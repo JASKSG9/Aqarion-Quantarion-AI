@@ -1,0 +1,127 @@
+AQARION-RUN-RECEIPT-2
+
+
+Purpose
+
+
+Bind an executable verification result to the exact repository revision,
+verification manifest, runtime, and registered check set that produced it.
+
+
+Required fields
+
+
+{
+  "schema": "AQARION-RUN-RECEIPT-2",
+
+  "source": {
+    "repository": "JASKSG9/Aqarions-Quantarion-AI",
+    "commit": "<EXACT_GIT_HEAD>"
+  },
+
+  "manifest": {
+    "path": "verification/manifest.json",
+    "sha256": "<EXACT_SHA256>"
+  },
+
+  "runtime": {
+    "python": "<EXACT_PYTHON_VERSION>",
+    "platform": "<EXACT_PLATFORM>"
+  },
+
+  "status": "PASS",
+
+  "checks": [
+    {
+      "id": "AQ-S14-SEMANTIC-K3",
+      "status": "PASS",
+      "returncode": 0
+    }
+  ]
+}
+
+
+
+Evidence semantics
+
+
+A PASS receipt establishes only:
+
+
+
+
+the declared manifest was loaded;
+
+
+the registered executable checks ran;
+
+
+every registered check returned zero;
+
+
+the receipt is bound to the stated repository revision and manifest.
+
+
+
+
+It does not establish:
+
+
+
+
+mathematical truth;
+
+
+formal proof;
+
+
+independence;
+
+
+publication readiness;
+
+
+C4 promotion.
+
+
+
+
+Fail-closed requirements
+
+
+The runner must fail if:
+
+
+
+
+repository revision cannot be determined;
+
+
+manifest hash cannot be computed;
+
+
+runtime metadata cannot be recorded;
+
+
+a registered executable is missing;
+
+
+a registered executable returns nonzero;
+
+
+the manifest is malformed;
+
+
+duplicate check identifiers occur.
+
+
+
+
+Provenance rule
+
+
+A detached receipt must remain meaningful without relying on a surrounding README.
+
+
+Therefore the commit SHA and manifest digest belong inside the receipt itself.
+
