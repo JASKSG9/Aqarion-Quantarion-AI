@@ -1,15 +1,12 @@
 {
   "schema": "AQARION-VERIFICATION-MANIFEST-1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "ACTIVE_ADVERSARIAL",
   "checks": [
     {
       "id": "AQ-S14-SEMANTIC-K3",
       "type": "semantic_exact_finite",
-      "command": [
-        "python3",
-        "verification/aq_s14/aq_s14_semantic_suite.py"
-      ],
+      "command": ["python3", "verification/aq_s14/aq_s14_semantic_suite.py"],
       "scope": "K3 forest/incidence semantic suite",
       "requires_external_repository": false
     }
@@ -21,7 +18,7 @@
     },
     {
       "id": "K2R-PARAMETRIC",
-      "reason": "K2R verification directory is not present in current repository HEAD"
+      "reason": "fixture verification/fixtures/k2r-family.json is present, but no executable verifier is bound to it"
     },
     {
       "id": "BETA-ENVELOPE",
