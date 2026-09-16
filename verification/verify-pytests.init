@@ -1,0 +1,4 @@
+[pytest]
+testpaths = ../tests verification
+python_files = test_*.py
+addopts = -q
