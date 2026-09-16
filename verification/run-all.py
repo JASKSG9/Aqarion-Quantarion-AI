@@ -2,27 +2,21 @@
 """
 AQARION canonical verification runner.
 
-FILE:
-    verification/run_all.py
+Receipt schema:
+    AQARION-RUN-RECEIPT-2
 
-TYPE:
-    PYTHON SCRIPT
-
-RULE:
-    PASS is possible only when every manifest check actually executes
-    and returns exit code 0.
-
-NOT_IMPLEMENTED, SKIPPED, MISSING, MALFORMED, or BLOCKED are failures.
+PASS means only that every registered manifest check executed
+and returned exit code 0.
 
 This runner does not establish mathematical truth.
-It establishes only the execution result of the registered verification
-checks.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import platform
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -32,12 +26,15 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
 VERIFICATION = ROOT / "verification"
+
 DEFAULT_MANIFEST = VERIFICATION / "manifest.json"
 DEFAULT_RECEIPT = VERIFICATION / "receipts" / "run_all_receipt.json"
 
 
 def utc_now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    return datetime.now(timezone.utc).replace(
+        microsecond=0
+    ).isoformat()
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -45,60 +42,38 @@ def load_json(path: Path) -> dict[str, Any]:
         raise RuntimeError(f"missing JSON file: {path}")
 
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
+        value = json.loads(
+            path.read_text(encoding="utf-8")
+        )
     except json.JSONDecodeError as exc:
-        raise RuntimeError(f"invalid JSON: {path}: {exc}") from exc
+        raise RuntimeError(
+            f"invalid JSON: {path}: {exc}"
+        ) from exc
 
     if not isinstance(value, dict):
-        raise RuntimeError(f"JSON root must be an object: {path}")
+        raise RuntimeError(
+            f"JSON root must be an object: {path}"
+        )
 
     return value
 
 
-def validate_manifest(manifest: dict[str, Any]) -> list[dict[str, Any]]:
-    checks = manifest.get("checks")
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
 
-    if not isinstance(checks, list) or not checks:
-        raise RuntimeError("manifest must contain a non-empty 'checks' list")
-
-    seen: set[str] = set()
-    normalized: list[dict[str, Any]] = []
-
-    for index, check in enumerate(checks):
-        if not isinstance(check, dict):
-            raise RuntimeError(f"manifest check {index} is not an object")
-
-        check_id = check.get("id")
-        command = check.get("command")
-
-        if not isinstance(check_id, str) or not check_id:
-            raise RuntimeError(f"manifest check {index} has invalid id")
-
-        if check_id in seen:
-            raise RuntimeError(f"duplicate manifest check id: {check_id}")
-
-        seen.add(check_id)
-
-        if (
-            not isinstance(command, list)
-            or not command
-            or not all(isinstance(x, str) and x for x in command)
+    with path.open("rb") as handle:
+        for chunk in iter(
+            lambda: handle.read(1024 * 1024),
+            b"",
         ):
-            raise RuntimeError(
-                f"manifest check {check_id} has invalid command"
-            )
+            digest.update(chunk)
 
-        normalized.append(check)
-
-    return normalized
+    return digest.hexdigest()
 
 
-def run_check(check: dict[str, Any]) -> dict[str, Any]:
-    check_id = check["id"]
-    command = check["command"]
-
-    proc = subprocess.run(
-        command,
+def git(*args: str) -> str:
+    process = subprocess.run(
+        ["git", *args],
         cwd=ROOT,
         text=True,
         stdout=subprocess.PIPE,
@@ -106,45 +81,168 @@ def run_check(check: dict[str, Any]) -> dict[str, Any]:
         check=False,
     )
 
-    status = "PASS" if proc.returncode == 0 else "FAIL"
+    if process.returncode != 0:
+        raise RuntimeError(
+            f"git {' '.join(args)} failed: "
+            f"{process.stderr.strip()}"
+        )
+
+    return process.stdout.strip()
+
+
+def validate_manifest(
+    manifest: dict[str, Any],
+) -> list[dict[str, Any]]:
+
+    checks = manifest.get("checks")
+
+    if not isinstance(checks, list) or not checks:
+        raise RuntimeError(
+            "manifest must contain a non-empty "
+            "'checks' list"
+        )
+
+    seen: set[str] = set()
+    normalized: list[dict[str, Any]] = []
+
+    for index, check in enumerate(checks):
+
+        if not isinstance(check, dict):
+            raise RuntimeError(
+                f"manifest check {index} "
+                "is not an object"
+            )
+
+        check_id = check.get("id")
+        command = check.get("command")
+
+        if not isinstance(check_id, str) or not check_id:
+            raise RuntimeError(
+                f"manifest check {index} "
+                "has invalid id"
+            )
+
+        if check_id in seen:
+            raise RuntimeError(
+                f"duplicate manifest check id: "
+                f"{check_id}"
+            )
+
+        if (
+            not isinstance(command, list)
+            or not command
+            or not all(
+                isinstance(item, str) and item
+                for item in command
+            )
+        ):
+            raise RuntimeError(
+                f"manifest check {check_id} "
+                "has invalid command"
+            )
+
+        seen.add(check_id)
+        normalized.append(check)
+
+    return normalized
+
+
+def run_check(
+    check: dict[str, Any],
+) -> dict[str, Any]:
+
+    process = subprocess.run(
+        check["command"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
 
     return {
-        "id": check_id,
-        "command": command,
-        "status": status,
-        "returncode": proc.returncode,
-        "stdout": proc.stdout,
-        "stderr": proc.stderr,
+        "id": check["id"],
+        "command": check["command"],
+        "status": (
+            "PASS"
+            if process.returncode == 0
+            else "FAIL"
+        ),
+        "returncode": process.returncode,
+        "stdout": process.stdout,
+        "stderr": process.stderr,
     }
 
 
 def main() -> int:
+
     parser = argparse.ArgumentParser()
+
     parser.add_argument(
         "--manifest",
         default=str(DEFAULT_MANIFEST),
     )
+
     parser.add_argument(
         "--receipt",
         default=str(DEFAULT_RECEIPT),
     )
+
     args = parser.parse_args()
 
-    manifest_path = Path(args.manifest).resolve()
-    receipt_path = Path(args.receipt).resolve()
+    manifest_path = Path(
+        args.manifest
+    ).resolve()
+
+    receipt_path = Path(
+        args.receipt
+    ).resolve()
 
     try:
         manifest = load_json(manifest_path)
         checks = validate_manifest(manifest)
+
+        commit = git(
+            "rev-parse",
+            "HEAD",
+        )
+
+        tree = git(
+            "rev-parse",
+            "HEAD^{tree}",
+        )
+
     except RuntimeError as exc:
-        print(f"MANIFEST FAIL: {exc}", file=sys.stderr)
+        print(
+            f"SETUP FAIL: {exc}",
+            file=sys.stderr,
+        )
         return 2
+
+    manifest_sha256 = sha256_file(
+        manifest_path
+    )
+
+    print(
+        f"Repository commit: {commit}"
+    )
+
+    print(
+        f"Repository tree: {tree}"
+    )
+
+    print(
+        f"Manifest SHA256: {manifest_sha256}"
+    )
+
+    print(
+        f"Loaded manifest {len(checks)} checks"
+    )
 
     results: list[dict[str, Any]] = []
 
-    print(f"Loaded manifest {len(checks)} checks")
-
     for check in checks:
+
         result = run_check(check)
         results.append(result)
 
@@ -155,10 +253,17 @@ def main() -> int:
         )
 
         if result["stdout"]:
-            print(result["stdout"], end="")
+            print(
+                result["stdout"],
+                end="",
+            )
 
         if result["stderr"]:
-            print(result["stderr"], file=sys.stderr, end="")
+            print(
+                result["stderr"],
+                file=sys.stderr,
+                end="",
+            )
 
     failed = [
         result
@@ -167,35 +272,75 @@ def main() -> int:
     ]
 
     receipt = {
-        "schema": "AQARION-RUN-RECEIPT-1",
+        "schema": (
+            "AQARION-RUN-RECEIPT-2"
+        ),
         "generated_at": utc_now(),
-        "repository_root": str(ROOT),
-        "manifest": str(manifest_path.relative_to(ROOT)),
-        "status": "FAIL" if failed else "PASS",
+        "source": {
+            "repository":
+                "JASKSG9/Aqarions-Quantarion-AI",
+            "commit": commit,
+            "tree": tree,
+        },
+        "manifest": {
+            "path": str(
+                manifest_path.relative_to(ROOT)
+            ),
+            "sha256": manifest_sha256,
+        },
+        "runtime": {
+            "python": platform.python_version(),
+            "implementation":
+                platform.python_implementation(),
+            "platform": platform.platform(),
+        },
+        "status": (
+            "FAIL"
+            if failed
+            else "PASS"
+        ),
         "checks": [
             {
                 "id": result["id"],
                 "status": result["status"],
-                "returncode": result["returncode"],
+                "returncode":
+                    result["returncode"],
             }
             for result in results
         ],
     }
 
-    receipt_path.parent.mkdir(parents=True, exist_ok=True)
+    receipt_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
     receipt_path.write_text(
-        json.dumps(receipt, indent=2, sort_keys=True) + "\n",
+        json.dumps(
+            receipt,
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
         encoding="utf-8",
     )
 
     if failed:
+
         print(
-            f"RUN-ALL FAIL: {len(failed)} of {len(results)} checks failed",
+            "RUN-ALL FAIL: "
+            f"{len(failed)} of "
+            f"{len(results)} checks failed",
             file=sys.stderr,
         )
+
         return 1
 
-    print(f"RUN-ALL PASS: {len(results)} checks passed")
+    print(
+        f"RUN-ALL PASS: "
+        f"{len(results)} checks passed"
+    )
+
     return 0
 
 
