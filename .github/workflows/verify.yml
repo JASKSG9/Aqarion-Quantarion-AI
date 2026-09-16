@@ -1,14 +1,51 @@
 name: AQARION Replay
-on: [push, pull_request, workflow_dispatch]
-permissions: {contents: read}
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
   replay:
+    name: AQARION executable replay
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: {python-version: '3.11'}
-      - run: pip install numpy
-      - run: python3 verification/run-all.py
-      - run: python3 verification/replay-harness.py
-      - run: python3 source/python/claimlock.py
+      - name: Checkout exact repository revision
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Show repository revision
+        run: |
+          git rev-parse HEAD
+
+      - name: Compile Python verification surface
+        run: |
+          python3 -m compileall -q \
+            verification \
+            source/python
+
+      - name: Run AQ-S14 semantic suite
+        run: |
+          python3 verification/aq_s14/aq_s14_semantic_suite.py
+
+      - name: Run canonical verification manifest
+        run: |
+          python3 verification/run_all.py \
+            --manifest verification/manifest.json \
+            --receipt verification/receipts/run_all_receipt.json
+
+      - name: Validate receipt exists
+        run: |
+          test -f verification/receipts/run_all_receipt.json
+
+      - name: Display verification receipt
+        run: |
+          cat verification/receipts/run_all_receipt.json
