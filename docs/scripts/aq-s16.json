@@ -1,38 +1,64 @@
 {
-  "schema_version": "aqarion.claim.v1",
+  "schema_version": "aqarion.claim.v2",
   "claim_id": "AQ-T10-001",
+
   "statement": "The proposed transport identity holds universally for the declared finite dynamical-system class.",
-  "assertion_state": "ASSERTED",
+
+  "assertion_state": "QUARANTINED",
 
   "declared_scope": {
     "kind": "UNIVERSAL",
     "domain": "All finite systems satisfying the declared hypotheses."
   },
 
+  "evidence_scope": {
+    "kind": "INSTANCE",
+    "domain": "One finite fixture with pinned input values."
+  },
+
   "requested_promotion": "FORMALLY_PROVED",
+
+  "promotion_status": "BLOCKED",
 
   "evidence": [
     {
       "evidence_id": "AQ-T10-001-FIXTURE-REPLAY",
       "kind": "EXACT_COMPUTATION",
+
       "established_scope": {
         "kind": "INSTANCE",
         "domain": "One finite fixture with pinned input values."
       },
+
       "result": "PASS",
-      "artifact_sha256": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+
+      "artifact_sha256": null,
+
+      "artifact_status": "PLACEHOLDER_NOT_EXECUTED"
     }
   ],
 
   "formalization": {
     "status": "NOT_COMPILED",
     "target_file": null,
-    "declaration": null
+    "declaration": null,
+    "kernel_receipt": null
+  },
+
+  "independent_verification": {
+    "status": "ABSENT",
+    "receipt": null
   },
 
   "limitations": [
     "Finite fixture agreement does not establish a universal identity.",
     "No Lean proof receipt is available.",
-    "No independent checker receipt is available."
-  ]
+    "No independent checker receipt is available.",
+    "The artifact hash is not an executed artifact digest."
+  ],
+
+  "governance": {
+    "evidence_class": "Q",
+    "promotion_allowed": false
+  }
 }
