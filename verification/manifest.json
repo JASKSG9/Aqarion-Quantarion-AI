@@ -1,49 +1,9 @@
 {
-  "schema": "AQARION-VERIFICATION-MANIFEST-1",
-  "repository": "JASKSG9/Aqarions-Quantarion-AI",
-  "verification_surface": "verification",
+  "version": "0.1",
   "checks": [
-    {
-      "check_id": "PATH-001",
-      "kind": "STRUCTURAL",
-      "path": "verification/verify_paths.py",
-      "command": "python verification/verify_paths.py",
-      "scope": "repository"
-    },
-    {
-      "check_id": "REGISTRY-001",
-      "kind": "SCHEMA",
-      "path": "verification/verify_registry_schema.py",
-      "command": "python verification/verify_registry_schema.py",
-      "scope": "verification/manifest.json"
-    },
-    {
-      "check_id": "HASH-001",
-      "kind": "INTEGRITY",
-      "path": "verification/verify_hashes.py",
-      "command": "python verification/verify_hashes.py",
-      "scope": "repository"
-    },
-    {
-      "check_id": "REPOSITORY-001",
-      "kind": "HYGIENE",
-      "path": "verification/verify_repository.py",
-      "command": "python verification/verify_repository.py",
-      "scope": "repository"
-    },
-    {
-      "check_id": "REPLAY-001",
-      "kind": "REPLAY",
-      "path": "verification/replay_harness.py",
-      "command": "python verification/replay_harness.py",
-      "scope": "registered checks"
-    },
-    {
-      "check_id": "ADVERSARIAL-001",
-      "kind": "NEGATIVE_CONTROL",
-      "path": "verification/adversarial",
-      "command": "python verification/adversarial/forged_pass.py",
-      "scope": "evidence provenance"
-    }
-  ]
+    {"id": "SV-001-V2", "type": "spectral", "command": ["python3","verification/replay-harness.py"], "expected_cases": 5720, "scope": "EXACT", "requires_independent": true},
+    {"id": "K2R-PARAMETRIC", "type": "incidence", "command": ["python3","verification/run-all.py"], "scope": "EXACT"},
+    {"id": "BETA-ENVELOPE", "type": "graph", "command": ["python3","verification/run-all.py"], "scope": "EXACT", "subadditivity_up_to": 1000}
+  ],
+  "known_issues_fixed": ["renamed mainfest.json -> manifest.json","self-check hyphen names","added cross-repo-manifest.json"]
 }
