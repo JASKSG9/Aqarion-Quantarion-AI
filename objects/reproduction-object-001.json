@@ -1,0 +1,49 @@
+{
+  "schema": "AQARION-REPRODUCTION-OBJECT-1",
+
+  "claim": {
+    "claim_id": "C3-N8",
+    "statement": "Delta = sT - s0",
+    "claim_class": "COMPUTATIONAL_IDENTITY"
+  },
+
+  "specification": {
+    "hash": "...",
+    "canonical": true
+  },
+
+  "source": {
+    "repository": "...",
+    "commit": "...",
+    "tree_hash": "..."
+  },
+
+  "implementation": {
+    "path": "...",
+    "sha256": "..."
+  },
+
+  "inputs": {
+    "sha256": "..."
+  },
+
+  "execution": {
+    "performed": true,
+    "exit_code": 0
+  },
+
+  "outputs": {
+    "observed_sha256": "...",
+    "expected_sha256": "...",
+    "match": true
+  },
+
+  "independence": {
+    "status": "NOT_ESTABLISHED",
+    "basis": null
+  },
+
+  "formal_proof": {
+    "status": "OPEN"
+  }
+}
