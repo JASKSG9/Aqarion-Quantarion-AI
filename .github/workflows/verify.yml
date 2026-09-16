@@ -1,0 +1,49 @@
+name: AQARION verification
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verification:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Verify repository structure
+        run: python verification/verify_paths.py
+
+      - name: Verify registry schema
+        run: python verification/verify_registry_schema.py
+
+      - name: Verify repository hygiene
+        run: python verification/verify_repository.py
+
+      - name: Verify hashes
+        run: python verification/verify_hashes.py
+
+      - name: Run adversarial controls
+        run: |
+          python verification/adversarial/forged_pass.py
+          python verification/adversarial/stale_root.py
+          python verification/adversarial/wrong_hash.py
+          python verification/adversarial/self_comparison.py
+          python verification/adversarial/missing_execution.py
+
+      - name: Run complete verification
+        run: python verification/run_all.py
