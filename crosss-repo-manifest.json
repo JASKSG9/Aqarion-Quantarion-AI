@@ -1,0 +1,8 @@
+{
+  "branches": [
+    {"name": "aqarion-core", "repository": "JASKSG9/AQARION-ARITHMETIC-FDS-FINITE-DYNAMICAL-SYSTEMS-", "commit_pin": "f309bfab14d7a9a6f9c52ae2808d1e14bf6f78b2", "provides": ["D_P = (I-P)KP","rank formula"], "status": "active"},
+    {"name": "kaprekar", "repository": "JASKSG9/KAPREKAR-SPECTRAL-GEOMETRY", "provides": ["55-state Kaprekar"], "status": "planned"},
+    {"name": "academy", "repository": "huggingface.co/spaces/Quantarion9/AQARION-ACADEMY", "provides": ["DEFECT.LEAN"], "status": "active"}
+  ],
+  "governance": {"C3":"OPEN","C4":"BLOCKED","Lean":"OPEN","SDS-002":"QUARANTINED","Publication":"BLOCKED","Promotable":false}
+}
