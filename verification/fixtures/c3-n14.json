@@ -1,0 +1,11 @@
+{
+  "fixture_id": "C3-N14",
+  "status": "COMPUTATIONAL_FIXTURE",
+  "n": 14,
+  "s0": 1,
+  "mT": 0,
+  "kappa": 2,
+  "delta": 2,
+  "sT": 3,
+  "purpose": "Exact regression fixture for the three-cycle transport calculation."
+}
