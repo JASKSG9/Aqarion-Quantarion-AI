@@ -1,0 +1,27 @@
+{
+  "skillId": "AQ-SKILL-001",
+  "name": "exact-reproduction-audit",
+
+  "requires": [
+    "source-commit",
+    "deterministic-fixture",
+    "execution-log"
+  ],
+
+  "prohibits": [
+    "fabricated-results",
+    "missing-source",
+    "implicit-version-upgrade",
+    "unverified-claim-promotion"
+  ],
+
+  "evaluation": {
+    "baselineRuns": 20,
+    "skillRuns": 20,
+    "regressions": 0,
+    "repairs": 0,
+    "costDelta": 0
+  },
+
+  "status": "EMPIRICALLY_VALIDATED"
+}
