@@ -1,5 +1,39 @@
-cache
-cache-downloads
-inspector
-api
-source/inspector.html
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Generated receipts
+receipts/*.json
+receipts/*.txt
+receipts/*.sha256
+!receipts/.gitkeep
+
+# Generated data
+data/*
+!data/.gitkeep
+
+# Lean
+.lake/
+*.olean
+*.ilean
+
+# Editors / OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+secrets/
