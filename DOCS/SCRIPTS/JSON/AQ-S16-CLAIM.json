@@ -1,0 +1,38 @@
+{
+  "schema_version": "aqarion.claim.v1",
+  "claim_id": "AQ-T10-001",
+  "statement": "The proposed transport identity holds universally for the declared finite dynamical-system class.",
+  "assertion_state": "ASSERTED",
+
+  "declared_scope": {
+    "kind": "UNIVERSAL",
+    "domain": "All finite systems satisfying the declared hypotheses."
+  },
+
+  "requested_promotion": "FORMALLY_PROVED",
+
+  "evidence": [
+    {
+      "evidence_id": "AQ-T10-001-FIXTURE-REPLAY",
+      "kind": "EXACT_COMPUTATION",
+      "established_scope": {
+        "kind": "INSTANCE",
+        "domain": "One finite fixture with pinned input values."
+      },
+      "result": "PASS",
+      "artifact_sha256": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+
+  "formalization": {
+    "status": "NOT_COMPILED",
+    "target_file": null,
+    "declaration": null
+  },
+
+  "limitations": [
+    "Finite fixture agreement does not establish a universal identity.",
+    "No Lean proof receipt is available.",
+    "No independent checker receipt is available."
+  ]
+}
