@@ -25,6 +25,7 @@ jobs:
       - name: Show repository revision
         run: |
           git rev-parse HEAD
+          git rev-parse HEAD^{tree}
 
       - name: Compile verification Python
         run: |
@@ -40,40 +41,115 @@ jobs:
             --manifest verification/manifest.json \
             --receipt verification/receipts/run_all_receipt.json
 
-      - name: Validate verification receipt
-        run: |
-          test -f verification/receipts/run_all_receipt.json
-
-      - name: Validate receipt status
+      - name: Validate self-bound verification receipt
+        env:
+          EXPECTED_COMMIT: ${{ github.sha }}
         run: |
           python3 - <<'PY'
+          import hashlib
           import json
+          import os
           from pathlib import Path
 
-          path = Path("verification/receipts/run_all_receipt.json")
-          data = json.loads(path.read_text(encoding="utf-8"))
+          receipt_path = Path(
+              "verification/receipts/run_all_receipt.json"
+          )
+
+          manifest_path = Path(
+              "verification/manifest.json"
+          )
+
+          if not receipt_path.is_file():
+              raise SystemExit(
+                  "FAIL: verification receipt missing"
+              )
+
+          data = json.loads(
+              receipt_path.read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          if data.get("schema") != (
+              "AQARION-RUN-RECEIPT-2"
+          ):
+              raise SystemExit(
+                  "FAIL: incorrect receipt schema"
+              )
 
           if data.get("status") != "PASS":
               raise SystemExit(
-                  f"FAIL: receipt status is {data.get('status')!r}, expected 'PASS'"
+                  f"FAIL: receipt status is "
+                  f"{data.get('status')!r}"
+              )
+
+          expected_commit = os.environ[
+              "EXPECTED_COMMIT"
+          ]
+
+          actual_commit = data.get(
+              "source", {}
+          ).get("commit")
+
+          if actual_commit != expected_commit:
+              raise SystemExit(
+                  "FAIL: receipt commit does not "
+                  "equal GITHUB_SHA"
+              )
+
+          expected_manifest_sha = hashlib.sha256(
+              manifest_path.read_bytes()
+          ).hexdigest()
+
+          actual_manifest_sha = data.get(
+              "manifest", {}
+          ).get("sha256")
+
+          if actual_manifest_sha != (
+              expected_manifest_sha
+          ):
+              raise SystemExit(
+                  "FAIL: manifest SHA256 mismatch"
               )
 
           checks = data.get("checks")
-          if not isinstance(checks, list) or not checks:
-              raise SystemExit("FAIL: receipt contains no checks")
+
+          if not isinstance(checks, list):
+              raise SystemExit(
+                  "FAIL: checks is not a list"
+              )
+
+          if not checks:
+              raise SystemExit(
+                  "FAIL: receipt contains no checks"
+              )
 
           failed = [
-              check for check in checks
+              check
+              for check in checks
               if check.get("status") != "PASS"
           ]
 
           if failed:
               raise SystemExit(
-                  f"FAIL: non-PASS checks in receipt: {failed}"
+                  "FAIL: non-PASS checks: "
+                  + repr(failed)
               )
 
           print(
-              f"PASS: {len(checks)} registered verification check(s) passed"
+              "PASS: self-bound Receipt-2 "
+              "verified"
+          )
+          print(
+              f"PASS: commit = {actual_commit}"
+          )
+          print(
+              f"PASS: manifest SHA256 = "
+              f"{actual_manifest_sha}"
+          )
+          print(
+              f"PASS: {len(checks)} "
+              "registered checks passed"
           )
           PY
 
