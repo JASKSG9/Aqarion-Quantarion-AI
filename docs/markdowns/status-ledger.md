@@ -1,1326 +1,235 @@
-AQARION FEDERATION / 2026-09-16
+# AQARION Federation Status Ledger
 
-SURFACE
-  public Hub reachable                 PASS
-  health endpoint                      PASS
-  evidence endpoint                    PASS
+## Checkpoint
 
-PROVENANCE
-  current GitHub HEAD identified       PASS
-  Hub snapshot matches HEAD            FAIL
-  reproduction receipt complete        FAIL
-  reproduction hashes real             FAIL
-  provenance verifier semantics        FAIL
-  independence established             NO
-  formal proof                         OPEN
-
-SKILLS
-  AQ-SKILL-001 exists                  PASS
-  skill metadata bound to runs         FAIL
-  EMPIRICALLY_VALIDATED substantiated  NO
-
-MATHEMATICS
-  computational evidence               SEPARATE
-  theorem status                       UNCHANGED
-  C4                                   BLOCKED
-  Publication                         BLOCKED
-
-GOVERNANCE
-  evidence promotion safe              NO
-  current "CERTIFIED" label            STALE/UNJUSTIFIEDAqarions-Quantarion-AI/
-│
-├── schemas/
-│   └── aro-1.schema.json
-│
-├── objects/
-│   ├── reproduction-object-001.json
-│   └── examples/
-│       ├── R0-unexecuted.json
-│       ├── R1-self-reproduction.json
-│       ├── R2-independent-shared-bug.json
-│       ├── R3-independent-validated.json
-│       ├── F1-output-drift.json
-│       └── F2-spec-drift.json
-│
-├── verification/
-│   ├── aro_verify.py
-│   ├── provenance.py
-│   ├── drift.py
-│   └── independence.py
-│
-├── tests/
-│   ├── test_aro_schema.py
-│   ├── test_output_agreement.py
-│   ├── test_independence.py
-│   ├── test_drift.py
-│   ├── test_adversarial_receipts.py
-│   └── test_false_reproduction_ladder.py
-│
-├── skills/
-│   └── aq-skill-001.json
-│
-└── docs/
-    └── ARO-1-REPRODUCTION-CONTRACT.md
+AQ-S14 / Federation Repair
 
 Date: 2026-09-16
+
 Mode: FROZEN · ADVERSARIAL · NO FABRICATION · NO PROMOTION
 
-1. Something important actually changed
+---
 
-The repository is actively changing today.
+## Current Repository
 
-Latest commits include:
+Repository:
 
-37f281d... — rename Project.toml → project.toml
+JASKSG9/Aqarions-Quantarion-AI
 
-c4bfecd... — move skills/docs/json/aq-skill-001.json → skills/aq-skill-001.json
+Current HEAD:
 
-54cd2ef... — expand the AQARION Evidence Ladder
+ec22fdbe71b8f33d470e002a7623aa2e613eb8ca
 
-959207d... — add initial graph structure for C-001
+The repository is actively changing. Any external application snapshot,
+certificate snapshot, or previous ledger entry must be checked against the
+current Git revision before being treated as current.
 
-4f7c642... — add AQ-SKILL-001 configuration
+---
 
+## Execution Surface
 
-The current HEAD is therefore:
+| Component | Status |
+|---|---|
+| GitHub repository reachable | PASS |
+| Current HEAD identifiable | PASS |
+| GitHub Actions exists | PASS |
+| Latest GitHub Actions run | FAIL |
+| Canonical run_all.py | REPAIR REQUIRED |
+| AQ-S14 semantic suite | ADDED / EXECUTABLE |
+| Provenance module | REPAIR REQUIRED |
+| CLAIMLOCK CL-1 boundary | OPEN |
+| Lean | OPEN |
+| C4 | BLOCKED |
+| Publication | BLOCKED |
 
-37f281d998450af9f8b1a7731fc0a6e19d8f378a
+---
 
-and the commits are dated September 16, 2026.
+## Findings
 
-That matters because the public Hub reports an evidence snapshot with asOf = 2026-09-11, while its evidence endpoint reports verifiedAt = 2026-09-11. 
+### F-001 — Receipt directory failure
+
+The previous verification runner attempted to write:
+
+verification/../receipts/run_all_receipt.json
+
+without creating the repository-level receipts directory.
+
+This caused the latest GitHub Actions run to fail.
+
+The corrected canonical runner writes receipts under:
+
+verification/receipts/
+
+and creates the directory before writing.
+
+---
+
+### F-002 — NOT_IMPLEMENTED was incorrectly associated with PASS
+
+The previous runner created results with:
+
+status = NOT_IMPLEMENTED
+
+while simultaneously writing:
+
+status = PASS
+
+This is prohibited.
+
+The new runner fails closed.
+
+---
+
+### F-003 — External replay paths were not repository-safe
+
+The previous replay harness referenced another AQARION repository and a
+local /mnt/data path.
+
+Canonical CI verification must not depend on either.
+
+External mathematical claims may remain declared dependencies, but their
+replay status must remain blocked until a concrete executable artifact is
+bound.
+
+---
+
+### F-004 — SV-001-V2 artifact is absent
+
+The claim record references:
+
+VERIFICATION/sv001_v2_check.py
+
+That executable is not present in this repository.
+
+Therefore this hub does not currently establish replayability of SV-001-V2.
+
+The claim is not mathematically refuted by this finding.
+
+The repository-level replay assertion is unsupported.
+
+---
+
+### F-005 — provenance.py was contaminated
+
+The previous provenance module contained conversational prose after the
+Python implementation.
+
+The complete module must therefore be replaced rather than patched.
+
+---
+
+### F-006 — output equality was incorrectly treated as an independence failure
+
+Observed output equality with expected output is required for ordinary
+reproduction.
+
+Independence is a separate evidence dimension.
 
 Therefore:
 
-The public certificate snapshot is older than the current repository state.
+REPRODUCED =
+  executed
+  AND source_bound
+  AND executable_bound
+  AND output_match
 
-That is exactly the kind of drift AQARION should detect.
+INDEPENDENTLY_REPRODUCED =
+  REPRODUCED
+  AND independence_established
 
-
----
-
-2. Public Hub: reachability PASS, certification freshness FAIL
-
-I independently checked the public endpoints.
-
-Surface
-
-/api/healthz
-
-→ {"status":"ok"}
-
-PASS — service reachable. 
-
-Federation snapshot
-
-The Hub currently reports:
-
-3 live sources
-
-4 repositories
-
-2 Hugging Face assets
-
-5 verified claims
-
-9 projects
-
-3 papers
-
-4 datasets
-
-
-and timestamps its snapshot September 11. 
-
-Evidence endpoint
-
-It reports:
-
-bootstrapStatus: CERTIFIED
-
-2/2 tests passed
-
-five claims marked verified
-
-a certificate hash
-
-Kaprekar kernel information. 
-
-
-That establishes what the API currently says.
-
-It does not establish that the certificate is still valid against today's repository HEAD.
-
-So the correct current interpretation is:
-
-Layer	Result
-
-Public app reachable	PASS
-Health API	PASS
-Evidence API responds	PASS
-Hub snapshot internally coherent	NOT YET ESTABLISHED
-Snapshot current against GitHub HEAD	FAIL / STALE
-Reproduction object valid	FAIL
-Independent reproduction	NOT ESTABLISHED
-Formal proof	OPEN
-Publication gate	BLOCKED
-
-
-That is a much stronger audit than simply repeating “CERTIFIED.”
-
+FORMALLY_VERIFIED =
+  REPRODUCED
+  AND formal_proof
 
 ---
 
-3. The reproduction object is the first hard blocker
+## AQ-S14
 
-Current objects/reproduction-object-001.json contains:
+AQ-S14 currently provides an exact finite semantic test surface.
 
-claim C3-N8
+The K3 fixture establishes:
 
-statement Delta = sT - s0
+- 3 spanning trees;
+- 4 orientations per spanning tree;
+- 12 oriented-incidence cases;
+- 8 total edge subsets;
+- 3 spanning forests;
+- 4 non-spanning forests;
+- 1 spanning cyclic subgraph;
+- unsigned incidence rejected as a semantic substitution;
+- a two-edge K3 forest correctly classified as spanning.
 
-execution marked performed
+These are finite computational results.
 
-exit code 0
-
-observed and expected hashes
-
-independence explicitly NOT_ESTABLISHED
-
-formal proof OPEN
-
-
-But its specification/source/implementation/input/output hashes are literal "..." placeholders.
-
-Therefore this is not currently a cryptographically bound reproduction receipt.
-
-Adversarial result
-
-placeholder hash
-      ↓
-cannot identify artifact
-      ↓
-cannot reproduce exact artifact identity
-      ↓
-cannot establish integrity
-      ↓
-cannot establish reproduction
-
-Verdict: INVALID_RECEIPT
-
-That is not a mathematical refutation of C3-N8.
-
-It is a refutation of the receipt's ability to substantiate C3-N8.
-
-That distinction needs to become fundamental to AQARION.
-
+They do not establish the universal forest-kernel theorem.
 
 ---
 
-4. The provenance verifier has the exact logical defect we identified
+## Evidence Discipline
 
-The current verifier requires:
+[D] DEFINED
 
-if receipt.observed_output_sha256 == receipt.expected_output_sha256:
-    raise ProvenanceError(...)
+[V] VERIFIED COMPUTATION
 
-So it rejects the exact condition that should establish output agreement.
+[P] PROVED
 
-This conflates:
+[PV] PROVED + VERIFIED
 
-OUTPUT AGREEMENT
+[C] CONJECTURE
 
-with:
+[R] RESEARCH
 
-INDEPENDENCE
+[F] REFUTED / KILLED
 
-They are not the same proposition.
+[Q] QUARANTINED
 
-The correct logic is:
-
-EXECUTED
-   +
-SOURCE_BOUND
-   +
-INPUT_BOUND
-   +
-EXECUTABLE_BOUND
-   +
-OUTPUT_AGREEMENT
-        ↓
-   REPRODUCED
-
-Then independently:
-
-REPRODUCED
-   +
-INDEPENDENCE_ESTABLISHED
-        ↓
-INDEPENDENT_REPRODUCTION
-
-And separately:
-
-FORMAL_ARTIFACT_VALID
-        ↓
-FORMALIZED / PROVED
-
-This is now sufficiently clear that I would freeze this separation as an architectural invariant.
-
-
----
-
-5. There is another problem: AQ-SKILL-001 overstates its own evidence
-
-The current skill object says:
-
-"baselineRuns": 20,
-"skillRuns": 20,
-"regressions": 0,
-"repairs": 0,
-"costDelta": 0,
-"status": "EMPIRICALLY_VALIDATED"
-
-but this object itself does not provide the run IDs, fixtures, logs, implementation hashes, output hashes, or independent execution artifacts necessary to substantiate those measurements.
-
-So:
-
-AQ-SKILL-001
-EMPIRICALLY_VALIDATED
-
-must currently be treated as a declared status, not independently established evidence.
-
-This is exactly why the skill itself needs to become a first-class evidence-producing object.
-
-
----
-
-6. The pivot I recommend
-
-Don't build another dashboard.
-
-Build the AQARION Reproduction Contract.
-
-Working name:
-
-ARO-1
-
-AQARION Reproduction Object
-
-The important object is not:
-
-PASS
-
-It is:
-
-CLAIM
-  ↓
-SPECIFICATION
-  ↓
-SOURCE
-  ↓
-FIXTURE
-  ↓
-EXECUTION
-  ↓
-ARTIFACT
-  ↓
-HASH
-  ↓
-VERIFIER
-  ↓
-REPLAY
-  ↓
-DRIFT
-  ↓
-VERDICT
-
-This gives the Evidence Ladder an actual machine substrate.
-
-
----
-
-7. Evidence Ladder — freeze this structure
-
-Your proposed ladder is strong, but I recommend one important semantic clarification.
-
-Code	Meaning	Establishes
-
-D	DEFINED	object/specification exists
-R	REPRODUCED	exact execution replayed successfully
-V	VERIFIED	deterministic evidence predicates passed
-IV	INDEPENDENT	independent implementation/reasoning path established
-P	PROVED	mathematical proof established
-F	FORMALIZED	formal artifact compiles/checks
-G	GOVERNED	policy/release requirements satisfied
-
-
-These are orthogonal evidence dimensions, not a single scalar score.
+Evidence must not migrate upward.
 
 In particular:
 
-V ≠ IV
-IV ≠ P
-P ≠ F
-F ≠ G
+public != certified
 
-And critically:
+runnable != verified
 
-G does not manufacture P.
-F does not manufacture P.
-IV does not manufacture P.
-V does not manufacture P.
+numeric != proof
 
-A governance policy can say an artifact is releasable; it cannot make a false theorem true.
+matching output != independence
 
+policy ALLOW != mathematical truth
+
+Lean source != Lean proof
 
 ---
 
-8. The new reproduction object
+## Current Governance
 
-I would make ARO-1 structurally similar to this:
+C3: OPEN
 
-{
-  "schema": "AQARION-REPRODUCTION-OBJECT-1",
+C4: BLOCKED
 
-  "object_id": "RO-C-001-RUN-001",
+Lean: OPEN
 
-  "claim": {
-    "claim_id": "C-001",
-    "statement": "...",
-    "specification_sha256": null,
-    "claim_class": "COMPUTATIONAL_IDENTITY"
-  },
+Publication: BLOCKED
 
-  "source": {
-    "repository": "JASKSG9/Aqarions-Quantarion-AI",
-    "commit": null,
-    "tree_sha256": null
-  },
-
-  "implementation": {
-    "path": null,
-    "sha256": null
-  },
-
-  "fixtures": [
-    {
-      "id": "FIX-001",
-      "path": null,
-      "sha256": null,
-      "bytes": null
-    }
-  ],
-
-  "execution": {
-    "run_id": "RUN-001",
-    "performed": false,
-    "command": null,
-    "exit_code": null,
-    "environment": {},
-    "log_sha256": null
-  },
-
-  "artifacts": [
-    {
-      "id": "ART-001",
-      "path": null,
-      "sha256": null,
-      "bytes": null
-    }
-  ],
-
-  "comparison": {
-    "relation": null,
-    "expected_sha256": null,
-    "observed_sha256": null,
-    "match": null
-  },
-
-  "independence": {
-    "status": "NOT_ESTABLISHED",
-    "implementation_id": null,
-    "source_root": null,
-    "verifier_id": null,
-    "basis": []
-  },
-
-  "formal": {
-    "status": "OPEN",
-    "artifact": null,
-    "sorry_axioms": null
-  },
-
-  "drift": {
-    "source_changed": null,
-    "fixture_changed": null,
-    "implementation_changed": null,
-    "environment_changed": null,
-    "claim_changed": null
-  },
-
-  "verdict": "UNEXECUTED"
-}
-
-Notice the deliberate use of null.
-
-No fake hashes.
-No fake timestamps.
-No fake outputs.
-No fake independence.
-
+Promotable: false
 
 ---
 
-9. Verdicts become deterministic
+## Required Next Gates
 
-I recommend these:
-
-INVALID_RECEIPT
-UNEXECUTED
-EXECUTED_UNVERIFIED
-REPRODUCED
-REPRODUCED_DRIFTED
-REPRODUCED_NOT_INDEPENDENT
-INDEPENDENT_REPRODUCTION
-FORMALIZED
-PROVED
-REFUTED
-GOVERNED
-
-But importantly, these are not one linear ladder.
-
-For example:
-
-REPRODUCED
-    +
-environment drift
-
-should produce:
-
-REPRODUCED_DRIFTED
-
-not failure.
-
-Whereas:
-
-REPRODUCED
-    +
-different output
-
-should produce:
-
-REFUTED / REPRODUCTION_FAILURE
-
-depending on whether the claim itself or merely the reproduction contract failed.
-
+1. Execute the repaired AQ-S14 suite in GitHub Actions.
+2. Verify that run_all.py produces a truthful receipt.
+3. Bind every registered claim to an actual executable artifact.
+4. Implement the CLAIMLOCK predicate-report boundary.
+5. Replace local deterministic JSON hashing with RFC 8785 JCS before
+   normative certificate generation.
+6. Establish independent reproduction separately from output agreement.
+7. Only then proceed to Lean formalization.
 
 ---
 
-10. Your GREEN/YELLOW/ORANGE/RED system is worth keeping
+## Non-Promotion Rule
 
-I would formalize it:
+A passing AQ-S14 replay does not promote any universal theorem.
 
-GREEN
-EXACT REPLAY
-
-All identity predicates match.
-
-YELLOW
-REPRODUCED + ENVIRONMENT DRIFT
-
-Same declared semantics/result, but environment differs.
-
-ORANGE
-SOURCE / SPECIFICATION DRIFT
-
-The old evidence no longer binds to current source/specification.
-
-RED
-RESULT DRIFT
-
-The reproduced result differs.
-
-And add:
-
-BLACK
-INVALID EVIDENCE OBJECT
-
-for malformed receipts, placeholders, impossible claims, missing artifacts, unsafe paths, malformed hashes, etc.
-
-That is useful because invalid evidence is not the same thing as a failed theorem.
-
-
----
-
-11. The killer adversarial test
-
-This should become AQARION's flagship reproduction experiment.
-
-FALSE-REPRODUCTION-LADDER-001
-
-Construct deliberately:
-
-R0  no execution
-R1  same implementation replay
-R2  independent implementation, shared specification error
-R3  independent implementation + independently validated specification
-R4  R3 + formal proof
-F1  different output
-F2  stale specification
-F3  stale fixture
-F4  environment drift
-
-Expected machine classifications:
-
-Case	Execution	Output	Independent	Spec independently checked	Formal	Expected
-
-R0	✗	—	—	—	—	UNEXECUTED
-R1	✓	✓	✗	✗	✗	REPRODUCED_NOT_INDEPENDENT
-R2	✓	✓	✓	✗	✗	INDEPENDENT_REPRODUCTION
-R3	✓	✓	✓	✓	✗	INDEPENDENT_REPRODUCTION + stronger evidence
-R4	✓	✓	✓	✓	✓	PROVED only if proof actually establishes theorem
-F1	✓	✗	✓	✓	✗	REFUTED / reproduction failure
-F2	✓	✓	✓	✗	—	ORANGE / SPEC_DRIFT
-F3	✓	✓	—	—	—	ORANGE / INPUT_DRIFT
-F4	✓	✓	✓	✓	—	REPRODUCED_DRIFTED
-
-
-The critical case is R2.
-
-Two independent implementations agreeing does not logically establish that the mathematical proposition is true if both implement an incorrect interpretation of the specification.
-
-That gives AQARION a precise answer to:
-
-> “What exactly did the evidence prove?”
-
-
-
-
----
-
-12. This is where the recent literature strongly supports the direction
-
-This isn't an invented ecosystem.
-
-Workflow Run RO-Crate
-
-Current WRROC 0.6 was updated September 4, 2026 to align with RO-Crate 1.3 and Workflow RO-Crate 1.1. It explicitly captures workflow/process execution provenance and inputs/outputs. 
-
-That means we should not invent another competing workflow-provenance packaging format.
-
-Use ARO-1 for AQARION's claim semantics, then map it into WRROC/RO-Crate.
-
-OpenLineage
-
-OpenLineage is now at 1.53.0 and explicitly separates:
-
-Run
-
-Job
-
-Dataset
-
-inputs
-
-outputs
-
-execution parameters
-
-lineage facets
-
-
-and supports custom facets. 
-
-That is almost exactly the execution graph AQARION needs.
-
-So:
-
-ARO-1
-   ↓
-OpenLineage Run / Job / Dataset facets
-
-rather than rebuilding lineage.
-
-SLSA
-
-SLSA 1.2 is the current approved specification, and its provenance model is explicitly about verifiable information connecting an artifact to where/how it was produced. 
-
-So SLSA can handle artifact/build provenance, while ARO-1 handles claim/reproduction semantics.
-
-Chakra
-
-MLCommons Chakra is particularly interesting because its 2026 system standardizes portable execution traces for reproducible AI workload behavior, replay, debugging, and benchmarking. 
-
-AQARION should borrow the trace concept, not the implementation:
-
-RUN
- ├── command
- ├── dependencies
- ├── events
- ├── inputs
- ├── outputs
- └── replay metadata
-
-F(AI)2R
-
-The July 2026 F(AI)2R work is unusually close to AQARION's direction: AI-in-the-loop provenance is represented as an executable skill, with graph conformance and verification rungs that humans grant. 
-
-That suggests a very strong AQARION rule:
-
-> The agent may generate evidence; the evidence engine determines whether the evidence satisfies the predicate.
-
-
-
-Agent-skill research
-
-Two very recent studies reinforce the need to treat skills as versioned, auditable artifacts rather than blobs of prompt text:
-
-a July 2026 empirical study examined 18,463 public skills and 23,199 personal-use skills, treating skills as engineered artifacts with reuse and maintenance histories; 
-
-an August 2026 study of 138,133 SKILL.md files reported widespread packaging/routing defects and explicitly investigated deterministic routing and quality gates. 
-
-
-That makes AQ-SKILL-001's current unbound "EMPIRICALLY_VALIDATED" status particularly worth fixing.
-
-
----
-
-13. The architecture becomes much cleaner
-
-AQARION
-                            │
-                            ▼
-                       CLAIMLOCK
-                            │
-             admissible evidence predicates
-                            │
-                            ▼
-                 ┌────────────────────┐
-                 │       ARO-1        │
-                 │ Reproduction Object│
-                 └─────────┬──────────┘
-                           │
-        ┌──────────────────┼──────────────────┐
-        ▼                  ▼                  ▼
-    SOURCE             FIXTURE             CLAIM SPEC
-        │                  │                  │
-        └──────────────┬───┴──────────────────┘
-                       ▼
-                    RUN TRACE
-                       │
-              ┌────────┴────────┐
-              ▼                 ▼
-           OUTPUT            LOG
-              │                 │
-              └────────┬────────┘
-                       ▼
-                  DETERMINISTIC
-                    VERIFIER
-                       │
-          ┌────────────┼─────────────┐
-          ▼            ▼             ▼
-       REPLAY        DRIFT      COUNTEREXAMPLE
-          │            │             │
-          └────────────┼─────────────┘
-                       ▼
-                   VERDICT
-                       │
-        ┌──────────────┼──────────────┐
-        ▼              ▼              ▼
-    OpenLineage      SLSA         RO-Crate/WRROC
-        │              │              │
-        └──────────────┼──────────────┘
-                       ▼
-                 FEDERATION HUB
-                       │
-                       ▼
-                 PUBLIC EVIDENCE
-
-The AQARION-specific intellectual layer is therefore:
-
-CLAIM SEMANTICS
-+
-EVIDENCE PREDICATES
-+
-REPRODUCTION OBJECT
-+
-ADVERSARIAL VERDICT LOGIC
-
-Everything else can interoperate with existing standards.
-
-
----
-
-14. A second important audit: the Hub's Kaprekar snapshot
-
-The Hub currently reports a Kaprekar system with:
-
-states = 10000
-periodicPoints = 2
-cycles = {0}, {6174}
-basin sizes = 10 / 9990
-
-
-
-That is not the current AQARION genuine-state convention you have frozen elsewhere:
-
-X = 1000..9999 excluding 9 nonzero repdigits
-|X| = 8992
-
-Therefore the public Hub's Kaprekar object is using a different state convention.
-
-This does not automatically make the Hub's computation mathematically wrong.
-
-But it means the Hub needs an explicit:
-
-DEFINITION_ID
-
-or:
-
-STATE_SPACE_SPECIFICATION_HASH
-
-otherwise two legitimate computations can appear contradictory.
-
-This is exactly what ARO-1 should solve.
-
-
----
-
-15. The public certificate must become definition-bound
-
-Instead of:
-
-{
-  "claimId": "C-001",
-  "verified": true
-}
-
-the Hub should ultimately expose:
-
-{
-  "claimId": "C-001",
-  "claimSpecSha256": "...",
-  "sourceCommit": "...",
-  "fixtureSha256": "...",
-  "implementationSha256": "...",
-  "runId": "...",
-  "outputSha256": "...",
-  "verifierId": "...",
-  "replay": {
-    "status": "PASS"
-  },
-  "independence": {
-    "status": "NOT_ESTABLISHED"
-  },
-  "formal": {
-    "status": "OPEN"
-  },
-  "drift": {
-    "status": "SOURCE_CHANGED"
-  },
-  "verdict": "REPRODUCED_NOT_INDEPENDENT"
-}
-
-Then the Hub can no longer accidentally convert:
-
-one green test
-
-into:
-
-mathematical certification
-
-
----
-
-16. Exact pivot deliverable
-
-I recommend the next implementation unit be:
-
-ARO-1 / CLAIMLOCK REPRODUCTION CONTRACT
-
-with this minimal tree:
-
-Aqarions-Quantarion-AI/
-│
-├── schemas/
-│   └── aro-1.schema.json
-│
-├── objects/
-│   ├── reproduction-object-001.json
-│   └── examples/
-│       ├── R0-unexecuted.json
-│       ├── R1-self-reproduction.json
-│       ├── R2-independent-shared-bug.json
-│       ├── R3-independent-validated.json
-│       ├── F1-output-drift.json
-│       └── F2-spec-drift.json
-│
-├── verification/
-│   ├── aro_verify.py
-│   ├── provenance.py
-│   ├── drift.py
-│   └── independence.py
-│
-├── tests/
-│   ├── test_aro_schema.py
-│   ├── test_output_agreement.py
-│   ├── test_independence.py
-│   ├── test_drift.py
-│   ├── test_adversarial_receipts.py
-│   └── test_false_reproduction_ladder.py
-│
-├── skills/
-│   └── aq-skill-001.json
-│
-└── docs/
-    └── ARO-1-REPRODUCTION-CONTRACT.md
-
-And then:
-
-/api/reproduction/{id}
-/api/reproduction/{id}/verify
-/api/reproduction/{id}/drift
-/api/reproduction/{id}/lineage
-
-not yet /certificate.
-
-The word CERTIFIED should remain blocked until the policy layer actually has enough evidence to justify it.
-
-
----
-
-17. What I would test first
-
-Before touching mathematics:
-
-TEST-ARO-001
-valid receipt → PASS
-
-TEST-ARO-002
-placeholder hash → INVALID_RECEIPT
-
-TEST-ARO-003
-missing fixture → FAIL
-
-TEST-ARO-004
-modified fixture → HASH_MISMATCH
-
-TEST-ARO-005
-correct observed == expected → PASS
-
-TEST-ARO-006
-different observed != expected → FAIL
-
-TEST-ARO-007
-same implementation + independent=true → NOT_INDEPENDENT
-
-TEST-ARO-008
-different implementation + same output → INDEPENDENT_REPRODUCTION
-
-TEST-ARO-009
-different implementation + shared bad specification → NOT_PROVED
-
-TEST-ARO-010
-changed claim specification → SPEC_DRIFT
-
-TEST-ARO-011
-changed source commit → SOURCE_DRIFT
-
-TEST-ARO-012
-changed environment only → ENVIRONMENT_DRIFT
-
-TEST-ARO-013
-numeric comparison without declared tolerance → INVALID_RECEIPT
-
-TEST-ARO-014
-exact comparison using floating point → INVALID_RECEIPT
-
-TEST-ARO-015
-receipt references path outside allowed root → INVALID_RECEIPT
-
-TEST-ARO-016
-formal artifact containing sorryAx → NOT_FORMALLY_VERIFIED
-
-TEST-ARO-017
-app says CERTIFIED but repository changed → STALE_CERTIFICATE
-
-TEST-ARO-018
-LLM-written verdict with no verifier evidence → REJECT
-
-That last one is particularly important.
-
-
----
-
-18. Current honest audit ledger
-
-AQARION FEDERATION / 2026-09-16
-
-SURFACE
-  public Hub reachable                 PASS
-  health endpoint                      PASS
-  evidence endpoint                    PASS
-
-PROVENANCE
-  current GitHub HEAD identified       PASS
-  Hub snapshot matches HEAD            FAIL
-  reproduction receipt complete        FAIL
-  reproduction hashes real             FAIL
-  provenance verifier semantics        FAIL
-  independence established             NO
-  formal proof                         OPEN
-
-SKILLS
-  AQ-SKILL-001 exists                  PASS
-  skill metadata bound to runs         FAIL
-  EMPIRICALLY_VALIDATED substantiated  NO
-
-MATHEMATICS
-  computational evidence               SEPARATE
-  theorem status                       UNCHANGED
-  C4                                   BLOCKED
-  Publication                         BLOCKED
-
-GOVERNANCE
-  evidence promotion safe              NO
-  current "CERTIFIED" label            STALE/UNJUSTIFIED
-
-The important phrase is “stale/unjustified,” not “false.”
-
-The API's certificate may describe a previous snapshot. What we have demonstrated is that it cannot presently be treated as a current certificate against today's source tree.
-
-
----
-
-19. Side-task pivot: CERTIFICATE FRESHNESS ATTACK
-
-I think this is the best side task to do next because it is small, novel, and immediately useful.
-
-Instead of another mathematical demo:
-
-CERTIFICATE
-    │
-    ├── certificate source commit
-    ├── current HEAD
-    ├── claim specification hash
-    ├── fixture hashes
-    ├── implementation hashes
-    ├── output hashes
-    └── verifier version
-            │
-            ▼
-        FRESHNESS
-            │
-       ┌────┼────┐
-       ▼    ▼    ▼
-     GREEN YELLOW RED
-
-A public certificate would automatically become:
-
-CURRENT
-STALE_SOURCE
-STALE_FIXTURE
-STALE_VERIFIER
-STALE_SPEC
-RESULT_CHANGED
-INVALID
-
-That is genuinely useful even before ARO-1 is complete.
-
-And it directly addresses what we just discovered in the live system.
-
-
----
-
-Design gate
-
-My recommendation is to pivot the next implementation cycle to ARO-1 + Certificate Freshness Attack, with the Evidence Ladder as the policy vocabulary and RO-Crate/WRROC + OpenLineage + SLSA as interoperability layers—not competing replacements.
-┌─────────────────────────────────────────────────────┐
-│              AQARION EVIDENCE LADDER                │
-├─────────────────────────────────────────────────────┤
-│ D    DEFINED       mathematical object specified    │
-│ R    REPRODUCED    execution successfully replayed  │
-│ V    VERIFIED      deterministic checks passed     │
-│ IV   INDEPENDENT   independent implementation pass │
-│ P    PROVED        formal/math proof established   │
-│ F    FORMALIZED    Lean artifact compiles          │
-│ G    GOVERNED      release policy satisfied        │
-└─────────────────────────────────────────────────────┘CLAIM
-  │
-  ├── definition
-  │
-  ├── source commit
-  │
-  ├── input fixture
-  │
-  ├── execution
-  │
-  ├── generated artifact
-  │
-  ├── verifier
-  │
-  ├── independent replay
-  │
-  ├── counterexample search
-  │
-  └── verdict
-          │
-          ▼
-      REPRODUCTION OBJECTC-001
- │
- ├── DEF-001
- │
- ├── FIX-001
- │
- ├── RUN-001
- │     ├── ART-001
- │     └── LOG-001
- │
- ├── VERIFY-001
- │
- └── REPLAY-001
-          │
-          ▼
-       VERDICT-001                         ┌──────────────┐
-                         │   CLAIM      │
-                         │    C-001     │
-                         └──────┬───────┘
-                                │
-                ┌───────────────┼───────────────┐
-                ▼               ▼               ▼
-           DEFINITION        FIXTURE          SOURCE
-             DEF-1            FIX-1           SRC-1
-                │               │               │
-                └───────┬───────┴───────┬───────┘
-                        ▼                 ▼
-                    RUN-001          RUN-002
-                        │                 │
-                        ▼                 ▼
-                    VERIFY-A         VERIFY-B
-                        │                 │
-                        └────────┬────────┘
-                                 ▼
-                         INDEPENDENT CHECK
-                                 │
-                                 ▼
-                              VERDICTCLAIMS
-SOURCE COMMITS
-REPRODUCTION OBJECTS
-FIXTURES
-RUN LOGS
-ARTIFACT HASHES
-COUNTEREXAMPLES
-FORMAL DECLARATIONS
-LITERATURECLAIM C-001
-
-STATUS:
-  V ✓
-  IV ○
-  P ○
-  F ○
-
-EVIDENCE:
-  RUN-001
-  VERIFY-001
-
-LIMITATION:
-  No independent implementation recorded.
-
-CONCLUSION:
-  COMPUTATIONALLY VERIFIED
-  NOT FORMALLY PROVEDSKILL
-  │
-  ├── BEFORE RUN
-  │
-  ├── WITH SKILL
-  │
-  ├── WITHOUT SKILL
-  │
-  ├── DIFFERENTIAL
-  │
-  └── REGRESSION TESTCLAIM ID     STATUS       EVIDENCE       FORMAL
-C-001        VERIFIED     3 RUNS         —
-C-002        VERIFIED     2 RUNS         —
-C-003        REPRODUCED   1 RUN          —
-C-004        VERIFIED     4 RUNS         —
-C-005        REFUTED      1 WITNESS      —                BASELINE       SKILL
-success            71%          78%
-regression          —            3%
-cost             1.00×         1.08×
-evidence          weak          strongSOURCE DRIFT       1 ⚠
-HASH MISMATCH      0
-MISSING FIXTURE    0
-UNPINNED ENV       2 ⚠
-UNVERIFIED CLAIM   0
-FORMAL SORRY       OPEN
-URL IDENTITY       1 ⚠CURRENT
-
-sources
-claims
-tests
-certificate
-
-
-                 ↓
-
-
-TARGET
-
-sources
-claims
-fixtures
-runs
-artifacts
-hashes
-verifiers
-replays
-counterexamples
-skills
-literature
-provenance DAG
-verdicts
-governance
-
-HAS ANYTHING CHANGED?
-
-source URL
-commit
-file hash
-fixture hash
-environment
-dependency versions
-command
-output hash
-claim text
-verification result
-
-GREEN
-EXACT REPLAY
-
-YELLOW
-REPRODUCED BUT ENVIRONMENT DRIFTED
-
-ORANGE
-SOURCE CHANGED
-
-RED
-CLAIM RESULT CHANGED
-
-AQARION CLAIM
-     │
-     ├── paper statement
-     ├── cited theorem
-     ├── formal Lean declaration
-     ├── computational test
-     └── reproduction object
-
-CLAIM
-  ↓
-SOURCE
-  ↓
-FIXTURE
-  ↓
-RUN
-  ↓
-ARTIFACT
-  ↓
-HASH
-  ↓
-VERIFIER
-  ↓
-INDEPENDENT REPLAY
-  ↓
-DRIFT CHECK
-  ↓
-VERDICT
-
-EXECUTED
-    │
-    ▼
-INTEGRITY_BOUND
-    │
-    ▼
-OUTPUT_AGREEMENT
-    │
-    ├──────────────► INDEPENDENCE_ESTABLISHED
-    │
-    ▼
-REPRODUCTION_VERDICT
-
-observed_hash == expected_hash
-        │
-        └── OUTPUT_AGREEMENT = PASS
-
-independence
-        │
-        ├── different implementation
-        ├── different execution path
-        ├── independent verifier
-        └── explicitly documented basis
-
-{
-  "execution": {
-    "performed": true,
-    "exit_code": 0
-  },
-  "integrity": {
-    "source_root_match": true,
-    "executable_hash_match": true,
-    "fixture_hash_match": true
-  },
-  "output_agreement": {
-    "observed_sha256": "...",
-    "expected_sha256": "...",
-    "match": true
-  },
-  "independence": {
-    "status": "NOT_ESTABLISHED",
-    "basis": []
-  },
-  "formal": {
-    "status": "OPEN"
-  },
-  "verdict": "REPRODUCED_NOT_INDEPENDENT"
-}
-
-surface_integrity
-reproduction
-independence
-formal_verification
-governance
-publication
-
-## Public app
-
-**https://aqarion-federation-hub--quantarion9.replit.app/**
-
-## Production verification passed
-
-- Deployment status: **deployed**
-- Visibility: **public**
-- Deployment type: **autoscale**
-- Build status: **successful**
-- Homepage: HTTP 200
-- Health endpoint: `{"status":"ok"}`
-- Live sources: **3**
-  - AQARION Hub
-  - GitHub
-  - Hugging Face
-- Public repositories returned: **4**
-- Hugging Face assets returned: **2**
-- Verified claims: **5**
-- Bootstrap certificate: **CERTIFIED**
-- Tests reported by the evidence API: **2/2 passed**
-
-Direct public endpoints:
-
-- https://aqarion-federation-hub--quantarion9.replit.app/api/healthz
-- https://aqarion-federation-hub--quantarion9.replit.app/api/overview
-- https://aqarion-federation-hub--quantarion9.replit.app/api/sources
-- https://aqarion-federation-hub--quantarion9.replit.app/api/evidence
-
-https://github.com/JASKSG9/Aqarions-Quantarion-AI/blob/main/objects/reproduction-object-001.json
-
-https://github.com/JASKSG9/Aqarions-Quantarion-AI
-
-https://github.com/JASKSG9/Aqarions-Quantarion-AI/tree/main
+It certifies only the declared finite computational scope.
