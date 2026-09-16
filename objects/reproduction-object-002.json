@@ -1,0 +1,77 @@
+{
+  "schema": "AQARION-ReproductionObject",
+  "schemaVersion": "0.2",
+  "objectId": "AQ-RO-002",
+  "title": "Canonical Reproduction Object",
+
+  "governance": {
+    "mode": "FROZEN",
+    "fabrication": false,
+    "promotion": false,
+    "c4": "BLOCKED",
+    "publication": "BLOCKED"
+  },
+
+  "subject": {
+    "claimId": "C-001",
+    "statement": "D = (I-P)KP = 0 iff K(V_Pi) subseteq V_Pi"
+  },
+
+  "source": {
+    "repository": "JASKSG9/Aqarions-Quantarion-AI",
+    "commit": "<EXACT_COMMIT>",
+    "path": "<EXACT_SOURCE_PATH>"
+  },
+
+  "environment": {
+    "runtime": "<EXACT_RUNTIME>",
+    "python": "<VERSION>",
+    "lean": "<VERSION_OR_NULL>",
+    "mathlib": "<VERSION_OR_NULL>"
+  },
+
+  "inputs": {
+    "canonicalHash": "<HASH>",
+    "parameters": {},
+    "fixtures": []
+  },
+
+  "execution": {
+    "command": "<EXACT_COMMAND>",
+    "startedAt": "<TIMESTAMP>",
+    "finishedAt": "<TIMESTAMP>",
+    "exitCode": 0
+  },
+
+  "artifacts": [
+    {
+      "path": "<PATH>",
+      "sha256": "<HASH>",
+      "role": "input|output|evidence|log"
+    }
+  ],
+
+  "independentReplay": {
+    "performed": false,
+    "implementation": null,
+    "result": null
+  },
+
+  "evidence": {
+    "tests": [],
+    "counterexamples": [],
+    "proofArtifacts": []
+  },
+
+  "verdict": {
+    "level": "EMPIRICALLY_VERIFIED",
+    "reason": "Exact execution passed; formal proof not established."
+  },
+
+  "limitations": [],
+
+  "provenance": {
+    "parentObjects": [],
+    "generatedBy": "AQARION"
+  }
+}
