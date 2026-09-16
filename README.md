@@ -204,6 +204,26 @@ Expected current behavior: the self-check reports FAIL due to the path-mismatch 
 
 Once the path mismatch is fixed, the orchestrator will iterate the manifest's declared checks and produce a summary receipt.
 
+## Evidence Status
+
+AQARION distinguishes mathematical evidence from software availability.
+
+- `[D]` Definition
+- `[V]` Independently verified computation
+- `[P]` Formal mathematical proof
+- `[PV]` Proof plus independent verification
+- `[C]` Conjecture
+- `[R]` Research
+- `[F]` Refuted / killed
+- `[Q]` Quarantined
+
+A public repository, running application, numerical agreement, or generated
+certificate does not by itself constitute a mathematical proof.
+
+AI-assisted development is recorded as provenance where applicable. The
+system does not claim to determine whether AI was used; it records the
+research and verification process.
+
 ---
 
 Roadmap
