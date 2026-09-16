@@ -1,0 +1,6 @@
+# Pin versions only after recording a known-good environment.
+# This initial file matches the active AQ-S16 CI dependency set.
+numpy
+scipy
+sympy
+pytest
