@@ -1,0 +1,24 @@
+{
+  "schema": "AQARION-EXECUTION-RECEIPT-1",
+  "claim_id": "C3-N8",
+  "source_root": "<exact git commit>",
+  "executable": "verification/fixtures/c3_n8.py",
+  "executable_sha256": "<actual sha256>",
+  "command": [
+    "python",
+    "verification/fixtures/c3_n8.py"
+  ],
+  "environment": {
+    "python": "<actual version>",
+    "platform": "<actual platform>"
+  },
+  "inputs_sha256": "<actual input digest>",
+  "observed_output_sha256": "<actual output digest>",
+  "expected_output_sha256": "<specification digest>",
+  "execution_performed": true,
+  "independence": {
+    "basis": "separate implementation",
+    "related_execution": false
+  },
+  "result": "PASS"
+}
