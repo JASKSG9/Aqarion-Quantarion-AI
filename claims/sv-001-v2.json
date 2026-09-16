@@ -1,0 +1,24 @@
+{
+  "schema": "AQARION-CLAIM-RECORD-1",
+  "claim_id": "SV-001-V2",
+  "statement": "trace=2m alpha^2, op-norm even 2alpha odd 2alpha cos(pi/2m)",
+  "evidence": {
+    "id": "sv001_exact",
+    "scope": "EXACT",
+    "exact": true,
+    "independent": false,
+    "artifact": "VERIFICATION/sv001_v2_check.py",
+    "cases": 5720,
+    "max_trace_err": 5.329e-15,
+    "max_norm_err": 7.772e-16
+  },
+  "current_hub_status": {
+    "artifact_present_in_this_repository": false,
+    "replayable_from_this_repository": false,
+    "independence_established": false
+  },
+  "disposition": {
+    "status": "REPLAY_BLOCKED_MISSING_ARTIFACT",
+    "governance": "C4=BLOCKED"
+  }
+}
