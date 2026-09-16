@@ -1,8 +1,306 @@
-Governance:
-C3 OPEN
-C4 BLOCKED
-Lean OPEN (no kernel receipts)
-SDS-002 QUARANTINED
-Publication BLOCKED
-Promotable false
-Fixed: path mismatches, manifest typo, cross-repo-manifest added
+AQARION S16 — CURRENT-HEAD RECONCILIATION
+
+Date: 2026-09-16
+
+MODE:
+FROZEN · ADVERSARIAL · NO FABRICATION · NO PROMOTION
+
+REPOSITORY:
+JASKSG9/Aqarions-Quantarion-AI
+
+CURRENT HEAD:
+b92618693b0f61db950912e1661d7bded616b41e
+
+HISTORICAL VERIFIED CI CHECKPOINT:
+5922c96dae992b7544b188d78fbe6934e2171be4
+
+
+============================================================
+1. HEAD RECONCILIATION
+============================================================
+
+The previous S16 ledger synchronized repository state to:
+
+    5922c96
+
+The actual main branch has subsequently advanced to:
+
+    b926186
+
+Therefore the old ledger is stale with respect to current HEAD.
+
+Disposition:
+
+    HISTORICAL CHECKPOINT = 5922c96
+    CURRENT HEAD          = b926186
+
+No historical execution result is promoted to current HEAD.
+
+
+============================================================
+2. HISTORICAL CI
+============================================================
+
+Revision:
+
+    5922c96
+
+Recorded CI:
+
+    AQ-S14 semantic suite PASS
+    canonical runner PASS
+    one manifest check PASS
+    CPython 3.11.16
+
+Scope:
+
+    finite K3 forest/incidence semantics
+    exact rational arithmetic
+
+Status:
+
+    [V]
+
+This is historical execution evidence only.
+
+
+============================================================
+3. CURRENT WORKFLOW PATHS
+============================================================
+
+The old S16 workflow-path calculation referenced six Python
+entry points and produced:
+
+    1/6 exact
+
+That result belongs to an older workflow snapshot.
+
+The current workflow actually references:
+
+    verification/aq_s14/aq_s14_semantic_suite.py
+    verification/run-all.py
+
+Both are present.
+
+CURRENT STATIC RESULT:
+
+    2 declared Python verification paths
+    2 exact existing paths
+    0 missing
+
+Therefore:
+
+    CURRENT PATH CHECK = 2/2 EXACT
+
+This is repository inspection.
+
+It is NOT a current execution receipt.
+
+
+============================================================
+4. CURRENT MANIFEST
+============================================================
+
+Registered:
+
+    AQ-S14-SEMANTIC-K3
+
+Excluded:
+
+    SV-001-V2
+    K2R-PARAMETRIC
+    BETA-ENVELOPE
+
+Reason:
+
+    executable evidence not currently bound
+
+Status:
+
+    CONSERVATIVE
+
+
+============================================================
+5. RECEIPT DEFECT
+============================================================
+
+AQARION-RUN-RECEIPT-1 does not bind:
+
+    source commit SHA
+    source tree SHA
+    manifest SHA256
+    Python runtime
+    platform
+
+Target:
+
+    AQARION-RUN-RECEIPT-2
+
+The replacement runner must derive:
+
+    git rev-parse HEAD
+    git rev-parse HEAD^{tree}
+    SHA256(manifest)
+
+and place those values into the receipt.
+
+No receipt is claimed until executed.
+
+
+============================================================
+6. CLAIM RECORD DEFECT
+============================================================
+
+AQ-T10-001 declares:
+
+    UNIVERSAL
+    ASSERTED
+    requested promotion = FORMALLY_PROVED
+
+Evidence is:
+
+    one finite fixture
+
+Formalization:
+
+    NOT_COMPILED
+
+Independent checker:
+
+    absent
+
+Artifact hash:
+
+    zero placeholder
+
+Disposition:
+
+    QUARANTINED
+
+No promotion.
+
+
+============================================================
+7. WU1
+============================================================
+
+Pole structure:
+
+B0:
+    poles 2, 1, 0
+
+B1:
+    double pole 2
+    pole 0
+    poles -2, -4, ...
+
+B2:
+    poles 3, 2
+
+Residue-derived coefficients:
+
+    C5 = 1/4 + pi^2/72
+    C6 = -1/72
+    C7 = -(1 + gamma)/72 - 1/48
+
+B1 at s = -2:
+
+    Res = 1/28800
+
+Therefore:
+
+    B1 contains delta^2 / 28800
+
+and the next determinant logarithmic coefficient is:
+
+    C8 = -1/14400
+
+Current formal target:
+
+    D(delta)
+      = pi^4/18
+      + delta C_{2:4}(L)
+      + (1/4 + pi^2/72) delta^2
+      - [(L + 1 + gamma)/72 + 1/48] delta^3
+      - [(L + 1 + gamma)/14400] delta^5
+      + remainder
+
+Status:
+
+    residue algebra = [R]
+    contour bound = OPEN
+
+
+============================================================
+8. EW3b
+============================================================
+
+Variance constant:
+
+    OPEN
+
+No promotion.
+
+
+============================================================
+9. LEAN / LAKE
+============================================================
+
+Lean:
+
+    OPEN
+
+Kernel receipt:
+
+    NONE CLAIMED
+
+C4:
+
+    BLOCKED
+
+Lake dependency closure remains the audit unit.
+
+
+============================================================
+10. FINAL S16 DISPOSITION
+============================================================
+
+CI GREEN at 5922c96:
+
+    VALID HISTORICAL CHECKPOINT
+
+Current HEAD b926186:
+
+    CURRENT EXECUTION RECEIPT OPEN
+
+Current workflow paths:
+
+    2/2 EXACT BY STATIC INSPECTION
+
+Current manifest:
+
+    1 REGISTERED EXECUTABLE CHECK
+
+Universal claims:
+
+    NOT PROMOTED
+
+WU1:
+
+    FORMAL RESIDUE PROGRAM ADVANCED
+
+Contour proof:
+
+    OPEN
+
+C4:
+
+    BLOCKED
+
+PUBLICATION:
+
+    BLOCKED
+
+PROMOTABLE:
+
+    FALSE
