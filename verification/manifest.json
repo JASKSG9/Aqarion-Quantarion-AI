@@ -1,9 +1,37 @@
 {
-  "version": "0.1",
+  "schema": "AQARION-VERIFICATION-MANIFEST-1",
+  "version": "1.0.0",
+  "status": "ACTIVE_ADVERSARIAL",
   "checks": [
-    {"id": "SV-001-V2", "type": "spectral", "command": ["python3","verification/replay-harness.py"], "expected_cases": 5720, "scope": "EXACT", "requires_independent": true},
-    {"id": "K2R-PARAMETRIC", "type": "incidence", "command": ["python3","verification/run-all.py"], "scope": "EXACT"},
-    {"id": "BETA-ENVELOPE", "type": "graph", "command": ["python3","verification/run-all.py"], "scope": "EXACT", "subadditivity_up_to": 1000}
+    {
+      "id": "AQ-S14-SEMANTIC-K3",
+      "type": "semantic_exact_finite",
+      "command": [
+        "python3",
+        "verification/aq_s14/aq_s14_semantic_suite.py"
+      ],
+      "scope": "K3 forest/incidence semantic suite",
+      "requires_external_repository": false
+    }
   ],
-  "known_issues_fixed": ["renamed mainfest.json -> manifest.json","self-check hyphen names","added cross-repo-manifest.json"]
+  "excluded_until_bound": [
+    {
+      "id": "SV-001-V2",
+      "reason": "declared executable is not present in this repository"
+    },
+    {
+      "id": "K2R-PARAMETRIC",
+      "reason": "K2R verification directory is not present in current repository HEAD"
+    },
+    {
+      "id": "BETA-ENVELOPE",
+      "reason": "no independent executable verifier is currently bound"
+    }
+  ],
+  "promotion_rule": {
+    "pass_requires_all_registered_checks": true,
+    "not_implemented_is_failure": true,
+    "missing_artifact_is_failure": true,
+    "external_fallback_paths_forbidden": true
+  }
 }
