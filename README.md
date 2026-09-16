@@ -1,266 +1,310 @@
-# Aqarions-Quantarion-AI
+Aqarions-Quantarion-AI
 
-![License](https://img.shields.io/badge/license-Apache--2.0-blue)
-![Python](https://img.shields.io/badge/python-3.10%2B-3776AB)
-![C3](https://img.shields.io/badge/C3-OPEN-yellow)
-![C4](https://img.shields.io/badge/C4-BLOCKED-red)
-![Lean](https://img.shields.io/badge/Lean-not%20compiled-lightgrey)
-![SDS--002](https://img.shields.io/badge/SDS--002-QUARANTINED-orange)
-![Publication](https://img.shields.io/badge/publication-BLOCKED-red)
-![Promotable](https://img.shields.io/badge/promotable-false-lightgrey)
-![CLAIMLOCK](https://img.shields.io/badge/CLAIMLOCK-policy%20kernel-blueviolet)
+"License" (https://img.shields.io/badge/license-Apache--2.0-blue)
+"C3" (https://img.shields.io/badge/C3-OPEN-yellow)
+"C4" (https://img.shields.io/badge/C4-BLOCKED-red)
+"Lean" (https://img.shields.io/badge/Lean-OPEN-lightgrey)
+"SDS--002" (https://img.shields.io/badge/SDS--002-QUARANTINED-orange)
+"Publication" (https://img.shields.io/badge/publication-BLOCKED-red)
+"Promotable" (https://img.shields.io/badge/promotable-false-lightgrey)
 
-Governance, policy, and cross-repo orchestration hub for the AQARION / Quantarion research corpus.
+Governance, policy, provenance, and cross-repository orchestration hub for
+the AQARION / Quantarion research corpus.
 
-This repository is a **hub**, not a self-contained mathematical library. It defines promotion policy (CLAIMLOCK), declares the layout of sibling AQARION repositories, and enforces a strict separation between idea, computation, replay, formalization, and certification.
+This repository is a hub, not a self-contained mathematical library.
+
+It provides:
+
+1. CLAIMLOCK policy evaluation.
+2. Reproduction-object and provenance semantics.
+3. Independent verification entry points.
+4. Cross-repository dependency declarations.
+5. Adversarial negative controls.
+6. A public computational replay surface for selected AQARION claims.
+
+It does not decide mathematical truth.
 
 ---
 
-## Status
+Current governance state
 
-```
-
-Governance:
-C3 ............. OPEN        (active research)
-C4 ............. BLOCKED     (publication gate closed)
-Lean ........... OPEN        (no compiled kernel receipts)
-SDS-002 ........ QUARANTINED (semantic-drift surface under audit)
+C3 ............. OPEN
+C4 ............. BLOCKED
+Lean ........... OPEN
+SDS-002 ........ QUARANTINED
 Publication .... BLOCKED
 Promotable ..... false
 
-```
+No repository-level policy result is a mathematical proof.
 
-No claim in this hub, or in any branch it references, is currently authorized for external submission.
-
----
-
-## What this repository is
-
-A **branching hub** that:
-
-1. **Declares** the layout of the AQARION/Quantarion research corpus across sibling repositories.
-2. **Evaluates** promotion policy via the CLAIMLOCK kernel — given a claim's evidence items and a promotion request, it authorizes or refuses the promotion.
-3. **Orchestrates** verification runs across declared branches, producing receipts.
-4. **Enforces** the discipline that no promotion happens without policy-compliance checks.
+No public application status is itself mathematical certification.
 
 ---
 
-## What this repository is NOT
+Evidence discipline
 
-- It is **not** a verifier of mathematical truth. The CLAIMLOCK kernel decides whether *policy allows* promotion, not whether a claim is *mathematically correct*.
-- It does **not** compile Lean. No Lean toolchain is vendored.
-- It does **not** perform cryptographic signing or Sigstore/Rekor inclusion.
-- It does **not** contain the AQARION defect-operator mathematics. That lives in `AQARION-ARITHMETIC-FDS-*`.
-- It does **not** clear C4, SDS-002, or publication. Those gates remain blocked by governance.
+AQARION distinguishes:
 
----
+[D]  DEFINED
+[V]  VERIFIED COMPUTATION
+[P]  PROVED
+[PV] PROVED + VERIFIED
+[C]  CONJECTURE
+[R]  RESEARCH
+[F]  REFUTED / KILLED
+[Q]  QUARANTINED
 
-## Repository contents
+Evidence must not migrate upward merely because a later artifact repeats the
+same statement.
 
-```
+In particular:
 
-Aqarions-Quantarion-AI/
-├── README.md
-├── LICENSE                          (Apache 2.0)
-├── requirements.txt                 (pytest only)
-├── project/
-│   └── Project.toml                 (package config)
-├── source/
-│   └── python/
-│       └── claimlock.py             (CLAIMLOCK policy kernel)
-├── verification/
-│   ├── run-all.py                   (orchestrator)
-│   ├── replay-harness.py            (compatibility wrapper)
-│   └── mainfest.json                (manifest — see known issues)
-├── docs/
-│   ├── logs/
-│   │   └── aq-s16.txt               (governance status)
-│   └── markdowns/
-│       └── executable-surface-migration.md
-└── .github/
-└── workflow/
-└── verify.yml               (CI: runs verification/run-all.py)
-
-```
-
-Planned but not yet implemented: `AQARION-CORE/`, `AQARION-LAKE/`, `AQARION-SKILLS/AQARION-REPLAY-LAB/`, `QUICKSTART/`, `EXAMPLES/`, `claims/`, `engines/`, `fixtures/`, `receipts/`, `lean/`.
-
-If you expect a mathematical verifier here, look in `JASKSG9/AQARION-ARITHMETIC-FDS-FINITE-DYNAMICAL-SYSTEMS-` instead.
+public == certified            NO
+runnable == verified           NO
+numeric == proof               NO
+Lean file == Lean proof        NO
+policy ALLOW == truth          NO
+matching output == independence NO
 
 ---
 
-## CLAIMLOCK kernel
+CLAIMLOCK
 
-**File:** `source/python/claimlock.py`
+"source/python/claimlock.py" is a policy evaluator.
 
-CLAIMLOCK is a **policy evaluator**. Given:
+It answers:
 
-- a **claim** (JSON) with a list of evidence items, each carrying a scope, exactness flag, formalization flag, and independent-check flag,
-- a **policy** (JSON) declaring the minimum scope rank and required evidence flags for a requested promotion,
+«Does this evidence set satisfy this promotion policy?»
 
-it emits a receipt with outcome one of:
+It does not answer:
 
-| Outcome | Meaning |
-|---------|---------|
-| `ALLOW` | Requested promotion is authorized by policy |
-| `CL_SCOPE_INSUFFICIENT` | Claim's strongest evidence scope is below the policy minimum |
-| `CL_MISSING_EVIDENCE` | A required evidence flag is absent |
-| `CL_EXACT_COMPUTATION_MISSING` | Policy requires exact computation; none present |
-| `CL_FORMALIZATION_MISSING` | Policy requires formalization; none present |
-| `CL_INDEPENDENT_CHECK_MISSING` | Policy requires independent check; none present |
+«Is the mathematical claim true?»
 
-CLAIMLOCK explicitly does **not**:
-
-- decide whether a mathematical statement is true,
-- validate a SHA-256 digest against real artifact bytes,
-- perform Lean compilation,
-- clear SDS-002, C4, or publication.
-
-Policy authorization is orthogonal to mathematical truth. Conflating the two is the failure mode this hub exists to prevent.
+That distinction is fundamental.
 
 ---
 
-## Branching architecture
+Reproduction provenance
 
-This hub references sibling repositories as **branches**:
+AQARION uses a reproduction-object model with separate predicates:
 
-| Branch | Repository | Provides |
-|--------|------------|----------|
-| `aqarion-core` | `JASKSG9/AQARION-ARITHMETIC-FDS-FINITE-DYNAMICAL-SYSTEMS-` | Defect operator `D_Π = (I−P)KP`, rank formula, trace equivalence |
-| `kaprekar` | `JASKSG9/KAPREKAR-SPECTRAL-GEOMETRY` | 55-state Kaprekar quotient, Jordan-block analysis |
-| `fibonacci` | `JASKSG9/FIBONACCI-SPECTRAL-DYNAMICS-` | Fibonacci operator dynamics |
-| `mandelbrot` | `JASKSG9/MANDELBROT-INFINITE-DYNAMICS` | Escape-time analysis, orbit classification |
-| `academy` | `huggingface.co/spaces/Quantarion9/AQARION-ACADEMY` | DEFECT.LEAN, verification harness, checkpoint notes |
+CLAIM
+SPECIFICATION
+SOURCE
+IMPLEMENTATION
+FIXTURE
+EXECUTION
+OUTPUT
+COMPARISON
+INDEPENDENCE
+FORMAL STATUS
+DRIFT
 
-**Branch manifest is not yet implemented.** A `cross-repo-manifest.json` declaring each branch's URL, commit pin, and `provides` list is required to make branching auditable. Until that exists, the branching described here is architectural intent, not a frozen dependency graph.
+A reproduction requires execution, binding, and output agreement.
 
----
+Independent reproduction additionally requires an independent basis.
 
-## Known issues
-
-### Self-check path mismatch (functional)
-
-`verification/run-all.py` performs a self-check that looks for:
-
-```
-
-verification/run_all.py        (underscore)
-verification/replay_harness.py (underscore)
-verification/manifest.json     (correct spelling)
-
-```
-
-The actual files are named:
-
-```
-
-verification/run-all.py        (hyphen)
-verification/replay-harness.py (hyphen)
-verification/mainfest.json     (typo: "mainfest")
-
-```
-
-**Consequence:** the self-check reports three missing files and returns `FAIL`. The CI workflow `.github/workflow/verify.yml` will fail on first push.
-
-**Fix:** rename files to match the checks, or update the checks to match the files. The typo `mainfest.json` → `manifest.json` should be fixed regardless.
-
-### Undefined items (scope)
-
-The following items have been referenced in audit context but are **not defined in this repository, nor in any accessible AQARION repository**:
-
-- `phase lift lemma`
-- `voltage cover counterexample`
-- `H_T` / `transport graph`
-- `C(G-R)`
-
-They must not be cited as AQARION objects until either (a) a definition is committed to a named branch, or (b) they are formally removed from the research ledger.
-
-### Layout description drift
-
-Prior versions of this README described directories (`AQARION-CORE/`, `AQARION-LAKE/`, `AQARION-SKILLS/`, `QUICKSTART/`, `EXAMPLES/`, `DOCS/`) that do not exist in this repository. That description has been replaced with the actual contents listed above. Planned directories are labeled as planned.
+Formalization and proof are separate evidence dimensions.
 
 ---
 
-## Governance rules
+Verification entry point
 
-The hub enforces four rules at the policy layer:
+Run:
 
-1. **Evidence scope must meet or exceed the promotion target.** A claim whose strongest evidence is numeric replay cannot be promoted to `FORMAL`.
-2. **Exact computation must be present if policy requires it.** Float64 agreement is not exact.
-3. **Formalization must be present if policy requires it.** A Lean target file is not a Lean compilation.
-4. **Independent check must be present if policy requires it.** Same-implementation self-verification does not count.
+python3 verification/run-all.py \
+  --manifest verification/manifest.json \
+  --receipt verification/receipts/run_all_receipt.json
 
-These rules exist to prevent specific, observed failure modes: finite-to-universal promotion, numeric-to-formal promotion, aspirational-to-actual promotion, and self-referential verification.
+The runner is fail-closed.
 
----
-
-## Running the verification orchestrator
-
-```bash
-python3 verification/run-all.py
-```
-
-Expected current behavior: the self-check reports FAIL due to the path-mismatch issue described above. This is a known bug, not an orchestration problem.
-
-Once the path mismatch is fixed, the orchestrator will iterate the manifest's declared checks and produce a summary receipt.
-
-## Evidence Status
-
-AQARION distinguishes mathematical evidence from software availability.
-
-- `[D]` Definition
-- `[V]` Independently verified computation
-- `[P]` Formal mathematical proof
-- `[PV]` Proof plus independent verification
-- `[C]` Conjecture
-- `[R]` Research
-- `[F]` Refuted / killed
-- `[Q]` Quarantined
-
-A public repository, running application, numerical agreement, or generated
-certificate does not by itself constitute a mathematical proof.
-
-AI-assisted development is recorded as provenance where applicable. The
-system does not claim to determine whether AI was used; it records the
-research and verification process.
+It never treats "NOT_IMPLEMENTED" as "PASS".
 
 ---
 
-Roadmap
+K2R closure-stabilization replay
 
-Priority Action
-P0 Fix filename mismatches in verification/run-all.py
-P0 Rename mainfest.json → manifest.json
-P1 Add cross-repo-manifest.json with branch URLs and commit pins
-P1 Implement one real mathematical verification module (e.g. D² = 0 exact replay)
-P2 Add claims/, fixtures/, receipts/ directories with a first worked example
-P2 Define or formally drop phase lift, voltage cover, H_T, C(G-R)
-P3 Add a real Lean target in a pinned Lake package
+The current hub contains an independent computational replay of the K2r
+closure family.
+
+The fixtures are:
+
+verification/k2r/fixtures/AQ-K2R-R2.json
+verification/k2r/fixtures/AQ-K2R-R3.json
+verification/k2r/fixtures/AQ-K2R-R5.json
+verification/k2r/fixtures/AQ-K2R-R15.json
+
+The verifier is:
+
+verification/k2r/verify.py
+
+Run:
+
+python3 verification/k2r/verify.py
+
+The verifier reconstructs the objects from "r", rather than importing a
+mathematical implementation from another AQARION repository.
+
+The current computational results include:
+
+h_min(P) = 2
+h_min(Q) = r
+h_min(M) = 2r
+h_min(U) = 1
+
+Delta = -(r-1)
+
+for the tested fixtures.
+
+These are currently recorded as:
+
+RECONSTRUCTED_INDEPENDENT_COMPUTATION
+
+They are not being represented here as Lean-certified theorems.
 
 ---
 
-Contributing
+Three-orbit-term negative control
 
-Before opening a PR:
+The closure certificate defines “three orbit terms” explicitly as:
 
-1. Every new claim must have a corresponding manifest entry.
-2. Every new evidence item must declare its scope: NUMERIC, EXACT, FORMAL, or INDEPENDENT.
-3. Promotion requests must go through CLAIMLOCK; do not edit governance status flags directly.
-4. Do not add aspirational documentation. If a directory does not exist, do not describe it as though it does.
-5. Do not add a status badge the repository cannot currently defend.
+R ∨ T(R) ∨ T²(R)
+
+This is not the same thing as three recurrence applications.
+
+The distinction matters already for "r = 2".
+
+The K2R verifier therefore checks both:
+
+three-orbit-term result
+
+and
+
+full orbit closure
+
+separately.
+
+---
+
+Canonicalization
+
+The K2R certificate manifest declares RFC 8785 JSON Canonicalization Scheme
+(JCS) as the intended canonical serialization contract.
+
+A true JCS implementation is required for normative certificate generation.
+
+Generic "json.dumps(sort_keys=True, ...)" is deterministic JSON, but it is not
+itself evidence of RFC 8785 compliance.
+
+---
+
+Two-application federation architecture
+
+The public federation uses separate application roles.
+
+PUBLIC FEDERATION HUB
+https://aqarion-federation-hub--quantarion9.replit.app
+
+        |
+        v
+
+CERTIFICATE / EVIDENCE SERVICE
+https://quantarion-federation-hub--aqarionaaron.replit.app
+
+        |
+        v
+
+GitHub / Hugging Face / archival artifacts
+
+These roles must be explicit in machine-readable metadata.
+
+A single ambiguous "liveAppUrl" field must not be used to represent both roles.
+
+---
+
+Cross-repository policy
+
+The hub declares sibling repositories and their pinned commits.
+
+A cross-repository declaration is a dependency statement.
+
+It is not a proof that the referenced repository is current, correct, or
+mathematically certified.
+
+A pinned commit identifies a specific revision.
+
+---
+
+AI and provenance
+
+AQARION does not claim that its infrastructure can determine whether a human
+or AI produced a particular mathematical idea.
+
+The relevant provenance question is:
+
+What claim was evaluated?
+What specification was used?
+What source revision was executed?
+What implementation ran?
+What input was used?
+What output was produced?
+What comparison was performed?
+Was independence established?
+Was a formal proof artifact checked?
+
+AI-assisted activity can be represented in the provenance graph where known.
+
+That provenance does not itself establish mathematical truth.
+
+---
+
+Reproducibility
+
+A repository being public is not equivalent to an independent reproduction.
+
+AQARION therefore distinguishes:
+
+AVAILABLE
+EXECUTED
+REPRODUCED
+INDEPENDENTLY REPRODUCED
+FORMALIZED
+PROVED
+
+Each requires its own evidence.
+
+---
+
+Publication gate
+
+The current publication gate remains:
+
+BLOCKED
+
+The K2R computational replay does not by itself change C4 or publication
+status.
+
+Any eventual promotion must satisfy the applicable evidence policy and the
+underlying mathematical proof requirements.
 
 ---
 
 License
 
-Apache 2.0. See LICENSE.
+Apache 2.0. See "LICENSE".
 
 ---
 
-Pointers
+Primary pointers
 
-· Core AQARION mathematics: github.com/JASKSG9/AQARION-ARITHMETIC-FDS-FINITE-DYNAMICAL-SYSTEMS-
-· Kaprekar case study: github.com/JASKSG9/KAPREKAR-SPECTRAL-GEOMETRY
-· HuggingFace space: huggingface.co/spaces/Quantarion9/AQARION-ACADEMY
+AQARION mathematical core:
 
----
+"JASKSG9/AQARION-ARITHMETIC-FDS-FINITE-DYNAMICAL-SYSTEMS-"
+
+Kaprekar spectral case study:
+
+"JASKSG9/KAPREKAR-SPECTRAL-GEOMETRY"
+
+AQARION Academy:
+
+"huggingface.co/spaces/Quantarion9/AQARION-ACADEMY"
