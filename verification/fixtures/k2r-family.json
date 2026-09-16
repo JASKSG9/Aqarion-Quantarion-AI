@@ -1,0 +1,17 @@
+{
+  "fixture_id": "C3-K2R",
+  "status": "PARAMETRIC_COMPUTATIONAL_FIXTURE",
+  "family": "K_2_r",
+  "parameter": "r",
+  "minimum_r": 2,
+  "support_size": "2*r",
+  "reservoir_size": 1,
+  "claims_to_check": [
+    "incidence_graph_is_K2r",
+    "beta_equals_r_minus_1",
+    "mT_equals_0",
+    "kappa_equals_minus_r_minus_1",
+    "delta_equals_minus_r_minus_1"
+  ],
+  "note": "These are executable family checks, not a universal theorem."
+}
