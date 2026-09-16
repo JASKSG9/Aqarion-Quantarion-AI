@@ -1,0 +1,81 @@
+{
+  "schema": "AQARION-REPRODUCTION-OBJECT-1",
+
+  "object_id": "RO-C-001-RUN-001",
+
+  "claim": {
+    "claim_id": "C-001",
+    "statement": "...",
+    "specification_sha256": null,
+    "claim_class": "COMPUTATIONAL_IDENTITY"
+  },
+
+  "source": {
+    "repository": "JASKSG9/Aqarions-Quantarion-AI",
+    "commit": null,
+    "tree_sha256": null
+  },
+
+  "implementation": {
+    "path": null,
+    "sha256": null
+  },
+
+  "fixtures": [
+    {
+      "id": "FIX-001",
+      "path": null,
+      "sha256": null,
+      "bytes": null
+    }
+  ],
+
+  "execution": {
+    "run_id": "RUN-001",
+    "performed": false,
+    "command": null,
+    "exit_code": null,
+    "environment": {},
+    "log_sha256": null
+  },
+
+  "artifacts": [
+    {
+      "id": "ART-001",
+      "path": null,
+      "sha256": null,
+      "bytes": null
+    }
+  ],
+
+  "comparison": {
+    "relation": null,
+    "expected_sha256": null,
+    "observed_sha256": null,
+    "match": null
+  },
+
+  "independence": {
+    "status": "NOT_ESTABLISHED",
+    "implementation_id": null,
+    "source_root": null,
+    "verifier_id": null,
+    "basis": []
+  },
+
+  "formal": {
+    "status": "OPEN",
+    "artifact": null,
+    "sorry_axioms": null
+  },
+
+  "drift": {
+    "source_changed": null,
+    "fixture_changed": null,
+    "implementation_changed": null,
+    "environment_changed": null,
+    "claim_changed": null
+  },
+
+  "verdict": "UNEXECUTED"
+}
