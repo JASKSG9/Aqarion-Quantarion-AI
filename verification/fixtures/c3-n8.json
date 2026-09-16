@@ -1,0 +1,11 @@
+{
+  "fixture_id": "C3-N8",
+  "status": "COMPUTATIONAL_FIXTURE",
+  "n": 8,
+  "s0": 1,
+  "mT": 0,
+  "kappa": 1,
+  "delta": 1,
+  "sT": 2,
+  "purpose": "Exact regression fixture for Delta = sT - s0."
+}
