@@ -1,4 +1,4 @@
-# AQARION Federation Status Ledger
+i# AQARION Federation Status Ledger
 
 ## Checkpoint
 
@@ -609,3 +609,59 @@ Publication:
 Promotable:
 
     false
+
+    AQARION CURRENT GOVERNANCE
+==========================
+
+CURRENT HEAD:
+b92618693b0f61db950912e1661d7bded616b41e
+
+HISTORICAL CI:
+5922c96 = PASS [V], historical only
+
+CURRENT CI:
+OPEN until actual current-head Actions run
+
+CURRENT WORKFLOW PATHS:
+2/2 exact by repository inspection
+
+CURRENT MANIFEST:
+1 executable check
+
+SV-001-V2:
+EXCLUDED
+
+K2R:
+EXCLUDED
+
+BETA-ENVELOPE:
+EXCLUDED
+
+RECEIPT:
+Receipt-2 implementation supplied
+execution receipt NOT fabricated
+
+AQ-T10-001:
+QUARANTINED
+
+WU1:
+C5 survives
+C6 derived
+C7 derived
+C8 derived from pole ledger
+contour constants OPEN
+
+EW3b:
+OPEN
+
+Lean:
+OPEN
+
+C4:
+BLOCKED
+
+Publication:
+BLOCKED
+
+Promotable:
+FALSE
