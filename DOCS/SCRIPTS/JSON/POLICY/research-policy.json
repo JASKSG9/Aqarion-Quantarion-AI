@@ -1,0 +1,59 @@
+{
+  "schema_version": "claimlock.policy.v1",
+  "policy_id": "AQARION-RESEARCH-POLICY",
+  "policy_version": "0.1.0",
+
+  "scope_order": {
+    "INSTANCE": 1,
+    "FINITE_FAMILY": 2,
+    "PARAMETERIZED_FAMILY": 3,
+    "UNIVERSAL": 4
+  },
+
+  "promotion_requirements": {
+    "COMPUTATIONALLY_SUPPORTED": {
+      "minimum_scope": "INSTANCE",
+      "require_exact_computation": true,
+      "require_formalization": false,
+      "require_independent_check": false
+    },
+
+    "COMPUTATIONALLY_REPLAYED": {
+      "minimum_scope": "FINITE_FAMILY",
+      "require_exact_computation": true,
+      "require_formalization": false,
+      "require_independent_check": true
+    },
+
+    "FORMALLY_PROVED": {
+      "minimum_scope": "UNIVERSAL",
+      "require_exact_computation": false,
+      "require_formalization": true,
+      "require_independent_check": true
+    },
+
+    "CERTIFIED": {
+      "minimum_scope": "UNIVERSAL",
+      "require_exact_computation": false,
+      "require_formalization": true,
+      "require_independent_check": true
+    }
+  },
+
+  "failure_policy": {
+    "scope_insufficient": "BLOCKED",
+    "missing_evidence": "INDETERMINATE",
+    "formalization_missing": "BLOCKED",
+    "independent_check_missing": "BLOCKED",
+    "unknown_promotion": "INDETERMINATE"
+  },
+
+  "governance": {
+    "promotion_default": false,
+    "C3": "OPEN",
+    "C4": "BLOCKED",
+    "lean": "OPEN",
+    "sds_002": "QUARANTINED",
+    "publication": "BLOCKED"
+  }
+}
