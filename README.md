@@ -1,454 +1,246 @@
-# AQARION & QUANTARION AI
+# Aqarions-Quantarion-AI
 
-**Replayable Research Objects for Finite Dynamical Systems**
+![License](https://img.shields.io/badge/license-Apache--2.0-blue)
+![Python](https://img.shields.io/badge/python-3.10%2B-3776AB)
+![C3](https://img.shields.io/badge/C3-OPEN-yellow)
+![C4](https://img.shields.io/badge/C4-BLOCKED-red)
+![Lean](https://img.shields.io/badge/Lean-not%20compiled-lightgrey)
+![SDS--002](https://img.shields.io/badge/SDS--002-QUARANTINED-orange)
+![Publication](https://img.shields.io/badge/publication-BLOCKED-red)
+![Promotable](https://img.shields.io/badge/promotable-false-lightgrey)
+![CLAIMLOCK](https://img.shields.io/badge/CLAIMLOCK-policy%20kernel-blueviolet)
 
-[![Status](https://img.shields.io/badge/status-FROZEN%20AUDIT-blue)]()
-[![C4](https://img.shields.io/badge/C4-BLOCKED-red)]()
-[![Publication](https://img.shields.io/badge/publication-BLOCKED-red)]()
-[![Lean](https://img.shields.io/badge/Lean-OPEN-yellow)]()
-[![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
+Governance, policy, and cross-repo orchestration hub for the AQARION / Quantarion research corpus.
 
-AQARION is a research framework and evidence infrastructure for certifying
-observable quotients of finite deterministic dynamical systems. It combines
-operator theory, exact-rational computation, formal verification targets, and
-a portable replay contract that makes every claim independently checkable.
-
-> **Replay is not proof. A receipt is not certification. No axis promotes another silently.**
-
----
-
-## Table of contents
-
-- [What AQARION is](#what-aqarion-is)
-- [What AQARION is not](#what-aqarion-is-not)
-- [Governance status](#governance-status)
-- [Core equation](#core-equation)
-- [Repository layout](#repository-layout)
-- [Quick start](#quick-start)
-- [The Replay Contract (RPL-001)](#the-replay-contract-rpl-001)
-- [ARRO — Replayable Research Objects](#arro--replayable-research-objects)
-- [Verdict lattice](#verdict-lattice)
-- [Claim and evidence registry](#claim-and-evidence-registry)
-- [Formal verification](#formal-verification)
-- [Replay Lab](#replay-lab)
-- [Contributing](#contributing)
-- [Citation](#citation)
-- [License](#license)
+This repository is a **hub**, not a self-contained mathematical library. It defines promotion policy (CLAIMLOCK), declares the layout of sibling AQARION repositories, and enforces a strict separation between idea, computation, replay, formalization, and certification.
 
 ---
 
-## What AQARION is
-
-AQARION studies **when a proposed observable space of a finite dynamical
-system is exactly invariant under the Koopman operator**, and when it is not,
-**how the leakage is structured**.
-
-Given:
-
-- a finite set `X` with a deterministic map `T : X → X`,
-- the Koopman operator `(K_T f)(x) = f(T(x))`,
-- a partition `Π` of `X` with orthogonal projector `P_Π`,
-
-the framework is built on one object — the **observable defect operator**:
+## Status
 
 ```
 
-D_Π = (I − P_Π) K_T P_Π
+Governance:
+C3 ............. OPEN        (active research)
+C4 ............. BLOCKED     (publication gate closed)
+Lean ........... OPEN        (no compiled kernel receipts)
+SDS-002 ........ QUARANTINED (semantic-drift surface under audit)
+Publication .... BLOCKED
+Promotable ..... false
 
 ```
 
-The central theorem (AQ-THM-001) states:
-
-```
-
-D_Π = 0  ⟺  K_T(V_Π) ⊆ V_Π
-
-```
-
-Everything else — rank, spectrum, Frobenius energy, entropy, transfer dual,
-closure refinement — is a derived invariant of this operator.
-
-**AQARION is not an observable-learning method.** It is a post-hoc
-certification layer that evaluates proposed observable spaces produced by
-any method: analytic construction, EDMD, kernel EDMD, neural Koopman
-approximations, Fourier truncation, polynomial bases.
+No claim in this hub, or in any branch it references, is currently authorized for external submission.
 
 ---
 
-## What AQARION is not
+## What this repository is
 
-AQARION does **not** claim, and will not claim without a kernel-accept
-receipt, any of the following:
+A **branching hub** that:
 
-- that finite computation establishes a universal theorem;
-- that a passing CI run certifies mathematics;
-- that a `Sorry`-free Lean file is a verified theorem;
-- that a healthy API implies valid evidence;
-- that a receipt implies certification;
-- that any axis (math / replay / provenance / formal) silently promotes another.
+1. **Declares** the layout of the AQARION/Quantarion research corpus across sibling repositories.
+2. **Evaluates** promotion policy via the CLAIMLOCK kernel — given a claim's evidence items and a promotion request, it authorizes or refuses the promotion.
+3. **Orchestrates** verification runs across declared branches, producing receipts.
+4. **Enforces** the discipline that no promotion happens without policy-compliance checks.
 
 ---
 
-## Governance status
+## What this repository is NOT
 
-| Component | Status | Meaning |
-|---|---|---|
-| **C3** | 🟢 OPEN | Active research; no freeze. |
-| **C4** | 🔴 BLOCKED | Publication gate is closed. |
-| **Lean** | 🟡 OPEN | Formal targets declared; kernel receipts pending. |
-| **SDS-002** | 🟠 QUARANTINED | Semantic-drift surface under audit. |
-| **Publication** | 🔴 BLOCKED | No external submission authorized. |
-| **Promotable** | ❌ false | No claim is currently promotable. |
-
-Releases of AQARION are **evidence snapshots**, not certifications.
+- It is **not** a verifier of mathematical truth. The CLAIMLOCK kernel decides whether *policy allows* promotion, not whether a claim is *mathematically correct*.
+- It does **not** compile Lean. No Lean toolchain is vendored.
+- It does **not** perform cryptographic signing or Sigstore/Rekor inclusion.
+- It does **not** contain the AQARION defect-operator mathematics. That lives in `AQARION-ARITHMETIC-FDS-*`.
+- It does **not** clear C4, SDS-002, or publication. Those gates remain blocked by governance.
 
 ---
 
-## Core equation
+## Repository contents
 
 ```
 
-CLAIM  →  RUN  →  RECEIPT  →  REPLAY  →  VERDICT
+Aqarions-Quantarion-AI/
+├── README.md
+├── LICENSE                          (Apache 2.0)
+├── requirements.txt                 (pytest only)
+├── project/
+│   └── Project.toml                 (package config)
+├── source/
+│   └── python/
+│       └── claimlock.py             (CLAIMLOCK policy kernel)
+├── verification/
+│   ├── run-all.py                   (orchestrator)
+│   ├── replay-harness.py            (compatibility wrapper)
+│   └── mainfest.json                (manifest — see known issues)
+├── docs/
+│   ├── logs/
+│   │   └── aq-s16.txt               (governance status)
+│   └── markdowns/
+│       └── executable-surface-migration.md
+└── .github/
+└── workflow/
+└── verify.yml               (CI: runs verification/run-all.py)
 
 ```
 
-with the load-bearing invariants:
+Planned but not yet implemented: `AQARION-CORE/`, `AQARION-LAKE/`, `AQARION-SKILLS/AQARION-REPLAY-LAB/`, `QUICKSTART/`, `EXAMPLES/`, `claims/`, `engines/`, `fixtures/`, `receipts/`, `lean/`.
 
-```
-
-NO RECEIPT  ⇒  NO REPLAY CLAIM
-REPLAY      ≠  PROOF
-COMPUTED    ≠  PROVED
-
-```
-
-Every claim, run, and verdict carries an explicit evidence class. No output
-is promoted above what its receipt supports.
+If you expect a mathematical verifier here, look in `JASKSG9/AQARION-ARITHMETIC-FDS-FINITE-DYNAMICAL-SYSTEMS-` instead.
 
 ---
 
-## Repository layout
+## CLAIMLOCK kernel
 
-```
+**File:** `source/python/claimlock.py`
 
-AQARION/
-├── AQARION-CORE/                 Core operator definitions
-├── AQARION-LAKE/                 Lean 4 formalization targets
-│   ├── AqarionLake.lean          Canonical library root (target)
-│   ├── lakefile.lean
-│   └── lean-toolchain
-├── AQARION-SKILLS/
-│   ├── AQARION-REPLAY-LAB/       Replay Contract v0.1
-│   │   ├── scripts/
-│   │   │   └── capture.py        RPL-001 compliant runner
-│   │   ├── schema/
-│   │   │   └── receipt.schema.json
-│   │   ├── claims/               Claim YAML definitions
-│   │   ├── ENGINES/              Per-claim execution engines
-│   │   ├── FIXTURES/             Inputs and negative controls
-│   │   ├── RECEIPTS/             Written receipts (immutable)
-│   │   ├── runs/                 Run artifacts (stdout, stderr, receipt)
-│   │   └── tests/
-│   └── aqarion-replay/
-│       └── SKILL.md              Agent Skills format
-├── QUICKSTART/
-│   └── AQARION-RIP/              Getting-started guides
-├── DOCS/                         Design documents and audit trails
-├── EXAMPLES/                     Worked ARROs
-└── README.md
+CLAIMLOCK is a **policy evaluator**. Given:
 
-```
+- a **claim** (JSON) with a list of evidence items, each carrying a scope, exactness flag, formalization flag, and independent-check flag,
+- a **policy** (JSON) declaring the minimum scope rank and required evidence flags for a requested promotion,
+
+it emits a receipt with outcome one of:
+
+| Outcome | Meaning |
+|---------|---------|
+| `ALLOW` | Requested promotion is authorized by policy |
+| `CL_SCOPE_INSUFFICIENT` | Claim's strongest evidence scope is below the policy minimum |
+| `CL_MISSING_EVIDENCE` | A required evidence flag is absent |
+| `CL_EXACT_COMPUTATION_MISSING` | Policy requires exact computation; none present |
+| `CL_FORMALIZATION_MISSING` | Policy requires formalization; none present |
+| `CL_INDEPENDENT_CHECK_MISSING` | Policy requires independent check; none present |
+
+CLAIMLOCK explicitly does **not**:
+
+- decide whether a mathematical statement is true,
+- validate a SHA-256 digest against real artifact bytes,
+- perform Lean compilation,
+- clear SDS-002, C4, or publication.
+
+Policy authorization is orthogonal to mathematical truth. Conflating the two is the failure mode this hub exists to prevent.
 
 ---
 
-## Quick start
+## Branching architecture
 
-### Requirements
+This hub references sibling repositories as **branches**:
 
-- Python 3.10+
-- `git`
-- (optional) Lean 4 + Lake for formal targets
-- No GPU, no cloud account, no paid API required for the evidence core.
+| Branch | Repository | Provides |
+|--------|------------|----------|
+| `aqarion-core` | `JASKSG9/AQARION-ARITHMETIC-FDS-FINITE-DYNAMICAL-SYSTEMS-` | Defect operator `D_Π = (I−P)KP`, rank formula, trace equivalence |
+| `kaprekar` | `JASKSG9/KAPREKAR-SPECTRAL-GEOMETRY` | 55-state Kaprekar quotient, Jordan-block analysis |
+| `fibonacci` | `JASKSG9/FIBONACCI-SPECTRAL-DYNAMICS-` | Fibonacci operator dynamics |
+| `mandelbrot` | `JASKSG9/MANDELBROT-INFINITE-DYNAMICS` | Escape-time analysis, orbit classification |
+| `academy` | `huggingface.co/spaces/Quantarion9/AQARION-ACADEMY` | DEFECT.LEAN, verification harness, checkpoint notes |
 
-### Minimal local run
-
-```sh
-git clone https://github.com/JASKSG9/AQARION-ARITHMETIC-FDS-FINITE-DYNAMICAL-SYSTEMS-.git
-cd AQARION-ARITHMETIC-FDS-FINITE-DYNAMICAL-SYSTEMS-
-python -m pip install numpy sympy pytest
-
-# Initialize the Replay Lab skeleton
-python aqreplay.py init
-
-# Run the RPL-001 receipt integrity tests
-python -m pytest tests/ -q
-
-# Capture the first ARRO
-python aqreplay.py capture AQ-S16-SAT-001 RPL-SAT-001 \
-  -- python ENGINES/saturation_equal_margin.py
-
-# Verify and close the object
-python aqreplay.py verify RPL-SAT-001
-python aqreplay.py closure AQ-S16-SAT-001
-```
-
-Expected closure output:
-
-```json
-{
-  "claim_id": "AQ-S16-SAT-001",
-  "parts": {
-    "claim_yaml": "RESOLVED",
-    "engine": "RESOLVED",
-    "receipt": "RESOLVED (1)",
-    "lean": "OPEN",
-    "promotion": "BLOCKED"
-  },
-  "object_status": "REPLAY_CLOSED"
-}
-```
-
-REPLAY_CLOSED means the computational object is replayable. It does
-not mean the theorem is proved.
+**Branch manifest is not yet implemented.** A `cross-repo-manifest.json` declaring each branch's URL, commit pin, and `provides` list is required to make branching auditable. Until that exists, the branching described here is architectural intent, not a frozen dependency graph.
 
 ---
 
-The Replay Contract (RPL-001)
+## Known issues
 
-Every run produces a receipt. Every receipt — including failures — is
-written unconditionally.
+### Self-check path mismatch (functional)
 
-RPL-001 invariant:
-
-```
-FAILED RUN  ⇒  COMPLETE RECEIPT
-```
-
-The reference implementation captures the subprocess exit code directly
-via subprocess.run(...).returncode. It does not use a shell pipeline,
-because "$@" | tee; echo $? reports the exit status of tee, not of the
-wrapped command.
-
-Receipt schema
-
-```json
-{
-  "receipt_id": "AQ-RPL-RPL-SAT-001",
-  "claim_id": "AQ-S16-SAT-001",
-  "run_id": "RPL-SAT-001",
-  "timestamp_utc": "2026-09-16T00:00:00+00:00",
-  "command": ["python", "ENGINES/saturation_equal_margin.py"],
-  "exit_code": 0,
-  "stdout_sha256": "…",
-  "stderr_sha256": "NO_STDERR",
-  "source_sha256": "…",
-  "commit": "abcdef123456",
-  "environment": { "python": "3.13.0", "platform": "Linux-…" },
-  "policy": {
-    "filesystem": "workspace_only",
-    "network": false,
-    "external_actions": false,
-    "package_install": false
-  },
-  "verdict": "COMPUTED",
-  "residual": null,
-  "promotion_allowed": false,
-  "independent_machine": false
-}
-```
-
-Verdict vocabulary (deliberately weak)
+`verification/run-all.py` performs a self-check that looks for:
 
 ```
-OBSERVED  |  COMPUTED  |  FAILED  |  QUARANTINED
-REPLAYED  |  INDEPENDENTLY_REPLAYED
+
+verification/run_all.py        (underscore)
+verification/replay_harness.py (underscore)
+verification/manifest.json     (correct spelling)
+
 ```
 
-PROVEN and CERTIFIED are not in this list. They belong to the
-formal axis and require kernel receipts.
+The actual files are named:
+
+```
+
+verification/run-all.py        (hyphen)
+verification/replay-harness.py (hyphen)
+verification/mainfest.json     (typo: "mainfest")
+
+```
+
+**Consequence:** the self-check reports three missing files and returns `FAIL`. The CI workflow `.github/workflow/verify.yml` will fail on first push.
+
+**Fix:** rename files to match the checks, or update the checks to match the files. The typo `mainfest.json` → `manifest.json` should be fixed regardless.
+
+### Undefined items (scope)
+
+The following items have been referenced in audit context but are **not defined in this repository, nor in any accessible AQARION repository**:
+
+- `phase lift lemma`
+- `voltage cover counterexample`
+- `H_T` / `transport graph`
+- `C(G-R)`
+
+They must not be cited as AQARION objects until either (a) a definition is committed to a named branch, or (b) they are formally removed from the research ledger.
+
+### Layout description drift
+
+Prior versions of this README described directories (`AQARION-CORE/`, `AQARION-LAKE/`, `AQARION-SKILLS/`, `QUICKSTART/`, `EXAMPLES/`, `DOCS/`) that do not exist in this repository. That description has been replaced with the actual contents listed above. Planned directories are labeled as planned.
 
 ---
 
-ARRO — Replayable Research Objects
+## Governance rules
 
-A Replayable Research Object is a tuple:
+The hub enforces four rules at the policy layer:
 
-```
-R = (C, S, I, E, O, Rc, V)
-```
+1. **Evidence scope must meet or exceed the promotion target.** A claim whose strongest evidence is numeric replay cannot be promoted to `FORMAL`.
+2. **Exact computation must be present if policy requires it.** Float64 agreement is not exact.
+3. **Formalization must be present if policy requires it.** A Lean target file is not a Lean compilation.
+4. **Independent check must be present if policy requires it.** Same-implementation self-verification does not count.
 
-Symbol Component Content
-C Claim statement, scope, expected residual, policy
-S Source exact git commit + source SHA-256
-I Inputs fixture digests
-E Execution command, environment, policy
-O Output stdout/stderr hashes
-Rc Receipt schema-validated JSON
-V Verdict multi-axis result
-
-A replay is valid iff the receipt's declared source, inputs, and policy
-match the replay environment. A replay is independent iff it occurs on
-a distinct machine and the hashes agree.
-
-Every ARRO lives in a directory:
-
-```
-claims/AQ-XXXX.yaml
-ENGINES/engine_name.py
-FIXTURES/fixture.json
-runs/RPL-XXXX/receipt.json
-RECEIPTS/AQ-RPL-RPL-XXXX.json
-```
+These rules exist to prevent specific, observed failure modes: finite-to-universal promotion, numeric-to-formal promotion, aspirational-to-actual promotion, and self-referential verification.
 
 ---
 
-Verdict lattice
+## Running the verification orchestrator
 
-AQARION maintains four independent axes. No axis promotes another
-silently.
-
-Axis Values
-MATH OBSERVED · COMPUTED · CONSISTENT · KILLED · FORMALLY_VERIFIED
-REPLAY NOT_REPLAYED · REPLAYED · INDEPENDENTLY_REPLAYED
-PROVENANCE ALIGNED · DRIFTED · UNKNOWN
-FORMAL NOT_STARTED · NOT_COMPILED · COMPILES · ZERO_SORRY · AXIOM_AUDITED · KERNEL_ACCEPTED
-
-A single receipt may carry, for example:
-
-```
-MATH:        COMPUTED
-REPLAY:      REPLAYED
-PROVENANCE:  ALIGNED
-FORMAL:      NOT_COMPILED
+```bash
+python3 verification/run-all.py
 ```
 
-That means: the computation ran, was replayed in-session, the source
-matches its declared hash, and no formal verification has been done.
+Expected current behavior: the self-check reports FAIL due to the path-mismatch issue described above. This is a known bug, not an orchestration problem.
+
+Once the path mismatch is fixed, the orchestrator will iterate the manifest's declared checks and produce a summary receipt.
 
 ---
 
-Claim and evidence registry
+Roadmap
 
-Claims are declared in claims/*.yaml:
-
-```yaml
-claim_id: AQ-S16-SAT-001
-statement: >
-  For equal-margin non-negative integer 3×3 multiplicity matrices M
-  (all row and column sums equal to n), the reduced residual Gram G_M
-  satisfies λ_max(G_M) = 1 if and only if rank(M) < 3.
-status: OPEN
-engine: ENGINES/saturation_equal_margin.py
-inputs: []
-expected:
-  residual: "0"
-  mismatches: 0
-  domain: "n=1..5 exhaustive transportation polytope"
-policy:
-  filesystem: workspace_only
-  network: false
-math_axis: STRUCTURALLY_DERIVED
-replay_axis: NOT_YET_REPLAYED
-formal_axis: LEAN_OPEN
-promotion_allowed: false
-```
-
-The full registry is machine-readable. aqreplay closure CLAIM_ID reports
-which parts of the object resolve and which remain open.
-
----
-
-Formal verification
-
-AQARION maintains Lean 4 targets under AQARION-LAKE/. Formal status is
-reported using strict labels:
-
-```
-NOT_COMPILED      no build attempted
-COMPILES          lake build succeeds
-ZERO_SORRY        no `sorry` in the certified slice
-AXIOM_AUDITED     #print axioms reports no project axioms
-KERNEL_ACCEPTED   an external kernel check accepted the proof
-```
-
-The formal axis is orthogonal to computation and replay. A theorem can
-be COMPUTED, REPLAYED, PROVENANCE: ALIGNED, and still FORMAL:
-NOT_COMPILED — and it will be reported exactly that way.
-
-Canonical build:
-
-```sh
-cd AQARION-LAKE
-lake build
-```
-
----
-
-Replay Lab
-
-The Replay Lab (AQARION-SKILLS/AQARION-REPLAY-LAB/) is the first
-concrete AQARION product. It is not a UI; it is a small, portable,
-evidence-first engine.
-
-Commands
-
-```sh
-aqreplay init                    # initialize skeleton
-aqreplay capture CLAIM RUN -- CMD
-aqreplay verify RUN              # validate receipt schema + hashes
-aqreplay closure CLAIM           # report object closure
-aqreplay diff RUN_A RUN_B        # compare two receipts
-aqreplay explain RUN             # show residual and provenance
-```
-
-Design constraints
-
-· Python standard library + optional numpy / sympy.
-· No cloud, no GPU, no paid API, no authentication.
-· Runs on Android / Termux, Linux, macOS, and CI equally.
-· Emits machine-readable JSON receipts.
-· Never mutates remote state.
+Priority Action
+P0 Fix filename mismatches in verification/run-all.py
+P0 Rename mainfest.json → manifest.json
+P1 Add cross-repo-manifest.json with branch URLs and commit pins
+P1 Implement one real mathematical verification module (e.g. D² = 0 exact replay)
+P2 Add claims/, fixtures/, receipts/ directories with a first worked example
+P2 Define or formally drop phase lift, voltage cover, H_T, C(G-R)
+P3 Add a real Lean target in a pinned Lake package
 
 ---
 
 Contributing
 
-Before opening a pull request:
+Before opening a PR:
 
-1. A claim is declared in claims/*.yaml.
-2. An engine exists under ENGINES/ and reproduces the claim.
-3. A receipt is produced by aqreplay capture.
-4. aqreplay closure reports the object status.
-5. python -m pytest tests/ passes.
-6. No status is promoted above what the receipt supports.
-
-See DOCS/ for the full evidence policy.
-
----
-
-Citation
-
-```bibtex
-@misc{aqarion2026,
-  author       = {Aaron, James},
-  title        = {AQARION: Replayable Research Objects for Finite Dynamical Systems},
-  year         = {2026},
-  howpublished = {\url{https://github.com/JASKSG9/AQARION-ARITHMETIC-FDS-FINITE-DYNAMICAL-SYSTEMS-}},
-  note         = {Version 0.1 · FROZEN AUDIT · C4 blocked}
-}
-```
+1. Every new claim must have a corresponding manifest entry.
+2. Every new evidence item must declare its scope: NUMERIC, EXACT, FORMAL, or INDEPENDENT.
+3. Promotion requests must go through CLAIMLOCK; do not edit governance status flags directly.
+4. Do not add aspirational documentation. If a directory does not exist, do not describe it as though it does.
+5. Do not add a status badge the repository cannot currently defend.
 
 ---
 
 License
 
-Apache License 2.0. See LICENSE.
+Apache 2.0. See LICENSE.
 
 ---
 
-AQARION does not replace observable-learning methods. It provides a
-mathematically grounded certification layer that evaluates whether a
-proposed observable space is exactly or approximately closed under the
-dynamics, together with quantitative measures of leakage when it is not.
+Pointers
 
-```
+· Core AQARION mathematics: github.com/JASKSG9/AQARION-ARITHMETIC-FDS-FINITE-DYNAMICAL-SYSTEMS-
+· Kaprekar case study: github.com/JASKSG9/KAPREKAR-SPECTRAL-GEOMETRY
+· HuggingFace space: huggingface.co/spaces/Quantarion9/AQARION-ACADEMY
+
+---
