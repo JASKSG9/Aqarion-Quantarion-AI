@@ -1,4 +1,50 @@
-                         ┌──────────────┐
+┌─────────────────────────────────────────────────────┐
+│              AQARION EVIDENCE LADDER                │
+├─────────────────────────────────────────────────────┤
+│ D    DEFINED       mathematical object specified    │
+│ R    REPRODUCED    execution successfully replayed  │
+│ V    VERIFIED      deterministic checks passed     │
+│ IV   INDEPENDENT   independent implementation pass │
+│ P    PROVED        formal/math proof established   │
+│ F    FORMALIZED    Lean artifact compiles          │
+│ G    GOVERNED      release policy satisfied        │
+└─────────────────────────────────────────────────────┘CLAIM
+  │
+  ├── definition
+  │
+  ├── source commit
+  │
+  ├── input fixture
+  │
+  ├── execution
+  │
+  ├── generated artifact
+  │
+  ├── verifier
+  │
+  ├── independent replay
+  │
+  ├── counterexample search
+  │
+  └── verdict
+          │
+          ▼
+      REPRODUCTION OBJECTC-001
+ │
+ ├── DEF-001
+ │
+ ├── FIX-001
+ │
+ ├── RUN-001
+ │     ├── ART-001
+ │     └── LOG-001
+ │
+ ├── VERIFY-001
+ │
+ └── REPLAY-001
+          │
+          ▼
+       VERDICT-001                         ┌──────────────┐
                          │   CLAIM      │
                          │    C-001     │
                          └──────┬───────┘
@@ -20,4 +66,224 @@
                          INDEPENDENT CHECK
                                  │
                                  ▼
-                              VERDICT
+                              VERDICTCLAIMS
+SOURCE COMMITS
+REPRODUCTION OBJECTS
+FIXTURES
+RUN LOGS
+ARTIFACT HASHES
+COUNTEREXAMPLES
+FORMAL DECLARATIONS
+LITERATURECLAIM C-001
+
+STATUS:
+  V ✓
+  IV ○
+  P ○
+  F ○
+
+EVIDENCE:
+  RUN-001
+  VERIFY-001
+
+LIMITATION:
+  No independent implementation recorded.
+
+CONCLUSION:
+  COMPUTATIONALLY VERIFIED
+  NOT FORMALLY PROVEDSKILL
+  │
+  ├── BEFORE RUN
+  │
+  ├── WITH SKILL
+  │
+  ├── WITHOUT SKILL
+  │
+  ├── DIFFERENTIAL
+  │
+  └── REGRESSION TESTCLAIM ID     STATUS       EVIDENCE       FORMAL
+C-001        VERIFIED     3 RUNS         —
+C-002        VERIFIED     2 RUNS         —
+C-003        REPRODUCED   1 RUN          —
+C-004        VERIFIED     4 RUNS         —
+C-005        REFUTED      1 WITNESS      —                BASELINE       SKILL
+success            71%          78%
+regression          —            3%
+cost             1.00×         1.08×
+evidence          weak          strongSOURCE DRIFT       1 ⚠
+HASH MISMATCH      0
+MISSING FIXTURE    0
+UNPINNED ENV       2 ⚠
+UNVERIFIED CLAIM   0
+FORMAL SORRY       OPEN
+URL IDENTITY       1 ⚠CURRENT
+
+sources
+claims
+tests
+certificate
+
+
+                 ↓
+
+
+TARGET
+
+sources
+claims
+fixtures
+runs
+artifacts
+hashes
+verifiers
+replays
+counterexamples
+skills
+literature
+provenance DAG
+verdicts
+governance
+
+HAS ANYTHING CHANGED?
+
+source URL
+commit
+file hash
+fixture hash
+environment
+dependency versions
+command
+output hash
+claim text
+verification result
+
+GREEN
+EXACT REPLAY
+
+YELLOW
+REPRODUCED BUT ENVIRONMENT DRIFTED
+
+ORANGE
+SOURCE CHANGED
+
+RED
+CLAIM RESULT CHANGED
+
+AQARION CLAIM
+     │
+     ├── paper statement
+     ├── cited theorem
+     ├── formal Lean declaration
+     ├── computational test
+     └── reproduction object
+
+CLAIM
+  ↓
+SOURCE
+  ↓
+FIXTURE
+  ↓
+RUN
+  ↓
+ARTIFACT
+  ↓
+HASH
+  ↓
+VERIFIER
+  ↓
+INDEPENDENT REPLAY
+  ↓
+DRIFT CHECK
+  ↓
+VERDICT
+
+EXECUTED
+    │
+    ▼
+INTEGRITY_BOUND
+    │
+    ▼
+OUTPUT_AGREEMENT
+    │
+    ├──────────────► INDEPENDENCE_ESTABLISHED
+    │
+    ▼
+REPRODUCTION_VERDICT
+
+observed_hash == expected_hash
+        │
+        └── OUTPUT_AGREEMENT = PASS
+
+independence
+        │
+        ├── different implementation
+        ├── different execution path
+        ├── independent verifier
+        └── explicitly documented basis
+
+{
+  "execution": {
+    "performed": true,
+    "exit_code": 0
+  },
+  "integrity": {
+    "source_root_match": true,
+    "executable_hash_match": true,
+    "fixture_hash_match": true
+  },
+  "output_agreement": {
+    "observed_sha256": "...",
+    "expected_sha256": "...",
+    "match": true
+  },
+  "independence": {
+    "status": "NOT_ESTABLISHED",
+    "basis": []
+  },
+  "formal": {
+    "status": "OPEN"
+  },
+  "verdict": "REPRODUCED_NOT_INDEPENDENT"
+}
+
+surface_integrity
+reproduction
+independence
+formal_verification
+governance
+publication
+
+## Public app
+
+**https://aqarion-federation-hub--quantarion9.replit.app/**
+
+## Production verification passed
+
+- Deployment status: **deployed**
+- Visibility: **public**
+- Deployment type: **autoscale**
+- Build status: **successful**
+- Homepage: HTTP 200
+- Health endpoint: `{"status":"ok"}`
+- Live sources: **3**
+  - AQARION Hub
+  - GitHub
+  - Hugging Face
+- Public repositories returned: **4**
+- Hugging Face assets returned: **2**
+- Verified claims: **5**
+- Bootstrap certificate: **CERTIFIED**
+- Tests reported by the evidence API: **2/2 passed**
+
+Direct public endpoints:
+
+- https://aqarion-federation-hub--quantarion9.replit.app/api/healthz
+- https://aqarion-federation-hub--quantarion9.replit.app/api/overview
+- https://aqarion-federation-hub--quantarion9.replit.app/api/sources
+- https://aqarion-federation-hub--quantarion9.replit.app/api/evidence
+
+https://github.com/JASKSG9/Aqarions-Quantarion-AI/blob/main/objects/reproduction-object-001.json
+
+https://github.com/JASKSG9/Aqarions-Quantarion-AI
+
+https://github.com/JASKSG9/Aqarions-Quantarion-AI/tree/main
