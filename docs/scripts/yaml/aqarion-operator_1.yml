@@ -1,0 +1,67 @@
+record_type: AQARION_OPERATOR_IDENTITY_CARD
+version: 1
+
+claim_id: <CLAIM_ID>
+status: OPEN
+
+operator:
+  label: <D_OPERATOR | D_STAR_D | K_UNNORMALIZED | G_SYMMETRIC | H_SIMILAR>
+  formula: <EXACT_FORMULA>
+  source_code_location: <UNKNOWN_OR_EXACT_PATH>
+  operator_role: <defect | gram | covariance | compression | quotient>
+
+carrier:
+  underlying_set: <EXACT_SET>
+  vector_space: <EXACT_VECTOR_SPACE>
+  basis: <POINT_BASIS | BLOCK_BASIS | NORMALIZED_BLOCK_BASIS>
+  dimension: <EXACT_OR_PARAMETERIZED>
+
+inner_product:
+  kind: <COUNTING | WEIGHTED_COUNTING | EUCLIDEAN | OTHER>
+  weights: <EXACT_FORMULA_OR_NONE>
+
+dynamics:
+  map_class: <PERMUTATION | INJECTIVE | DETERMINISTIC_NONINJECTIVE | ABSTRACT_MATRIX>
+  map_formula: <EXACT_FORMULA>
+  koopman_convention: <PULLBACK | PUSHFORWARD | NONE>
+  isometry_status: <PROVED | ASSUMED | FALSE | UNKNOWN>
+
+partition_projection:
+  projection_formula: <EXACT_FORMULA>
+  orthogonal: <PROVED | ASSUMED | FALSE | UNKNOWN>
+  block_sizes: <EXACT_FORMULA>
+
+normalization:
+  raw_matrix: <EXACT_FORMULA_OR_NONE>
+  normalized_matrix: <EXACT_FORMULA_OR_NONE>
+  coordinate_change: <EXACT_FORMULA_OR_NONE>
+  similarity_claim: <EXACT_FORMULA_OR_NONE>
+
+spectral_statistic:
+  kind: <TRACE | FROBENIUS_NORM | EIGENVALUE | SINGULAR_VALUE | STABLE_RANK>
+  target: <EXACT_EXPRESSION>
+  claimed_range: <EXACT_RANGE_OR_NONE>
+  range_hypotheses: <EXACT_HYPOTHESES>
+
+evidence:
+  evidence_tier: <PAPER_DERIVATION | EXACT_RATIONAL_REPLAY | FLOAT64_REPLAY | LEAN_RECEIPT>
+  source_artifact: <UNKNOWN_OR_DIGEST>
+  verifier: <UNKNOWN_OR_EXACT_NAME>
+  domain: <EXACT_DOMAIN>
+  exclusions: <EXACT_EXCLUSIONS>
+
+nonpromotion:
+  does_not_establish:
+    - <UNIVERSAL_THEOREM>
+    - <FORMAL_PROOF>
+    - <INDEPENDENT_REPRODUCTION>
+  promotion_allowed: false
+
+audit:
+  known_counterexamples: []
+  known_failure_modes:
+    - trace_vs_eigenvalue_confusion
+    - raw_vs_normalized_operator_confusion
+    - carrier_mismatch
+    - map_class_mismatch
+    - finite_to_universal_promotion
