@@ -1,168 +1,611 @@
 # AQARION Federation Status Ledger
 
 ## Checkpoint
-AQ-S14 / Federation Repair — CI GREEN
+
+AQ-S16 / Federation Repair — CURRENT-HEAD RECONCILIATION
+
 Date: 2026-09-16
+
 Mode: FROZEN · ADVERSARIAL · NO FABRICATION · NO PROMOTION
-Auditor: Live main branch audit, not README description
 
-## Current Repository
-Repository: JASKSG9/Aqarions-Quantarion-AI
-Current HEAD: 5922c96dae992b7544b188d78fbe6934e2171be4
-Previous HEAD at repair start: ec22fdbe71b8f33d470e002a7623aa2e613eb8ca
-Remote: https://github.com/JASKSG9/Aqarions-Quantarion-AI
+Auditor: Live repository inspection
 
-## Execution Surface — Live
+Repository:
+JASKSG9/Aqarions-Quantarion-AI
 
-| Component | Live Status | Evidence |
-|---|---|---|
-| GitHub repository reachable | PASS | main returns 200 |
-| Current HEAD identifiable | PASS | 5922c96dae992b7544b188d78fbe6934e2171be4 via git rev-parse HEAD |
-| Workflow file present | PASS |.github/workflows/verify.yml exists |
-| Workflow path correction | PASS | now uses verification/run-all.py, not nonexistent verification/run_all.py |
-| Compilation target correction | PASS | removed nonexistent source/python, now compileall -q verification |
-| GitHub Actions run #42 | PASS | commit 5922c96, event push, conclusion success, job AQARION executable replay all steps success |
-| Python runtime in CI | PASS | CPython 3.11.16 |
-| Canonical runner run-all.py | PASS | fail-closed, mkdir parents, exitcode 0 = PASS else FAIL |
-| AQ-S14 semantic suite | PASS [V] finite | see logs below |
-| Manifest | PASS conservative | 1 real check only, external forbidden |
-| Receipt validation | PASS | file exists verification/receipts/run_all_receipt.json |
-| Provenance module | PASS | clean Python, no prose contamination |
-| CLAIMLOCK CL-1 boundary | OPEN | not yet cryptographically bound |
-| Lean formalization | OPEN | no RankPair.lean in this hub |
-| C4 | BLOCKED | intentional |
-| Publication | BLOCKED | intentional |
-| Promotable | false | intentional |
+Current HEAD:
+b92618693b0f61db950912e1661d7bded616b41e
 
-## Live CI Log — Run #42
+Historical verified CI checkpoint:
+5922c96dae992b7544b188d78fbe6934e2171be4
 
-Checked out: 5922c96dae992b7544b188d78fbe6934e2171be4
-Python: 3.11.16
+Status:
+C3 OPEN
+C4 BLOCKED
+Lean OPEN
+SDS-002 QUARANTINED
+Publication BLOCKED
+Promotable false
 
-AQ-S14-001 PASS: K3 spanning-tree enumeration = 3
-AQ-S14-002 PASS: oriented incidence = 12/12
-AQ-S14-003 PASS: all 8 edge subsets classified
-AQ-S14-004 PASS: unsigned incidence rejected semantically
-AQ-S14-005 PASS: two-edge K3 forest classified as spanning
-AQ-S14-006 PASS: triangle classified as cyclic, not forest
-AQ-S14-007 PASS: graph mutation detected despite equal coarse invariants
-AQ-S14 SEMANTIC SUITE PASS
 
-Loaded manifest 1 checks
-[PASS] AQ-S14-SEMANTIC-K3 exit=0
-RUN-ALL PASS: 1 checks passed
+---
 
-## Historical Findings — Fixed
+## 1. CURRENT REPOSITORY STATE
 
-### F-001 — Receipt directory failure
-Old runner wrote receipts/run_all_receipt.json without mkdir. Fixed: writes verification/receipts/ with parents=True.
+The repository is public and reachable.
 
-### F-002 — NOT_IMPLEMENTED mapped to PASS
-Old runner created results status NOT_IMPLEMENTED then wrote overall PASS. Fixed: fail-closed, PASS only if returncode 0 for every check.
+The current main branch has advanced beyond the historical AQ-S14 CI checkpoint.
 
-### F-003 — External replay paths
-Old replay-harness referenced../AQARION-ARITHMETIC... and /mnt/data/... Fixed: canonical CI self-contained, external claims excluded_until_bound.
+Therefore:
 
-### F-004 — SV-001-V2 artifact absent
-Claim referenced VERIFICATION/sv001_v2_check.py 404. Status correctly set to REPLAY_BLOCKED_MISSING_ARTIFACT, not REPLAYED.
+    historical CI evidence at 5922c96
+    !=
+    current-main evidence at b926186
 
-### F-005 — provenance.py contaminated
-Contained conversational prose after execute(). Fixed: complete replacement.
+The historical CI result remains valid only for the revision actually executed.
 
-### F-006 — output equality reversed
-Old code raised error if observed==expected. Fixed: output_match requires equality, independence separate.
+No historical receipt is silently promoted to current HEAD.
 
-## Current Findings — Open
 
-### F-007 — Status ledger was stale (now fixed by this file)
-Previous ledger stated HEAD ec22fdbe and FAIL/REPAIR REQUIRED while actual HEAD is 5922c96 and Actions #42 is SUCCESS. This file synchronizes ledger to 5922c96.
+---
 
-### F-008 — Receipt weakly bound (next repair)
-Current receipt schema AQARION-RUN-RECEIPT-1 contains only repository_root, manifest path, status, checks. Detached copy does not bind to commit SHA or manifest SHA. Recommendation: upgrade to AQARION-RUN-RECEIPT-2 with source.repository, source.commit, manifest.sha256, runtime.python, runtime.platform. The crucial field is commit SHA.
+## 2. HISTORICAL CI CHECKPOINT
 
-### F-009 — Reproduction-object templates unmarked
-reproduction-object-001.json and 002.json contain placeholders repository "...", commit "...", <EXACT_COMMIT>, <HASH> while stating execution performed true. They are schema examples, not executed evidence. Should be marked instance_status TEMPLATE or renamed REPRODUCTION-OBJECT-SCHEMA-EXAMPLE.
+Revision:
 
-### F-010 — External core pin f309bfa contains synthetic section
-Sibling dependency pinned to f309bfab14d7a9a6f9c52ae2808d1e14bf6f78b2 exists, but its 5720-case spectral section is explicitly labeled synthetic/placeholder. Correctly quarantined by manifest. Must not be registered until genuine verifier replaces synthetic portion.
+    5922c96dae992b7544b188d78fbe6934e2171be4
 
-### F-011 — Checkout/setup-python Node warnings
-Actions log shows actions/checkout@v4 and setup-python@v5 targeting Node 20 forced onto Node 24. Not a failure, but future maintenance debt. Track separately.
+At that revision:
 
-## AQ-S14 Exact Finite Results [V]
+    AQ-S14 semantic suite = PASS
+    canonical runner = PASS
+    manifest = PASS
+    registered checks = 1
+    registered check passed = 1
 
-K3 vertices: (0,1,2)
-K3 edges: (0,1),(0,2),(1,2)
-2^3 = 8 edge subsets
+Scope:
 
-Classification:
-forest+spanning: 3
-forest+non-spanning: 4
-cyclic+spanning: 1
-cyclic+non-spanning: 0
+    K3 finite forest/incidence semantics
+    exact rational computation
 
-Spanning trees: 3
-Orientations per tree: 4
-Positive oriented-incidence cases: 12
-Exact-rational rank in all 12: 2
-
-These are finite computational results. They do not establish universal forest-kernel theorem. Status [V] only.
-
-## Evidence Discipline
-
-[D] DEFINED
-[V] VERIFIED COMPUTATION
-[P] PROVED
-[PV] PROVED + VERIFIED
-[C] CONJECTURE
-[R] RESEARCH
-[F] REFUTED / KILLED
-[Q] QUARANTINED
-
-Rules:
-public!= certified
-runnable!= verified
-numeric!= proof
-matching output!= independence
-policy ALLOW!= mathematical truth
-Lean source!= Lean proof
-artifact exists!= artifact executed!= artifact independently reproduced!= mathematical claim proved
-
-## Current Governance
-
-C3: OPEN
-C4: BLOCKED
-Lean: OPEN
-SDS-002: QUARANTINED
-Publication: BLOCKED
-Promotable: false
-
-## Promotion Requirements — Not Met
-
-A PASS receipt establishes only:
-1. manifest loaded
-2. registered executable checks ran
-3. every check returned 0
-4. receipt bound to stated revision and manifest (after v2 upgrade)
+This establishes only the execution result of the registered finite check.
 
 It does NOT establish:
-- mathematical truth
-- formal proof
-- independence
-- publication readiness
-- C4 promotion
 
-## Next Gates
+    universal theorem
+    formal proof
+    independence
+    publication readiness
+    C4 promotion
 
-1. DONE: Make CI green — completed in 5922c96 Actions #42
-2. DONE: Synchronize status ledger — this file
-3. NEXT: Upgrade receipt to self-binding AQARION-RUN-RECEIPT-2 with commit SHA and manifest SHA256
-4. NEXT: Mark reproduction-object templates as TEMPLATE
-5. NEXT: Implement CLAIMLOCK CL-1 with predicate_id, result, claim_digest, evidence_manifest_digest, policy_digest, verifier.id, verifier.version, verifier.artifact_digest, execution.input_digest, execution.output_digest, execution.network_mode
-6. NEXT: Replace local deterministic JSON with RFC 8785 JCS before normative certs
-7. NEXT: Establish independent reproduction separately
-8. THEN: Lean formalization
 
-## Non-Promotion Rule
+---
 
-A passing AQ-S14 replay does not promote any universal theorem. It certifies only declared finite computational scope: K3 forest/incidence semantics, exact rational arithmetic.
+## 3. CURRENT HEAD
+
+Current main:
+
+    b92618693b0f61db950912e1661d7bded616b41e
+
+The current tree contains the S16 checkpoint/data-lake material.
+
+The current repository must not inherit a historical CI receipt merely because the source tree descended from the verified revision.
+
+Current-main execution receipt:
+
+    NOT ESTABLISHED IN THIS AUDIT
+
+Therefore:
+
+    CURRENT_HEAD_CI = OPEN
+
+until GitHub Actions executes the current HEAD and produces a receipt bound to that commit.
+
+
+---
+
+## 4. WORKFLOW PATH RECONCILIATION
+
+The earlier S16 six-entry workflow calculation was based on an older workflow snapshot.
+
+That result is now classified:
+
+    OBSOLETE / SNAPSHOT-SCOPED
+
+The current workflow actually invokes:
+
+    verification/aq_s14/aq_s14_semantic_suite.py
+    verification/run-all.py
+
+Both paths exist in the current repository.
+
+Therefore current workflow path inspection gives:
+
+    declared Python verification entry points = 2
+    exact current paths = 2
+    missing current paths = 0
+
+Result:
+
+    CURRENT WORKFLOW PATH CHECK = 2/2 EXACT
+
+This is a static repository inspection.
+
+It is NOT an execution receipt.
+
+The historical six-entry:
+
+    1/6
+
+calculation must not be presented as the current workflow state.
+
+
+---
+
+## 5. CURRENT MANIFEST
+
+The active verification manifest intentionally registers one executable check:
+
+    AQ-S14-SEMANTIC-K3
+
+The following remain excluded until independently bound:
+
+    SV-001-V2
+    K2R-PARAMETRIC
+    BETA-ENVELOPE
+
+The fail-closed policy remains:
+
+    missing artifact = failure
+    NOT_IMPLEMENTED = failure
+    external fallback = forbidden
+    every registered executable check must return 0
+
+This is correct governance.
+
+Manifest PASS does not mean mathematical truth.
+
+
+---
+
+## 6. RECEIPT STATUS
+
+Historical receipt:
+
+    AQARION-RUN-RECEIPT-1
+
+Weakness:
+
+    repository commit was not cryptographically bound
+    manifest SHA256 was not included
+    runtime was not recorded
+    platform was not recorded
+
+The replacement target is:
+
+    AQARION-RUN-RECEIPT-2
+
+Required fields:
+
+    source.repository
+    source.commit
+    source.tree
+    manifest.path
+    manifest.sha256
+    runtime.python
+    runtime.implementation
+    runtime.platform
+    status
+    checks
+
+The current audit does NOT claim that a new receipt has been executed.
+
+Receipt-2 implementation is supplied separately below.
+
+
+---
+
+## 7. CLAIMLOCK BOUNDARY
+
+Claim records must distinguish:
+
+    declared scope
+    evidence scope
+    execution status
+    formalization status
+    independence status
+    promotion status
+
+A universal assertion supported only by one finite fixture is not a universal verification.
+
+Required invariant:
+
+    INSTANCE evidence
+    cannot promote
+    UNIVERSAL claim
+
+Likewise:
+
+    NOT_COMPILED
+    cannot promote
+    FORMALLY_PROVED
+
+
+---
+
+## 8. AQ-T10-001
+
+Claim:
+
+    "The proposed transport identity holds universally
+     for the declared finite dynamical-system class."
+
+Declared scope:
+
+    UNIVERSAL
+
+Requested promotion:
+
+    FORMALLY_PROVED
+
+Actual recorded evidence:
+
+    one finite fixture
+
+Formalization:
+
+    NOT_COMPILED
+
+Independent checker:
+
+    absent
+
+Artifact hash:
+
+    placeholder / zero hash
+
+Disposition:
+
+    QUARANTINED
+
+Promotion:
+
+    BLOCKED
+
+This record must not be interpreted as a theorem certificate.
+
+
+---
+
+## 9. TEMPLATE ARTIFACTS
+
+Any reproduction-object file containing placeholders such as:
+
+    ...
+    <EXACT_COMMIT>
+    <HASH>
+
+must be classified as:
+
+    TEMPLATE
+
+unless the fields have been populated by an actual execution.
+
+A template is not an execution receipt.
+
+A schema is not an execution receipt.
+
+A repository file existing is not evidence that its claimed execution occurred.
+
+
+---
+
+## 10. EXTERNAL CORE PIN
+
+The sibling dependency containing the historical 5720-case spectral section remains quarantined because that section is explicitly synthetic/placeholder.
+
+It must not enter the executable verification manifest until a genuine verifier replaces the synthetic component.
+
+Status:
+
+    QUARANTINED
+
+
+---
+
+## 11. JCS / CANONICALIZATION
+
+Normative certificate hashing should use a defined canonical representation.
+
+RFC 8785 defines JSON Canonicalization Scheme for deterministic JSON representations suitable for hashing/signing.
+
+AQARION must not call ordinary:
+
+    json.dumps(sort_keys=True)
+
+a normative RFC-8785 implementation.
+
+Until a conforming JCS implementation is bound:
+
+    current deterministic JSON hashing = NON-NORMATIVE
+
+No cryptographic certification claim should depend on the current ad-hoc serializer.
+
+
+---
+
+## 12. WU1 STATUS
+
+Surviving residue coefficients:
+
+    C5 = 1/4 + pi^2/72
+
+Derived:
+
+    C6 = -1/72
+
+    C7 = -(1 + gamma)/72 - 1/48
+
+The next B1 Mellin pole is:
+
+    s = -2
+
+with residue contribution:
+
+    1/28800
+
+This yields the formal next logarithmic coefficient:
+
+    C8 = -1/14400
+
+These coefficients are residue/algebra results.
+
+They are NOT promoted to [P] until the explicit vertical-contour inequalities are written and verified.
+
+Current status:
+
+    C5 = [V + formal residue support]
+    C6 = [R]
+    C7 = [R]
+    C8 = [R]
+
+Contour constants:
+
+    OPEN
+
+Remainder claim:
+
+    OPEN
+
+
+---
+
+## 13. WU1 CURRENT FORMAL TARGET
+
+Let
+
+    L = log(1/delta)
+    A = L + 1 + gamma
+
+Then the current formal expansion is:
+
+    D(delta)
+      = pi^4/18
+      + delta[-A^2 - pi^2/4]
+      + delta^2[1/4 + pi^2/72]
+      - delta^3[A/72 + 1/48]
+      - delta^5[A/14400]
+      + remainder
+
+Equivalently:
+
+    D(delta)
+      = pi^4/18
+      + delta C_{2:4}(L)
+      + (1/4 + pi^2/72) delta^2
+      - [(L + 1 + gamma)/72 + 1/48] delta^3
+      - [(L + 1 + gamma)/14400] delta^5
+      + remainder
+
+The absence of a delta^4 contribution is structurally supported by the displayed pole ledger.
+
+The final remainder order remains OPEN pending explicit contour bounds.
+
+
+---
+
+## 14. EW3b
+
+Partition-statistic variance constant:
+
+    OPEN
+
+Known:
+
+    relevant partition asymptotic machinery exists
+
+Not established:
+
+    exact AQARION variance constant
+
+No promotion.
+
+
+---
+
+## 15. LEAN
+
+Lean formalization:
+
+    OPEN
+
+No kernel compilation receipt is claimed.
+
+Lean source existing is not equivalent to Lean proof.
+
+Lake dependency closure remains the correct unit of audit:
+
+    theorem
+      -> definitions
+      -> lemmas
+      -> imports
+      -> dependency closure
+      -> unresolved frontier
+
+
+---
+
+## 16. GOVERNANCE
+
+C3:
+
+    OPEN
+
+C4:
+
+    BLOCKED
+
+Lean:
+
+    OPEN
+
+SDS-002:
+
+    QUARANTINED
+
+Publication:
+
+    BLOCKED
+
+Promotable:
+
+    false
+
+
+---
+
+## 17. EVIDENCE CLASSES
+
+[D]  DEFINED
+
+[V]  VERIFIED COMPUTATION
+
+[P]  PROVED
+
+[PV] PROVED + VERIFIED
+
+[C]  CONJECTURE
+
+[R]  RESEARCH
+
+[F]  REFUTED / KILLED
+
+[Q]  QUARANTINED
+
+Additional execution boundary:
+
+[EXECUTED]
+
+means an actual pinned execution receipt exists.
+
+[INDEPENDENTLY VERIFIED]
+
+means an independent verifier has reproduced the result.
+
+AI-generated narrative is never execution evidence.
+
+
+---
+
+## 18. NON-PROMOTION RULE
+
+A passing executable receipt establishes only:
+
+    the declared manifest was loaded
+    the registered commands executed
+    the registered commands returned zero
+    the receipt's source binding is correct
+
+It does NOT establish:
+
+    mathematical truth
+    formal proof
+    independence
+    universal validity
+    publication readiness
+    C4 promotion
+
+
+---
+
+## 19. CURRENT AUDIT SUMMARY
+
+Historical AQ-S14 CI:
+
+    PASS [V]
+    revision = 5922c96
+
+Current HEAD:
+
+    b926186
+    execution receipt = OPEN
+
+Current workflow path inspection:
+
+    2/2 exact
+
+Current manifest:
+
+    1 executable check
+
+SV-001-V2:
+
+    EXCLUDED
+
+K2R:
+
+    EXCLUDED
+
+BETA-ENVELOPE:
+
+    EXCLUDED
+
+AQ-T10-001:
+
+    QUARANTINED
+
+WU1 C5:
+
+    SURVIVES
+
+WU1 C6/C7:
+
+    DERIVED [R]
+
+WU1 C8:
+
+    DERIVED FROM POLE LEDGER [R]
+
+WU1 contour bound:
+
+    OPEN
+
+EW3b:
+
+    OPEN
+
+Lean:
+
+    OPEN
+
+C4:
+
+    BLOCKED
+
+Publication:
+
+    BLOCKED
+
+Promotable:
+
+    false
