@@ -26,25 +26,56 @@ jobs:
         run: |
           git rev-parse HEAD
 
-      - name: Compile Python verification surface
+      - name: Compile verification Python
         run: |
-          python3 -m compileall -q \
-            verification \
-            source/python
+          python3 -m compileall -q verification
 
       - name: Run AQ-S14 semantic suite
         run: |
           python3 verification/aq_s14/aq_s14_semantic_suite.py
 
-      - name: Run canonical verification manifest
+      - name: Run canonical verification runner
         run: |
-          python3 verification/run_all.py \
+          python3 verification/run-all.py \
             --manifest verification/manifest.json \
             --receipt verification/receipts/run_all_receipt.json
 
-      - name: Validate receipt exists
+      - name: Validate verification receipt
         run: |
           test -f verification/receipts/run_all_receipt.json
+
+      - name: Validate receipt status
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("verification/receipts/run_all_receipt.json")
+          data = json.loads(path.read_text(encoding="utf-8"))
+
+          if data.get("status") != "PASS":
+              raise SystemExit(
+                  f"FAIL: receipt status is {data.get('status')!r}, expected 'PASS'"
+              )
+
+          checks = data.get("checks")
+          if not isinstance(checks, list) or not checks:
+              raise SystemExit("FAIL: receipt contains no checks")
+
+          failed = [
+              check for check in checks
+              if check.get("status") != "PASS"
+          ]
+
+          if failed:
+              raise SystemExit(
+                  f"FAIL: non-PASS checks in receipt: {failed}"
+              )
+
+          print(
+              f"PASS: {len(checks)} registered verification check(s) passed"
+          )
+          PY
 
       - name: Display verification receipt
         run: |
