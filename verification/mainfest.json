@@ -1,0 +1,27 @@
+{
+  "schema_version": "aqarion.verification.manifest.v1",
+  "manifest_id": "AQ-S16-CANONICAL-REPLAY",
+  "mode": "FROZEN",
+  "governance": {
+    "C3": "OPEN",
+    "C4": "BLOCKED",
+    "lean": "OPEN",
+    "sds_002": "QUARANTINED",
+    "publication": "BLOCKED",
+    "promotable": false
+  },
+  "checks": [
+    {
+      "check_id": "AQ-S16-RUN-ALL",
+      "path": "verification/run_all.py",
+      "command": ["{python}", "verification/run_all.py", "--self-check"],
+      "required": true,
+      "scope": "harness self-check only"
+    }
+  ],
+  "limitations": [
+    "Replace the self-check with actual mapped verifier modules only after semantic review.",
+    "A passing manifest run does not establish mathematical theorem validity.",
+    "No Lean, Sigstore, Rekor, or publication claim is made by this harness."
+  ]
+}
