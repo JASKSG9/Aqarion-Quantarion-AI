@@ -1,667 +1,370 @@
-i# AQARION Federation Status Ledger
+AQARION Federation Status Ledger — CURRENT HEAD
 
-## Checkpoint
 
-AQ-S16 / Federation Repair — CURRENT-HEAD RECONCILIATION
+Checkpoint
 
-Date: 2026-09-16
+
+AQ-S17 / Current-Head Verification Reconciliation
+
+
+Date: 2026-09-17
+
 
 Mode: FROZEN · ADVERSARIAL · NO FABRICATION · NO PROMOTION
 
-Auditor: Live repository inspection
 
 Repository:
+
+
 JASKSG9/Aqarions-Quantarion-AI
 
+
 Current HEAD:
-b92618693b0f61db950912e1661d7bded616b41e
-
-Historical verified CI checkpoint:
-5922c96dae992b7544b188d78fbe6934e2171be4
-
-Status:
-C3 OPEN
-C4 BLOCKED
-Lean OPEN
-SDS-002 QUARANTINED
-Publication BLOCKED
-Promotable false
 
 
----
-
-## 1. CURRENT REPOSITORY STATE
-
-The repository is public and reachable.
-
-The current main branch has advanced beyond the historical AQ-S14 CI checkpoint.
-
-Therefore:
-
-    historical CI evidence at 5922c96
-    !=
-    current-main evidence at b926186
-
-The historical CI result remains valid only for the revision actually executed.
-
-No historical receipt is silently promoted to current HEAD.
+aaf323b79e6060f0a3b93fdd24dbb408a20e08bc
 
 
----
-
-## 2. HISTORICAL CI CHECKPOINT
-
-Revision:
-
-    5922c96dae992b7544b188d78fbe6934e2171be4
-
-At that revision:
-
-    AQ-S14 semantic suite = PASS
-    canonical runner = PASS
-    manifest = PASS
-    registered checks = 1
-    registered check passed = 1
-
-Scope:
-
-    K3 finite forest/incidence semantics
-    exact rational computation
-
-This establishes only the execution result of the registered finite check.
-
-It does NOT establish:
-
-    universal theorem
-    formal proof
-    independence
-    publication readiness
-    C4 promotion
+Current tree:
 
 
----
-
-## 3. CURRENT HEAD
-
-Current main:
-
-    b92618693b0f61db950912e1661d7bded616b41e
-
-The current tree contains the S16 checkpoint/data-lake material.
-
-The current repository must not inherit a historical CI receipt merely because the source tree descended from the verified revision.
-
-Current-main execution receipt:
-
-    NOT ESTABLISHED IN THIS AUDIT
-
-Therefore:
-
-    CURRENT_HEAD_CI = OPEN
-
-until GitHub Actions executes the current HEAD and produces a receipt bound to that commit.
+efba04420186e413719b711a15997d7f6bac8433
 
 
----
+Current CI
 
-## 4. WORKFLOW PATH RECONCILIATION
 
-The earlier S16 six-entry workflow calculation was based on an older workflow snapshot.
+GitHub Actions run:
 
-That result is now classified:
 
-    OBSOLETE / SNAPSHOT-SCOPED
+#70
 
-The current workflow actually invokes:
 
-    verification/aq_s14/aq_s14_semantic_suite.py
-    verification/run-all.py
+Workflow:
 
-Both paths exist in the current repository.
 
-Therefore current workflow path inspection gives:
+AQARION Replay
 
-    declared Python verification entry points = 2
-    exact current paths = 2
-    missing current paths = 0
+
+Conclusion:
+
+
+SUCCESS
+
+
+The current HEAD was actually checked out and executed.
+
+
+Python:
+
+
+CPython 3.11.16
+
+
+Platform:
+
+
+Linux-6.17.0-1022-azure-x86_64-with-glibc2.39
+
+
+Registered executable checks
+
+
+The active manifest is version 1.2.0.
+
+
+Registered checks:
+
+
+
+
+AQ-S14-SEMANTIC-K3
+
+
+AQ-CONTRACT-OBJECT-OPERATOR
+
+
+
+
+Both returned exit code 0.
+
 
 Result:
 
-    CURRENT WORKFLOW PATH CHECK = 2/2 EXACT
 
-This is a static repository inspection.
+RUN-ALL PASS: 2 checks passed
 
-It is NOT an execution receipt.
 
-The historical six-entry:
+AQ-S14
 
-    1/6
-
-calculation must not be presented as the current workflow state.
-
-
----
-
-## 5. CURRENT MANIFEST
-
-The active verification manifest intentionally registers one executable check:
-
-    AQ-S14-SEMANTIC-K3
-
-The following remain excluded until independently bound:
-
-    SV-001-V2
-    K2R-PARAMETRIC
-    BETA-ENVELOPE
-
-The fail-closed policy remains:
-
-    missing artifact = failure
-    NOT_IMPLEMENTED = failure
-    external fallback = forbidden
-    every registered executable check must return 0
-
-This is correct governance.
-
-Manifest PASS does not mean mathematical truth.
-
-
----
-
-## 6. RECEIPT STATUS
-
-Historical receipt:
-
-    AQARION-RUN-RECEIPT-1
-
-Weakness:
-
-    repository commit was not cryptographically bound
-    manifest SHA256 was not included
-    runtime was not recorded
-    platform was not recorded
-
-The replacement target is:
-
-    AQARION-RUN-RECEIPT-2
-
-Required fields:
-
-    source.repository
-    source.commit
-    source.tree
-    manifest.path
-    manifest.sha256
-    runtime.python
-    runtime.implementation
-    runtime.platform
-    status
-    checks
-
-The current audit does NOT claim that a new receipt has been executed.
-
-Receipt-2 implementation is supplied separately below.
-
-
----
-
-## 7. CLAIMLOCK BOUNDARY
-
-Claim records must distinguish:
-
-    declared scope
-    evidence scope
-    execution status
-    formalization status
-    independence status
-    promotion status
-
-A universal assertion supported only by one finite fixture is not a universal verification.
-
-Required invariant:
-
-    INSTANCE evidence
-    cannot promote
-    UNIVERSAL claim
-
-Likewise:
-
-    NOT_COMPILED
-    cannot promote
-    FORMALLY_PROVED
-
-
----
-
-## 8. AQ-T10-001
-
-Claim:
-
-    "The proposed transport identity holds universally
-     for the declared finite dynamical-system class."
-
-Declared scope:
-
-    UNIVERSAL
-
-Requested promotion:
-
-    FORMALLY_PROVED
-
-Actual recorded evidence:
-
-    one finite fixture
-
-Formalization:
-
-    NOT_COMPILED
-
-Independent checker:
-
-    absent
-
-Artifact hash:
-
-    placeholder / zero hash
-
-Disposition:
-
-    QUARANTINED
-
-Promotion:
-
-    BLOCKED
-
-This record must not be interpreted as a theorem certificate.
-
-
----
-
-## 9. TEMPLATE ARTIFACTS
-
-Any reproduction-object file containing placeholders such as:
-
-    ...
-    <EXACT_COMMIT>
-    <HASH>
-
-must be classified as:
-
-    TEMPLATE
-
-unless the fields have been populated by an actual execution.
-
-A template is not an execution receipt.
-
-A schema is not an execution receipt.
-
-A repository file existing is not evidence that its claimed execution occurred.
-
-
----
-
-## 10. EXTERNAL CORE PIN
-
-The sibling dependency containing the historical 5720-case spectral section remains quarantined because that section is explicitly synthetic/placeholder.
-
-It must not enter the executable verification manifest until a genuine verifier replaces the synthetic component.
 
 Status:
 
-    QUARANTINED
 
+PASS [V]
 
----
 
-## 11. JCS / CANONICALIZATION
+Scope:
 
-Normative certificate hashing should use a defined canonical representation.
 
-RFC 8785 defines JSON Canonicalization Scheme for deterministic JSON representations suitable for hashing/signing.
+finite K3 forest/incidence semantic computation.
 
-AQARION must not call ordinary:
 
-    json.dumps(sort_keys=True)
+Verified finite results include:
 
-a normative RFC-8785 implementation.
 
-Until a conforming JCS implementation is bound:
 
-    current deterministic JSON hashing = NON-NORMATIVE
 
-No cryptographic certification claim should depend on the current ad-hoc serializer.
+3 spanning trees
 
 
----
+12/12 oriented incidence cases
 
-## 12. WU1 STATUS
 
-Surviving residue coefficients:
+all 8 edge subsets classified
 
-    C5 = 1/4 + pi^2/72
 
-Derived:
+unsigned incidence rejected semantically
 
-    C6 = -1/72
 
-    C7 = -(1 + gamma)/72 - 1/48
+two-edge K3 forest classified as spanning
 
-The next B1 Mellin pole is:
 
-    s = -2
+triangle classified as cyclic rather than forest
 
-with residue contribution:
 
-    1/28800
+graph mutation detected despite equal coarse invariants
 
-This yields the formal next logarithmic coefficient:
 
-    C8 = -1/14400
 
-These coefficients are residue/algebra results.
 
-They are NOT promoted to [P] until the explicit vertical-contour inequalities are written and verified.
+This is finite computational verification only.
 
-Current status:
 
-    C5 = [V + formal residue support]
-    C6 = [R]
-    C7 = [R]
-    C8 = [R]
+It does not establish a universal theorem, formal proof, independence, or publication readiness.
 
-Contour constants:
 
-    OPEN
+Object/operator contract
 
-Remainder claim:
 
-    OPEN
+Status:
 
 
----
+PASS [V]
 
-## 13. WU1 CURRENT FORMAL TARGET
 
-Let
+The executable suite verifies the frozen finite conventions:
 
-    L = log(1/delta)
-    A = L + 1 + gamma
 
-Then the current formal expansion is:
 
-    D(delta)
-      = pi^4/18
-      + delta[-A^2 - pi^2/4]
-      + delta^2[1/4 + pi^2/72]
-      - delta^3[A/72 + 1/48]
-      - delta^5[A/14400]
-      + remainder
 
-Equivalently:
+K_T[x,T(x)] = 1
 
-    D(delta)
-      = pi^4/18
-      + delta C_{2:4}(L)
-      + (1/4 + pi^2/72) delta^2
-      - [(L + 1 + gamma)/72 + 1/48] delta^3
-      - [(L + 1 + gamma)/14400] delta^5
-      + remainder
 
-The absence of a delta^4 contribution is structurally supported by the displayed pole ledger.
+K_T f = f o T
 
-The final remainder order remains OPEN pending explicit contour bounds.
 
+raw image-block families are not silently treated as partitions
 
----
 
-## 14. EW3b
+T_* is generated as an equivalence relation from image identifications
 
-Partition-statistic variance constant:
 
-    OPEN
+permutation image blocks preserve partition structure
 
-Known:
 
-    relevant partition asymptotic machinery exists
 
-Not established:
 
-    exact AQARION variance constant
+This is semantic contract verification.
 
-No promotion.
 
+It is not a theorem certificate.
 
----
 
-## 15. LEAN
+Receipt
 
-Lean formalization:
 
-    OPEN
+Schema:
 
-No kernel compilation receipt is claimed.
 
-Lean source existing is not equivalent to Lean proof.
+AQARION-RUN-RECEIPT-2
 
-Lake dependency closure remains the correct unit of audit:
 
-    theorem
-      -> definitions
-      -> lemmas
-      -> imports
-      -> dependency closure
-      -> unresolved frontier
+Receipt status:
 
 
----
+PASS
 
-## 16. GOVERNANCE
+
+The receipt is bound to:
+
+
+
+
+repository
+
+
+exact commit
+
+
+exact repository tree
+
+
+manifest path
+
+
+manifest SHA-256
+
+
+Python implementation/version
+
+
+runtime platform
+
+
+individual check results
+
+
+
+
+Manifest SHA-256:
+
+
+9c489c3554efcd761318592d0a4003f7266a7ef15e25c38d415e6ca9f4345f12
+
+
+The workflow independently recomputes the manifest hash and checks the receipt commit against GITHUB_SHA.
+
+
+Excluded claims
+
+
+The following remain excluded until an executable verifier and appropriate evidence are bound:
+
+
+
+
+SV-001-V2
+
+
+K2R-PARAMETRIC
+
+
+BETA-ENVELOPE
+
+
+
+
+A declared claim is not equivalent to executed evidence.
+
+
+A finite execution is not equivalent to a universal theorem.
+
+
+A passing implementation is not equivalent to independent verification.
+
+
+A Lean source file is not equivalent to a compiled Lean proof.
+
+
+Current adversarial boundary
+
+
+The current repository has verified:
+
+
+current commit
+→ current manifest
+→ current execution
+→ current receipt
+→ current registered results
+
+
+The next required independence boundary is:
+
+
+implementation
+→ independent reference model
+→ generated/adversarial finite corpus
+→ independent comparison
+→ separately bound receipt
+
+
+Until that exists, the object/operator suite remains:
+
+
+PASS [V]
+
+
+not:
+
+
+[P]
+
+
+or:
+
+
+[PV].
+
+
+Governance
+
 
 C3:
 
-    OPEN
 
-C4:
-
-    BLOCKED
-
-Lean:
-
-    OPEN
-
-SDS-002:
-
-    QUARANTINED
-
-Publication:
-
-    BLOCKED
-
-Promotable:
-
-    false
-
-
----
-
-## 17. EVIDENCE CLASSES
-
-[D]  DEFINED
-
-[V]  VERIFIED COMPUTATION
-
-[P]  PROVED
-
-[PV] PROVED + VERIFIED
-
-[C]  CONJECTURE
-
-[R]  RESEARCH
-
-[F]  REFUTED / KILLED
-
-[Q]  QUARANTINED
-
-Additional execution boundary:
-
-[EXECUTED]
-
-means an actual pinned execution receipt exists.
-
-[INDEPENDENTLY VERIFIED]
-
-means an independent verifier has reproduced the result.
-
-AI-generated narrative is never execution evidence.
-
-
----
-
-## 18. NON-PROMOTION RULE
-
-A passing executable receipt establishes only:
-
-    the declared manifest was loaded
-    the registered commands executed
-    the registered commands returned zero
-    the receipt's source binding is correct
-
-It does NOT establish:
-
-    mathematical truth
-    formal proof
-    independence
-    universal validity
-    publication readiness
-    C4 promotion
-
-
----
-
-## 19. CURRENT AUDIT SUMMARY
-
-Historical AQ-S14 CI:
-
-    PASS [V]
-    revision = 5922c96
-
-Current HEAD:
-
-    b926186
-    execution receipt = OPEN
-
-Current workflow path inspection:
-
-    2/2 exact
-
-Current manifest:
-
-    1 executable check
-
-SV-001-V2:
-
-    EXCLUDED
-
-K2R:
-
-    EXCLUDED
-
-BETA-ENVELOPE:
-
-    EXCLUDED
-
-AQ-T10-001:
-
-    QUARANTINED
-
-WU1 C5:
-
-    SURVIVES
-
-WU1 C6/C7:
-
-    DERIVED [R]
-
-WU1 C8:
-
-    DERIVED FROM POLE LEDGER [R]
-
-WU1 contour bound:
-
-    OPEN
-
-EW3b:
-
-    OPEN
-
-Lean:
-
-    OPEN
-
-C4:
-
-    BLOCKED
-
-Publication:
-
-    BLOCKED
-
-Promotable:
-
-    false
-
-    AQARION CURRENT GOVERNANCE
-==========================
-
-CURRENT HEAD:
-b92618693b0f61db950912e1661d7bded616b41e
-
-HISTORICAL CI:
-5922c96 = PASS [V], historical only
-
-CURRENT CI:
-OPEN until actual current-head Actions run
-
-CURRENT WORKFLOW PATHS:
-2/2 exact by repository inspection
-
-CURRENT MANIFEST:
-1 executable check
-
-SV-001-V2:
-EXCLUDED
-
-K2R:
-EXCLUDED
-
-BETA-ENVELOPE:
-EXCLUDED
-
-RECEIPT:
-Receipt-2 implementation supplied
-execution receipt NOT fabricated
-
-AQ-T10-001:
-QUARANTINED
-
-WU1:
-C5 survives
-C6 derived
-C7 derived
-C8 derived from pole ledger
-contour constants OPEN
-
-EW3b:
 OPEN
 
-Lean:
-OPEN
 
 C4:
+
+
 BLOCKED
+
+
+Lean:
+
+
+OPEN
+
 
 Publication:
+
+
 BLOCKED
 
+
+Independent verification:
+
+
+OPEN
+
+
 Promotable:
+
+
 FALSE
+
+
+Audit conclusion
+
+
+The current repository has a real, reproducible, current-head finite verification result.
+
+
+The evidence supports the statement:
+
+
+
+
+Two registered finite executable checks passed on commit aaf323b79e6060f0a3b93fdd24dbb408a20e08bc, with a Receipt-2 provenance record bound to that commit and the manifest SHA-256.
+
+
+
+
+The evidence does not support a claim that the underlying universal mathematical propositions have been proved or independently verified.
+
+
+No stronger claim should be made until the independent-oracle boundary is completed.
+
