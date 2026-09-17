@@ -215,6 +215,22 @@ WORKLOAD / NOT YET A FROZEN ASSERTION RECEIPT
 Layer 3b — T10
 WORKLOAD / NOT YET A FROZEN ASSERTION RECEIPT
 
+SV-001-V2 complete domain:     1176 / 1176
+zero-r cases:                   196
+nonzero-r cases:                980
+
+Gram failures:                    0
+Trace failures:                   0
+Operator-norm failures:           0
+Non-finite failures:              0
+
+Maximum Gram error:       5.551115123125783e-16
+Maximum trace error:      4.440892098500626e-15
+Maximum norm error:       5.551115123125783e-16
+
+Mutation tests:                  5 / 5 killed
+Receipt JSON:                    PASS
+
 ╔══════════════════════════════════════════════════════╗
 ║         AQARION — 2026-09-17 CLOSURE                ║
 ╠══════════════════════════════════════════════════════╣
