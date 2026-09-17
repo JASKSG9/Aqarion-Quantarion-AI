@@ -2,26 +2,18 @@
 """
 AQARION semantic mutation suite.
 
-The purpose is not merely to show that the reference implementation
-passes. It asks whether deliberate semantic errors are detectable.
+Purpose
+-------
+Deliberately mutate frozen semantic definitions and require
+the independent oracle/specification to detect each mutation.
 
-Registered mutations
---------------------
-NC-01:
-    Transpose the Koopman matrix.
+Registered mutations:
+    NC-01  transposed Koopman orientation
+    WRONG-SPEC  D = K P (I-P) instead of D = (I-P) K P
+    NC-02  vertical incidence construction instead of horizontal
 
-WRONG-SPEC:
-    Use D = K P (I-P) instead of D = (I-P) K P.
-
-NC-02:
-    Replace the horizontal incidence construction with the
-    deliberately wrong vertical-stack construction.
-
-A mutation is "killed" only when the independent oracle produces
-a different result from the mutated computation.
-
-No probabilistic tolerance.
-No floating point.
+This is an adversarial regression test, not a mathematical
+proof.
 """
 
 from __future__ import annotations
@@ -30,16 +22,16 @@ from fractions import Fraction
 from itertools import product
 
 
-def partitions_of_set(n):
+def partitions_of_set(n: int):
     if n == 0:
         yield ()
         return
 
-    blocks = [[0]]
+    blocks: list[list[int]] = [[0]]
 
-    def rec(x):
+    def rec(x: int):
         if x == n:
-            yield tuple(tuple(b) for b in blocks)
+            yield tuple(tuple(block) for block in blocks)
             return
 
         for i in range(len(blocks)):
@@ -54,98 +46,116 @@ def partitions_of_set(n):
     yield from rec(1)
 
 
-def pidx(partition):
-    result = {}
-    for i, block in enumerate(partition):
-        for x in block:
-            result[x] = i
-    return result
-
-
-def identity(n):
-    return [
-        [Fraction(int(i == j)) for j in range(n)]
-        for i in range(n)
-    ]
-
-
-def sub(A, B):
-    return [
-        [A[i][j] - B[i][j] for j in range(len(A[0]))]
-        for i in range(len(A))
-    ]
-
-
-def mul(A, B):
-    return [
-        [
-            sum(A[i][k] * B[k][j] for k in range(len(B)))
-            for j in range(len(B[0]))
-        ]
-        for i in range(len(A))
-    ]
-
-
-def rank(A):
-    A = [row[:] for row in A]
-
-    if not A:
-        return 0
-
-    rows = len(A)
-    cols = len(A[0])
-    r = 0
-
-    for c in range(cols):
-        pivot = next(
-            (
-                i for i in range(r, rows)
-                if A[i][c] != 0
-            ),
-            None,
-        )
-
-        if pivot is None:
-            continue
-
-        A[r], A[pivot] = A[pivot], A[r]
-
-        q = A[r][c]
-        A[r] = [x / q for x in A[r]]
-
-        for i in range(rows):
-            if i == r:
-                continue
-
-            q = A[i][c]
-
-            if q:
-                A[i] = [
-                    A[i][j] - q * A[r][j]
-                    for j in range(cols)
-                ]
-
-        r += 1
-
-    return r
-
-
-def P_matrix(n, partition):
+def projection_matrix(n: int, partition):
     P = [
         [Fraction(0) for _ in range(n)]
         for _ in range(n)
     ]
 
     for block in partition:
-        q = Fraction(1, len(block))
+        value = Fraction(1, len(block))
+
         for i in block:
             for j in block:
-                P[i][j] = q
+                P[i][j] = value
 
     return P
 
 
-def K_matrix(T):
+def identity(n: int):
+    return [
+        [
+            Fraction(int(i == j))
+            for j in range(n)
+        ]
+        for i in range(n)
+    ]
+
+
+def matsub(A, B):
+    return [
+        [
+            A[i][j] - B[i][j]
+            for j in range(len(A[0]))
+        ]
+        for i in range(len(A))
+    ]
+
+
+def matmul(A, B):
+    rows = len(A)
+    inner = len(B)
+    cols = len(B[0])
+
+    return [
+        [
+            sum(
+                A[i][k] * B[k][j]
+                for k in range(inner)
+            )
+            for j in range(cols)
+        ]
+        for i in range(rows)
+    ]
+
+
+def gaussian_rank(A):
+    if not A:
+        return 0
+
+    A = [row[:] for row in A]
+
+    rows = len(A)
+    cols = len(A[0])
+    rank = 0
+
+    for col in range(cols):
+        pivot = None
+
+        for r in range(rank, rows):
+            if A[r][col] != 0:
+                pivot = r
+                break
+
+        if pivot is None:
+            continue
+
+        A[rank], A[pivot] = (
+            A[pivot],
+            A[rank],
+        )
+
+        pivot_value = A[rank][col]
+
+        A[rank] = [
+            value / pivot_value
+            for value in A[rank]
+        ]
+
+        for r in range(rows):
+            if r == rank:
+                continue
+
+            factor = A[r][col]
+
+            if factor == 0:
+                continue
+
+            A[r] = [
+                A[r][c]
+                - factor * A[rank][c]
+                for c in range(cols)
+            ]
+
+        rank += 1
+
+        if rank == rows:
+            break
+
+    return rank
+
+
+def koopman(T):
     n = len(T)
 
     K = [
@@ -159,145 +169,280 @@ def K_matrix(T):
     return K
 
 
+def transposed_koopman(T):
+    K = koopman(T)
+
+    return [
+        [
+            K[j][i]
+            for j in range(len(K))
+        ]
+        for i in range(len(K))
+    ]
+
+
 def production_rank(T, partition):
     n = len(T)
 
-    P = P_matrix(n, partition)
-    Q = sub(identity(n), P)
-    K = K_matrix(T)
+    P = projection_matrix(
+        n,
+        partition,
+    )
 
-    D = mul(mul(Q, K), P)
+    Q = matsub(
+        identity(n),
+        P,
+    )
 
-    return rank(D)
+    K = koopman(T)
+
+    D = matmul(
+        matmul(Q, K),
+        P,
+    )
+
+    return gaussian_rank(D)
 
 
-def mutant_transposed_koopman_rank(T, partition):
+def mutant_transposed_koopman_rank(
+    T,
+    partition,
+):
     n = len(T)
 
-    P = P_matrix(n, partition)
-    Q = sub(identity(n), P)
-    K = K_matrix(T)
+    P = projection_matrix(
+        n,
+        partition,
+    )
 
-    K = [
-        list(row)
-        for row in zip(*K)
-    ]
+    Q = matsub(
+        identity(n),
+        P,
+    )
 
-    D = mul(mul(Q, K), P)
+    K = transposed_koopman(T)
 
-    return rank(D)
+    D = matmul(
+        matmul(Q, K),
+        P,
+    )
+
+    return gaussian_rank(D)
 
 
-def mutant_wrong_spec_rank(T, partition):
+def mutant_wrong_spec_rank(
+    T,
+    partition,
+):
     n = len(T)
 
-    P = P_matrix(n, partition)
-    Q = sub(identity(n), P)
-    K = K_matrix(T)
+    P = projection_matrix(
+        n,
+        partition,
+    )
 
-    D = mul(mul(K, P), Q)
+    Q = matsub(
+        identity(n),
+        P,
+    )
 
-    return rank(D)
+    K = koopman(T)
+
+    D = matmul(
+        matmul(K, P),
+        Q,
+    )
+
+    return gaussian_rank(D)
 
 
-def mutant_vertical_stack_rank(T, partition):
-    """
-    Deliberately wrong incidence representation.
+def incidence_edges(
+    T,
+    partition,
+):
+    owner = {}
 
-    This mutation is intentionally not algebraically equivalent
-    to the production horizontal construction.
-    """
-    n = len(T)
-    m = len(partition)
-    idx = pidx(partition)
+    for i, block in enumerate(partition):
+        for x in block:
+            owner[x] = i
 
-    rows = []
+    edges = set()
 
     for x, y in enumerate(T):
-        source = idx[x]
-        target = idx[y]
+        edges.add(
+            (
+                owner[x],
+                owner[y],
+            )
+        )
 
-        row = [
-            Fraction(int(j == source))
-            for j in range(m)
-        ]
+    return edges
 
-        row += [
-            Fraction(int(j == target))
-            for j in range(m)
-        ]
 
-        rows.append(row)
+def horizontal_incidence_matrix(
+    T,
+    partition,
+):
+    m = len(partition)
 
-    # Wrong vertical-stack semantics:
-    # transpose before rank calculation.
+    edges = incidence_edges(
+        T,
+        partition,
+    )
+
     A = [
-        list(row)
-        for row in zip(*rows)
+        [Fraction(0) for _ in range(m)]
+        for _ in range(m)
     ]
 
-    return rank(A)
+    for source, target in edges:
+        A[source][target] = Fraction(1)
+
+    return A
 
 
-MUTATIONS = [
-    (
-        "NC-01 transposed Koopman",
-        mutant_transposed_koopman_rank,
-    ),
-    (
-        "WRONG-SPEC D=KP(I-P)",
-        mutant_wrong_spec_rank,
-    ),
-    (
-        "NC-02 vertical stack substituted for horizontal",
-        mutant_vertical_stack_rank,
-    ),
-]
+def vertical_incidence_matrix(
+    T,
+    partition,
+):
+    m = len(partition)
+
+    edges = incidence_edges(
+        T,
+        partition,
+    )
+
+    A = [
+        [Fraction(0) for _ in range(m)]
+        for _ in range(m)
+    ]
+
+    for source, target in edges:
+        A[target][source] = Fraction(1)
+
+    return A
 
 
-def find_counterexample(mutant):
-    for n in range(1, 5):
-        partitions = list(partitions_of_set(n))
+def horizontal_rank(
+    T,
+    partition,
+):
+    return gaussian_rank(
+        horizontal_incidence_matrix(
+            T,
+            partition,
+        )
+    )
 
-        for T in product(range(n), repeat=n):
-            for partition in partitions:
-                oracle = production_rank(
-                    T,
-                    partition,
-                )
 
-                mutated = mutant(
-                    T,
-                    partition,
-                )
+def vertical_rank(
+    T,
+    partition,
+):
+    return gaussian_rank(
+        vertical_incidence_matrix(
+            T,
+            partition,
+        )
+    )
 
-                if oracle != mutated:
-                    return (
-                        n,
-                        T,
-                        partition,
-                        oracle,
-                        mutated,
-                    )
 
-    return None
+def require_killed(
+    name,
+    T,
+    partition,
+    oracle,
+    mutant,
+):
+    if oracle == mutant:
+        raise AssertionError(
+            f"MUTATION SURVIVED: {name}\n"
+            f"n={len(T)} "
+            f"T={T} "
+            f"part={partition} "
+            f"oracle={oracle} "
+            f"mutant={mutant}"
+        )
+
+    print(
+        f"KILLED: {name} -> "
+        f"n={len(T)} "
+        f"T={T} "
+        f"part={partition} "
+        f"oracle={oracle} "
+        f"mutant={mutant}"
+    )
 
 
 def run():
-    for name, mutant in MUTATIONS:
-        witness = find_counterexample(mutant)
+    require_killed(
+        "NC-01 transposed Koopman",
+        (0, 0),
+        ((0, 1),),
+        production_rank(
+            (0, 0),
+            ((0, 1),),
+        ),
+        mutant_transposed_koopman_rank(
+            (0, 0),
+            ((0, 1),),
+        ),
+    )
 
-        if witness is None:
-            raise AssertionError(
-                f"MUTATION SURVIVED: {name}"
-            )
+    require_killed(
+        "WRONG-SPEC D=KP(I-P)",
+        (0, 0, 1),
+        ((0, 2), (1,)),
+        production_rank(
+            (0, 0, 1),
+            ((0, 2), (1,)),
+        ),
+        mutant_wrong_spec_rank(
+            (0, 0, 1),
+            ((0, 2), (1,)),
+        ),
+    )
 
-        n, T, partition, oracle, mutated = witness
+    found = False
 
-        print(
-            f"KILLED: {name} -> "
-            f"n={n} T={T} part={partition} "
-            f"oracle={oracle} mutant={mutated}"
+    for n in range(2, 5):
+        for T in product(range(n), repeat=n):
+            for partition in partitions_of_set(n):
+                oracle = horizontal_rank(
+                    T,
+                    partition,
+                )
+
+                mutant = vertical_rank(
+                    T,
+                    partition,
+                )
+
+                if oracle != mutant:
+                    print(
+                        "KILLED: "
+                        "NC-02 vertical stack substituted "
+                        "for horizontal -> "
+                        f"n={n} "
+                        f"T={T} "
+                        f"part={partition} "
+                        f"oracle={oracle} "
+                        f"mutant={mutant}"
+                    )
+                    found = True
+                    break
+
+            if found:
+                break
+
+        if found:
+            break
+
+    if not found:
+        raise AssertionError(
+            "MUTATION SURVIVED: "
+            "NC-02 vertical stack substituted "
+            "for horizontal"
         )
 
     print(
