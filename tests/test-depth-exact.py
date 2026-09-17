@@ -7,9 +7,17 @@ import numpy as np
 
 def kaprekar_T(n_digits=4, base=10):
     def gap(x):
-        digits = [(x // (base ** i)) % base for i in range(n_digits)]
+        digits = [
+            (x // (base ** i)) % base
+            for i in range(n_digits)
+        ]
+
         s = sorted(digits)
-        return (s[-1] - s[0], s[-2] - s[1])
+
+        return (
+            s[-1] - s[0],
+            s[-2] - s[1],
+        )
 
     G = [
         (g1, g2)
@@ -17,18 +25,25 @@ def kaprekar_T(n_digits=4, base=10):
         for g2 in range(0, g1 + 1)
     ]
 
-    index = {g: i for i, g in enumerate(G)}
+    index = {
+        g: i
+        for i, g in enumerate(G)
+    }
 
     return [
-        index[gap(999 * g1 + 90 * g2)]
+        index[
+            gap(999 * g1 + 90 * g2)
+        ]
         for g1, g2 in G
     ], len(G)
 
 
 def build_K(T, n):
     K = np.zeros((n, n))
+
     for i, t in enumerate(T):
         K[i, t] = 1.0
+
     return K
 
 
@@ -37,6 +52,7 @@ def build_P(blocks, n):
 
     for block in blocks:
         k = len(block)
+
         for i in block:
             for j in block:
                 P[i, j] = 1.0 / k
@@ -45,16 +61,25 @@ def build_P(blocks, n):
 
 
 def rank_D(blocks, T, n):
-    D = (
-        np.eye(n) - build_P(blocks, n)
-    ) @ build_K(T, n) @ build_P(blocks, n)
+    K = build_K(T, n)
+    P = build_P(blocks, n)
 
-    return int(np.linalg.matrix_rank(D, tol=1e-9))
+    D = (
+        np.eye(n) - P
+    ) @ K @ P
+
+    return int(
+        np.linalg.matrix_rank(
+            D,
+            tol=1e-9,
+        )
+    )
 
 
 def make_depth_partition(T, n):
     fixed = next(
-        i for i, t in enumerate(T)
+        i
+        for i, t in enumerate(T)
         if t == i
     )
 
@@ -63,7 +88,10 @@ def make_depth_partition(T, n):
     for i, t in enumerate(T):
         reverse[t].append(i)
 
-    depth = {fixed: 0}
+    depth = {
+        fixed: 0
+    }
+
     queue = deque([fixed])
 
     while queue:
@@ -71,13 +99,18 @@ def make_depth_partition(T, n):
 
         for u in reverse[v]:
             if u not in depth:
-                depth[u] = depth[v] + 1
+                depth[u] = (
+                    depth[v] + 1
+                )
+
                 queue.append(u)
 
     by_depth = defaultdict(list)
 
     for i in range(n):
-        by_depth[depth[i]].append(i)
+        by_depth[
+            depth[i]
+        ].append(i)
 
     return [
         by_depth[d]
@@ -88,17 +121,27 @@ def make_depth_partition(T, n):
 def main():
     T, n = kaprekar_T()
 
-    blocks = make_depth_partition(T, n)
-    rank = rank_D(blocks, T, n)
+    blocks = make_depth_partition(
+        T,
+        n,
+    )
+
+    rank = rank_D(
+        blocks,
+        T,
+        n,
+    )
 
     print(
-        f"R3 depth partition rank: {rank} "
+        "R3 depth partition rank: "
+        f"{rank} "
         f"{'PASS' if rank == 0 else 'FAIL'}"
     )
 
     if rank != 0:
         raise AssertionError(
-            f"Depth quotient is not exact: rank={rank}"
+            "Depth quotient is not exact: "
+            f"rank={rank}"
         )
 
 
