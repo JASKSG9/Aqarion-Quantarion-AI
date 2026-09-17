@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aqarion.org/schemas/aro-1-reproduction-object.json",
+  "title": "AQARION Reproduction Object 1",
+  "type": "object",
+  "required": [
+    "schema",
+    "claim_id",
+    "specification",
+    "inputs",
+    "reference_execution",
+    "reproduction_execution",
+    "relation",
+    "freshness"
+  ],
+  "properties": {
+    "schema": {
+      "const": "AQARION-REPRODUCTION-OBJECT-1"
+    },
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "specification": {
+      "type": "object",
+      "required": ["digest"],
+      "properties": {
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "inputs": {
+      "type": "object",
+      "required": ["digest"],
+      "properties": {
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "reference_execution": {
+      "$ref": "#/$defs/execution"
+    },
+    "reproduction_execution": {
+      "$ref": "#/$defs/execution"
+    },
+    "relation": {
+      "type": "object",
+      "required": [
+        "specification_same",
+        "inputs_same",
+        "implementation_independent",
+        "environment_independent",
+        "outputs_equal"
+      ],
+      "properties": {
+        "specification_same": {
+          "type": "boolean"
+        },
+        "inputs_same": {
+          "type": "boolean"
+        },
+        "implementation_independent": {
+          "type": "boolean"
+        },
+        "environment_independent": {
+          "type": "boolean"
+        },
+        "outputs_equal": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "freshness": {
+      "type": "object",
+      "required": [
+        "reference_commit",
+        "reproduction_commit"
+      ],
+      "properties": {
+        "reference_commit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reproduction_commit": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "execution": {
+      "type": "object",
+      "required": [
+        "source_digest",
+        "executable_digest",
+        "input_digest",
+        "environment_digest",
+        "output_digest",
+        "commit"
+      ],
+      "properties": {
+        "source_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        },
+        "executable_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        },
+        "input_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        },
+        "environment_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        },
+        "output_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        },
+        "commit": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
