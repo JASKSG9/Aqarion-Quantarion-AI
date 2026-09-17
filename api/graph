@@ -253,6 +253,35 @@ formal_verification
 governance
 publication
 
+                 ┌────────────────────┐
+                 │ mathematical claim │
+                 └─────────┬──────────┘
+                           │
+                           ▼
+                 ┌────────────────────┐
+                 │ computational run  │
+                 └─────────┬──────────┘
+                           │
+                           ▼
+                 ┌────────────────────┐
+                 │ canonical evidence │
+                 └─────────┬──────────┘
+                           │
+                           ▼
+                    SHA-256 digest
+                           │
+                           ▼
+                 ┌────────────────────┐
+                 │      receipt       │
+                 └─────────┬──────────┘
+                           │
+                independent anchor
+                           │
+             ┌─────────────┴─────────────┐
+             ▼                           ▼
+        Git commit                  signed artifact
+
+
 ## Public app
 
 **https://aqarion-federation-hub--quantarion9.replit.app/**
