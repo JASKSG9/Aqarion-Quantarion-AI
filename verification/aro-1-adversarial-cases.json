@@ -1,0 +1,76 @@
+{
+  "schema": "AQARION-ARO1-ADVERSARIAL-1",
+  "cases": [
+    {
+      "id": "M1",
+      "name": "false-independence",
+      "condition": {
+        "same_source": true,
+        "same_executable": true,
+        "claimed_independent": true,
+        "outputs_equal": true
+      },
+      "expected": "FALSE_INDEPENDENCE"
+    },
+    {
+      "id": "M2",
+      "name": "ordinary-rerun",
+      "condition": {
+        "same_source": true,
+        "same_executable": true,
+        "claimed_independent": false,
+        "outputs_equal": true
+      },
+      "expected": "RERUN"
+    },
+    {
+      "id": "M3",
+      "name": "independent-agreement",
+      "condition": {
+        "same_source": false,
+        "same_executable": false,
+        "claimed_independent": true,
+        "outputs_equal": true
+      },
+      "expected": "INDEPENDENTLY_REPRODUCED"
+    },
+    {
+      "id": "M4",
+      "name": "independent-disagreement",
+      "condition": {
+        "same_source": false,
+        "same_executable": false,
+        "claimed_independent": true,
+        "outputs_equal": false
+      },
+      "expected": "REPRODUCTION_FAILURE"
+    },
+    {
+      "id": "M5",
+      "name": "input-drift-hidden-by-output",
+      "condition": {
+        "same_input": false,
+        "outputs_equal": true
+      },
+      "expected": "INPUT_DRIFT"
+    },
+    {
+      "id": "M6",
+      "name": "stale-receipt",
+      "condition": {
+        "commit_matches_expected": false
+      },
+      "expected": "STALE_RECEIPT"
+    },
+    {
+      "id": "M7",
+      "name": "same-output-not-independence",
+      "condition": {
+        "same_source": true,
+        "same_executable": true,
+        "outputs_equal": true
+      },
+      "expected": "RERUN"
+    }
+  ]
+}
