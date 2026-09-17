@@ -1,370 +1,189 @@
-AQARION Federation Status Ledger — CURRENT HEAD
-
-
-Checkpoint
-
-
-AQ-S17 / Current-Head Verification Reconciliation
-
+# AQARION Federation Status Ledger
 
 Date: 2026-09-17
 
-
-Mode: FROZEN · ADVERSARIAL · NO FABRICATION · NO PROMOTION
-
+## Current repository state
 
 Repository:
 
-
 JASKSG9/Aqarions-Quantarion-AI
 
+Branch:
+
+main
 
 Current HEAD:
 
-
-aaf323b79e6060f0a3b93fdd24dbb408a20e08bc
-
+a7decb9bf00cbf1cfc92313b6dcd4c795c10645a
 
 Current tree:
 
+62954365caf42670beae1ee051beaa464be83477
 
-efba04420186e413719b711a15997d7f6bac8433
-
-
-Current CI
-
-
-GitHub Actions run:
-
-
-#70
-
-
-Workflow:
-
-
-AQARION Replay
-
-
-Conclusion:
-
-
-SUCCESS
-
-
-The current HEAD was actually checked out and executed.
-
-
-Python:
-
-
-CPython 3.11.16
-
-
-Platform:
-
-
-Linux-6.17.0-1022-azure-x86_64-with-glibc2.39
-
-
-Registered executable checks
-
-
-The active manifest is version 1.2.0.
-
-
-Registered checks:
-
-
-
-
-AQ-S14-SEMANTIC-K3
-
-
-AQ-CONTRACT-OBJECT-OPERATOR
-
-
-
-
-Both returned exit code 0.
-
-
-Result:
-
-
-RUN-ALL PASS: 2 checks passed
-
-
-AQ-S14
-
-
-Status:
-
-
-PASS [V]
-
-
-Scope:
-
-
-finite K3 forest/incidence semantic computation.
-
-
-Verified finite results include:
-
-
-
-
-3 spanning trees
-
-
-12/12 oriented incidence cases
-
-
-all 8 edge subsets classified
-
-
-unsigned incidence rejected semantically
-
-
-two-edge K3 forest classified as spanning
-
-
-triangle classified as cyclic rather than forest
-
-
-graph mutation detected despite equal coarse invariants
-
-
-
-
-This is finite computational verification only.
-
-
-It does not establish a universal theorem, formal proof, independence, or publication readiness.
-
-
-Object/operator contract
-
-
-Status:
-
-
-PASS [V]
-
-
-The executable suite verifies the frozen finite conventions:
-
-
-
-
-K_T[x,T(x)] = 1
-
-
-K_T f = f o T
-
-
-raw image-block families are not silently treated as partitions
-
-
-T_* is generated as an equivalence relation from image identifications
-
-
-permutation image blocks preserve partition structure
-
-
-
-
-This is semantic contract verification.
-
-
-It is not a theorem certificate.
-
-
-Receipt
-
-
-Schema:
-
-
-AQARION-RUN-RECEIPT-2
-
-
-Receipt status:
-
-
-PASS
-
-
-The receipt is bound to:
-
-
-
-
-repository
-
-
-exact commit
-
-
-exact repository tree
-
-
-manifest path
-
-
-manifest SHA-256
-
-
-Python implementation/version
-
-
-runtime platform
-
-
-individual check results
-
-
-
-
-Manifest SHA-256:
-
-
-9c489c3554efcd761318592d0a4003f7266a7ef15e25c38d415e6ca9f4345f12
-
-
-The workflow independently recomputes the manifest hash and checks the receipt commit against GITHUB_SHA.
-
-
-Excluded claims
-
-
-The following remain excluded until an executable verifier and appropriate evidence are bound:
-
-
-
-
-SV-001-V2
-
-
-K2R-PARAMETRIC
-
-
-BETA-ENVELOPE
-
-
-
-
-A declared claim is not equivalent to executed evidence.
-
-
-A finite execution is not equivalent to a universal theorem.
-
-
-A passing implementation is not equivalent to independent verification.
-
-
-A Lean source file is not equivalent to a compiled Lean proof.
-
-
-Current adversarial boundary
-
-
-The current repository has verified:
-
-
-current commit
-→ current manifest
-→ current execution
-→ current receipt
-→ current registered results
-
-
-The next required independence boundary is:
-
-
-implementation
-→ independent reference model
-→ generated/adversarial finite corpus
-→ independent comparison
-→ separately bound receipt
-
-
-Until that exists, the object/operator suite remains:
-
-
-PASS [V]
-
-
-not:
-
-
-[P]
-
-
-or:
-
-
-[PV].
-
-
-Governance
-
-
-C3:
-
-
-OPEN
-
-
-C4:
-
-
-BLOCKED
-
+## Current policy
 
 Lean:
 
+OPTIONAL / COLLABORATIVE
 
-OPEN
+Mathematical research:
 
+ACTIVE
+
+Computational verification:
+
+ACTIVE
+
+Independent reproduction:
+
+ACTIVE
+
+Evidence compiler:
+
+ACTIVE
 
 Publication:
 
+claim-dependent; no universal publication gate is asserted by Lean absence
 
-BLOCKED
+## Current GitHub Actions state
 
+Latest observed run for current HEAD:
 
-Independent verification:
+AQARION Replay #94
 
+Conclusion:
+
+FAILURE
+
+Failure:
+
+The workflow invokes:
+
+verification/aq_mutation_suite.py
+
+The current HEAD contains:
+
+verification/aq-mutation-suit.py
+
+The mutation suite therefore did not execute.
+
+The following stages completed successfully before that failure:
+
+- AQ-S14 semantic suite
+- AQ contract semantic suite
+- independent exhaustive oracle
+
+The canonical verification runner did not execute.
+
+The Receipt-2 validation did not execute.
+
+Therefore:
+
+CURRENT HEAD = NOT FULLY VERIFIED BY WORKFLOW
+
+## Independent finite oracle
+
+The repository's current independent oracle covers:
+
+deterministic maps:
+
+288
+
+partition/map cases:
+
+3984
+
+The current observed GitHub run reports:
+
+INDEPENDENT ORACLE PASS: maps=288, cases=3984
+
+This is finite computational evidence only.
+
+It does not establish a universal theorem.
+
+## Mathematical state
+
+T10 dynamic-closure result:
+
+COMPUTATIONALLY SUPPORTED
+
+The direct orbit-generated equivalence closure agrees with iterative repair
+over the independently reproduced finite scope reported in the research
+record.
+
+The corrected graphic-rank proof route is an analytic theorem target.
+
+Do not label it formally verified.
+
+## Support-spectrum result
+
+For support size s >= 1, the proposed exact spectrum is:
+
+Spec_s(kappa_S)
+=
+{-s + ceil(2 sqrt(s)) - 1, ..., s - 1}.
+
+Status:
+
+ANALYTICALLY DERIVED / COMPUTATIONALLY CHECKED
+
+The construction has been independently checked for all requested
+integer pairs through s = 30 in the current research session.
+
+This computation is supporting evidence for the construction, not the proof.
+
+## Important notation correction
+
+Use:
+
+b_infinity(P) = |C_T(P)|
+
+for dynamic-closure block count.
+
+Use:
+
+rho_infinity(P) = n - |C_T(P)|
+
+for dynamic-closure graphic/rank quantity.
+
+Then:
+
+b_infinity is supermodular
+
+and:
+
+rho_infinity is submodular.
+
+Do not call the block count itself submodular.
+
+## Governance
+
+C3:
 
 OPEN
 
+C4:
 
-Promotable:
+BLOCKED
 
+Lean:
 
-FALSE
+OPTIONAL / COLLABORATIVE
 
+SDS-002:
 
-Audit conclusion
+QUARANTINED
 
+Publication:
 
-The current repository has a real, reproducible, current-head finite verification result.
+NOT PROMOTED
 
+## Immediate action
 
-The evidence supports the statement:
-
-
-
-
-Two registered finite executable checks passed on commit aaf323b79e6060f0a3b93fdd24dbb408a20e08bc, with a Receipt-2 provenance record bound to that commit and the manifest SHA-256.
-
-
-
-
-The evidence does not support a claim that the underlying universal mathematical propositions have been proved or independently verified.
-
-
-No stronger claim should be made until the independent-oracle boundary is completed.
-
+1. Repair the live mutation-suite path.
+2. Obtain a new GitHub Actions run.
+3. Inspect every step.
+4. Only then regenerate the current status receipt.
+5. Preserve historical snapshots separately from current-state ledgers.
+6. Bind the support-spectrum executable as a separate mathematical fixture.
