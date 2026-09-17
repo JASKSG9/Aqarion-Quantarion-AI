@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aqarion.org/schemas/arc-1-receipt.schema.json",
+  "title": "AQARION Reproduction Receipt ARC-1",
+  "type": "object",
+
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "contract",
+    "implementation",
+    "oracle",
+    "adversary",
+    "execution",
+    "observed",
+    "verification",
+    "independence",
+    "governance"
+  ],
+
+  "properties": {
+    "schema_version": {
+      "const": "ARC-1.0"
+    },
+
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+
+    "contract": {
+      "$ref": "#/$defs/artifact"
+    },
+
+    "implementation": {
+      "$ref": "#/$defs/artifact"
+    },
+
+    "oracle": {
+      "$ref": "#/$defs/artifact"
+    },
+
+    "adversary": {
+      "$ref": "#/$defs/artifact"
+    },
+
+    "execution": {
+      "type": "object",
+      "required": [
+        "performed",
+        "command",
+        "exit_code"
+      ],
+      "properties": {
+        "performed": {
+          "type": "boolean"
+        },
+        "command": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exit_code": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": true
+    },
+
+    "observed": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "INVALID_RECEIPT",
+            "UNEXECUTED"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+
+    "verification": {
+      "type": "object",
+      "required": [
+        "relation",
+        "result"
+      ],
+      "properties": {
+        "relation": {
+          "enum": [
+            "sha256_equal",
+            "json_semantic_equal",
+            "exact_rational_equal",
+            "predicate"
+          ]
+        },
+
+        "result": {
+          "enum": [
+            "PASS",
+            "FAIL"
+          ]
+        }
+      },
+
+      "additionalProperties": true
+    },
+
+    "independence": {
+      "type": "object",
+      "required": [
+        "grade",
+        "implementation_id",
+        "oracle_id"
+      ],
+
+      "properties": {
+        "grade": {
+          "enum": [
+            "I0",
+            "I1",
+            "I2",
+            "I3",
+            "I4"
+          ]
+        },
+
+        "implementation_id": {
+          "type": "string"
+        },
+
+        "oracle_id": {
+          "type": "string"
+        }
+      },
+
+      "additionalProperties": true
+    },
+
+    "governance": {
+      "type": "object",
+      "required": [
+        "evidence_class",
+        "promotion_gate"
+      ],
+
+      "properties": {
+        "evidence_class": {
+          "enum": [
+            "V",
+            "PV",
+            "C",
+            "R",
+            "REFUTED"
+          ]
+        },
+
+        "promotion_gate": {
+          "enum": [
+            "BLOCKED",
+            "OPEN",
+            "PASSED"
+          ]
+        }
+      },
+
+      "additionalProperties": true
+    }
+  },
+
+  "$defs": {
+    "artifact": {
+      "type": "object",
+
+      "required": [
+        "id",
+        "sha256"
+      ],
+
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+
+        "path": {
+          "type": "string"
+        },
+
+        "sha256": {
+          "type": "string",
+          "pattern":
+            "^[0-9a-f]{64}$"
+        }
+      },
+
+      "additionalProperties": true
+    }
+  }
+}
