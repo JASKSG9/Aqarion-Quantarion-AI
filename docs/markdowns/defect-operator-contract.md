@@ -1,0 +1,1208 @@
+# ✨ AQARION Object–Operator Contract
+
+**Frozen vocabulary for finite maps, partitions, transport, joins, closure, defect operators, graphs, ranks, and evidence**
+
+---
+
+## 🔒 STATUS
+
+**Contract ID:** `AQARION-OBJECT-OPERATOR-CONTRACT-v1`
+
+**Path:** `DOCS/AQARION-OBJECT-OPERATOR-CONTRACT.md`
+
+**Purpose:** prevent semantic object mismatch before computation, replay,
+formalization, certification, or publication.
+
+This document is normative vocabulary.
+
+It does not by itself prove any theorem.
+
+A theorem, computation, fixture, claim record, or receipt that uses an
+undefined or overloaded object is:
+
+`UNBOUND`
+
+An `UNBOUND` object cannot be promoted.
+
+---
+
+# 1. 🌙 DOMAIN
+
+Let
+
+\[
+X
+\]
+
+be a finite set with
+
+\[
+|X|=n.
+\]
+
+Let
+
+\[
+T:X\to X
+\]
+
+be a deterministic finite map.
+
+The default domain is **ARBITRARY MAP**.
+
+A result must explicitly declare any narrower domain:
+
+- `[MAP]` — arbitrary deterministic finite map;
+- `[PERMUTATION]` — bijective map;
+- `[CYCLIC]` — specified cyclic permutation;
+- `[EQUAL-BLOCK]` — partition with specified equal block geometry;
+- `[INVARIANT-TREE]` — a separately verified invariant-tree domain.
+
+A theorem must not silently move from `[MAP]` to `[PERMUTATION]`.
+
+A computation must record the same domain as the mathematical statement.
+
+---
+
+# 2. ✨ PARTITIONS
+
+A partition of \(X\) is
+
+\[
+\Pi=\{B_1,\ldots,B_m\},
+\]
+
+where the \(B_i\) are nonempty, pairwise disjoint, and
+
+\[
+X=\bigcup_{i=1}^{m}B_i.
+\]
+
+Write
+
+\[
+|\Pi|=m.
+\]
+
+The ordinary partition-lattice rank is
+
+\[
+\boxed{r(\Pi)=n-|\Pi|}.
+\]
+
+This quantity is called:
+
+`ORDINARY PARTITION-LATTICE RANK`
+
+It is **never** called defect rank.
+
+---
+
+# 3. 🔷 BLOCK-CONSTANT FUNCTION SPACE
+
+Define
+
+\[
+V_\Pi
+=
+\{f:X\to\mathbb R:
+f\text{ is constant on every }B\in\Pi\}.
+\]
+
+Equivalently,
+
+\[
+V_\Pi=\operatorname{Ran}(P_\Pi),
+\]
+
+where \(P_\Pi\) is the block-averaging projection below.
+
+The ambient function space is
+
+\[
+\mathbb R^X.
+\]
+
+---
+
+# 4. 🔷 BLOCK-AVERAGING PROJECTION
+
+For \(B\in\Pi\), define
+
+\[
+(P_\Pi f)(x)
+=
+\frac1{|B|}
+\sum_{y\in B}f(y),
+\qquad x\in B.
+\]
+
+Its matrix entries are
+
+\[
+(P_\Pi)_{xy}
+=
+\begin{cases}
+|B|^{-1},&x,y\in B\text{ for some }B\in\Pi,\\
+0,&\text{otherwise}.
+\end{cases}
+\]
+
+The frozen algebraic properties are
+
+\[
+P_\Pi^2=P_\Pi,
+\]
+
+\[
+P_\Pi^\top=P_\Pi.
+\]
+
+Define
+
+\[
+Q_\Pi=I-P_\Pi.
+\]
+
+Then
+
+\[
+Q_\Pi^2=Q_\Pi,
+\qquad
+Q_\Pi^\top=Q_\Pi,
+\qquad
+P_\Pi Q_\Pi=Q_\Pi P_\Pi=0.
+\]
+
+---
+
+# 5. ⚡ KOOPMAN OPERATOR — FROZEN ORIENTATION
+
+The AQARION Koopman convention is
+
+\[
+\boxed{
+(K_Tf)(x)=f(T(x)).
+}
+\]
+
+The matrix convention is therefore
+
+\[
+\boxed{
+(K_T)_{x,y}=1
+\iff
+y=T(x).
+}
+\]
+
+Equivalently, row \(x\) contains its nonzero entry in column \(T(x)\).
+
+Thus
+
+\[
+(K_Tf)(x)=
+\sum_y(K_T)_{x,y}f(y)
+=
+f(T(x)).
+\]
+
+## 🚨 TRANSPOSE WARNING
+
+The alternative convention
+
+\[
+(K_T)_{T(x),x}=1
+\]
+
+is the transpose/pushforward-style convention.
+
+It represents a different matrix orientation.
+
+It must never be substituted silently.
+
+Every matrix-level fixture must test the orientation directly.
+
+---
+
+# 6. 🌊 ONE-STEP DEFECT
+
+Define the block-invariance defect
+
+\[
+\boxed{
+D_{\Pi,T}
+=
+(I-P_\Pi)K_TP_\Pi.
+}
+\]
+
+Equivalently,
+
+\[
+D_{\Pi,T}=Q_\Pi K_TP_\Pi.
+\]
+
+The following identities are immediate:
+
+\[
+P_\Pi D_{\Pi,T}=0,
+\]
+
+and
+
+\[
+D_{\Pi,T}P_\Pi=D_{\Pi,T}.
+\]
+
+Therefore
+
+\[
+\operatorname{Im}(D_{\Pi,T})
+\subseteq
+\ker(P_\Pi).
+\]
+
+---
+
+# 7. 🚫 NO UNJUSTIFIED NILPOTENCY
+
+The identity
+
+\[
+D_{\Pi,T}^2=0
+\]
+
+is **not** a definition.
+
+It is **not** an automatic consequence of the notation
+
+\[
+D=(I-P)KP.
+\]
+
+Any claim that \(D^2=0\) must provide its additional hypotheses.
+
+A source-level object contract test must therefore not encode
+
+\[
+D^2=0
+\]
+
+as a universal axiom.
+
+---
+
+# 8. 🎯 ZERO DEFECT
+
+The exact zero-defect condition is
+
+\[
+D_{\Pi,T}=0
+\iff
+K_T(V_\Pi)\subseteq V_\Pi.
+\]
+
+For a deterministic map this is equivalent to
+
+\[
+\boxed{
+\forall B\in\Pi\;
+\exists C\in\Pi:
+T(B)\subseteq C.
+}
+\]
+
+Thus every source block must map entirely into one target block.
+
+This is the finite deterministic exact-observable-quotient condition.
+
+---
+
+# 9. 🧭 ONE-STEP PARTITION TRANSPORT
+
+There are two distinct constructions that must not be conflated.
+
+## 9.1 Image-block family
+
+For a partition \(\Pi\), define the raw image-block family
+
+\[
+T[\Pi]
+=
+\{T(B):B\in\Pi\}.
+\]
+
+For a permutation, \(T[\Pi]\) is again a partition of \(X\).
+
+For an arbitrary deterministic map, it need not be.
+
+Possible failures include:
+
+- image sets that overlap;
+- image sets that do not cover \(X\);
+- duplicated image sets.
+
+Therefore
+
+\[
+T[\Pi]
+\]
+
+is **not** the canonical partition transport for arbitrary maps.
+
+---
+
+## 9.2 Equivalence-generated transport
+
+For arbitrary maps define \(T_*(\Pi)\) as the partition whose equivalence
+relation is generated by
+
+\[
+T(x)\sim T(y)
+\]
+
+whenever
+
+\[
+x\sim_\Pi y.
+\]
+
+In words:
+
+1. take every pair of points lying in one \(\Pi\)-block;
+2. identify their images under \(T\);
+3. take the smallest equivalence relation on \(X\) containing all such
+   image identifications.
+
+The resulting equivalence classes form \(T_*(\Pi)\).
+
+This construction is defined for arbitrary deterministic maps.
+
+It must not be replaced by the raw family \(T[\Pi]\).
+
+---
+
+# 10. 🔁 ONE-STEP JOIN
+
+The one-step transport join is
+
+\[
+\boxed{
+J_T^{(1)}(\Pi)
+=
+\Pi\vee T_*(\Pi).
+}
+\]
+
+Here \(\vee\) is the join in the partition lattice.
+
+This is a **single recurrence step**.
+
+It is not a dynamical closure.
+
+---
+
+# 11. 🔄 ITERATED CLOSURE
+
+Define
+
+\[
+\Pi_0=\Pi,
+\]
+
+and recursively
+
+\[
+\boxed{
+\Pi_{h+1}
+=
+\Pi_h\vee T_*(\Pi_h).
+}
+\]
+
+Because \(X\) is finite, the ascending chain stabilizes.
+
+Define the stabilization height
+
+\[
+\boxed{
+h_T(\Pi)
+=
+\min\{h:\Pi_h=\Pi_{h+1}\}.
+}
+\]
+
+Define the dynamical closure
+
+\[
+\boxed{
+C_T(\Pi)=\Pi_{h_T(\Pi)}.
+}
+\]
+
+Thus \(C_T(\Pi)\) is the least stabilized partition produced by the
+specified recurrence.
+
+---
+
+# 12. 🚨 JOIN/CLOSURE WARNING
+
+The following are distinct objects:
+
+\[
+J_T^{(1)}(\Pi),
+\]
+
+\[
+J_T^{(1)}(J_T^{(1)}(\Pi)),
+\]
+
+and
+
+\[
+C_T(\Pi).
+\]
+
+Likewise,
+
+\[
+\Pi\vee T[\Pi]\vee T^2[\Pi]
+\]
+
+is not automatically the same object as three applications of the
+recurrence
+
+\[
+\Pi_{h+1}
+=
+\Pi_h\vee T_*(\Pi_h).
+\]
+
+Every computation must state whether it uses:
+
+- raw image blocks;
+- one-step generated transport;
+- one-step join;
+- repeated join;
+- stabilized closure.
+
+Bare notation such as `J_T` is therefore `UNBOUND` unless locally defined.
+
+---
+
+# 13. 🧱 DEFECT RANK
+
+Define
+
+\[
+\boxed{
+\rho_T(\Pi)
+=
+\operatorname{rank}(D_{\Pi,T}).
+}
+\]
+
+This is the:
+
+`DEFECT RANK`
+
+It is not the ordinary partition-lattice rank.
+
+Therefore
+
+\[
+\boxed{
+r(\Pi)\neq\rho_T(\Pi)
+}
+\]
+
+as a matter of vocabulary.
+
+They measure different objects.
+
+A source file must not use `r`, `rank`, or `rho` ambiguously.
+
+---
+
+# 14. 🕸️ DEFECT GRAPH REALIZATION
+
+A statement of the form
+
+\[
+\rho_T(\Pi)=|\Pi|-c(H)
+\]
+
+is incomplete unless \(H\) is defined.
+
+AQARION recognizes the following possible graph realizations:
+
+### 14.1 Incidence graph
+
+\[
+H_{\mathrm{incidence}}(\Pi,T)
+\]
+
+has:
+
+- one left vertex for every source block \(B\in\Pi\);
+- one right vertex for every target block \(C\in\Pi\);
+- an edge \(B-C\) whenever
+
+\[
+T(B)\cap C\neq\varnothing.
+\]
+
+This is a bipartite graph.
+
+### 14.2 Clique expansion
+
+\[
+H_{\mathrm{clique}}(\Pi,T)
+\]
+
+has vertex set \(\Pi\), with target blocks occurring together in the
+image of one source block joined according to the explicitly declared
+clique convention.
+
+### 14.3 Hypergraph
+
+\[
+H_{\mathrm{hypergraph}}(\Pi,T)
+\]
+
+retains each source-block image incidence set as a hyperedge.
+
+These objects are related, but they are not identical data structures.
+
+A theorem must name the realization.
+
+Bare
+
+\[
+H
+\]
+
+is `UNBOUND`.
+
+---
+
+# 15. 🌱 BLOCK TRANSITION MULTIPLICITY
+
+For
+
+\[
+\Pi=\{B_1,\ldots,B_m\},
+\]
+
+define
+
+\[
+M_{rs}
+=
+\left|
+\{x\in B_r:T(x)\in B_s\}
+\right|.
+\]
+
+Thus \(M\) records source-block to target-block transition
+multiplicities.
+
+The row sums satisfy
+
+\[
+\sum_s M_{rs}=|B_r|.
+\]
+
+For a permutation, the column sums satisfy
+
+\[
+\sum_r M_{rs}=|B_s|.
+\]
+
+For arbitrary maps, the column sums need not equal block sizes.
+
+This distinction must remain explicit.
+
+---
+
+# 16. 🔢 REDUCED OPERATOR OBJECTS
+
+If a computation introduces a reduced matrix derived from \(M\), the
+construction must explicitly declare:
+
+1. the normalization;
+2. the domain and codomain;
+3. whether the matrix is symmetric;
+4. its relation to \(D_{\Pi,T}\);
+5. the exact basis being used.
+
+Symbols such as
+
+\[
+G(M)
+\]
+
+are reserved but are not normative mathematical definitions merely by
+name.
+
+A formula must be frozen in the artifact that first claims it.
+
+No nonsymmetric substitute may be silently identified with a symmetric
+Gram operator.
+
+---
+
+# 17. 🌳 INVARIANT-TREE DOMAIN
+
+Tree-based structural results require an explicit domain predicate.
+
+`INVARIANT-TREE` means that a specified graph \(G\) satisfies:
+
+1. \(G\) is a tree under the declared graph convention;
+2. \(T\) acts on \(G\) by graph automorphisms;
+3. the action preserves the vertex set;
+4. the required vertex-orbit identification is explicitly stated;
+5. edge orbits are explicitly defined;
+6. edge inversion is either prohibited or explicitly handled;
+7. the quotient graph convention is declared.
+
+The statement
+
+> "take the quotient tree"
+
+is not sufficient by itself.
+
+---
+
+# 18. 🪢 QUOTIENT GRAPH CONVENTION
+
+When a group action is used, the quotient must specify:
+
+- vertex orbits;
+- edge orbits;
+- incidence of edge orbits;
+- whether parallel edges are retained;
+- whether loops are retained;
+- how edge inversion is handled.
+
+Only after these choices are fixed may the quotient be called a graph.
+
+Only after connectedness and acyclicity are established under that
+convention may it be called a tree.
+
+This prevents accidental use of a tree theorem outside its domain.
+
+---
+
+# 19. 🔬 CYCLE / SUPPORT VOCABULARY
+
+When \(T\) is a permutation, let
+
+\[
+C_1,\ldots,C_r
+\]
+
+denote its nontrivial cycle orbits.
+
+Define the nontrivial support
+
+\[
+S=\bigcup_{i=1}^{r}C_i,
+\]
+
+with
+
+\[
+s=|S|.
+\]
+
+For a partition \(R\), let
+
+\[
+\mathcal B_S(R)
+=
+\{B\cap S:B\in R,\;B\cap S\neq\varnothing\}.
+\]
+
+Define
+
+\[
+q=|\mathcal B_S(R)|.
+\]
+
+For each support block \(B\), define
+
+\[
+t_B
+=
+|\{i:B\cap C_i\neq\varnothing\}|.
+\]
+
+Define the multiplicity defect
+
+\[
+\boxed{
+\mu(R)
+=
+\sum_B
+\left(
+|B\cap S|-t_B
+\right).
+}
+\]
+
+Then
+
+\[
+\mu(R)\ge0.
+\]
+
+---
+
+# 20. 🕸️ CYCLE-BLOCK INCIDENCE GRAPH
+
+Define
+
+\[
+I_R
+\]
+
+with:
+
+- left vertices \(C_1,\ldots,C_r\);
+- right vertices \(B\in\mathcal B_S(R)\);
+- edge \(C_i-B\) iff
+
+\[
+B\cap C_i\neq\varnothing.
+\]
+
+Its edge count is
+
+\[
+E(I_R)
+=
+\sum_B t_B.
+\]
+
+Since
+
+\[
+s
+=
+E(I_R)+\mu(R),
+\]
+
+we have
+
+\[
+E(I_R)=s-\mu(R).
+\]
+
+---
+
+# 21. ♻️ CYCLE-INTERSECTION GRAPH
+
+The cycle-intersection graph
+
+\[
+H_T(R)
+\]
+
+has one vertex for each nontrivial cycle.
+
+Two cycle vertices are adjacent exactly when the corresponding cycles
+meet a common support block of \(R\).
+
+The connected-component count agrees with that of the bipartite
+incidence graph:
+
+\[
+c(I_R)=c(H_T(R)).
+\]
+
+This equivalence is a structural fact of the declared constructions,
+not permission to substitute arbitrary graph realizations elsewhere.
+
+---
+
+# 22. 🧮 STRUCTURAL EXCESS
+
+Define
+
+\[
+b(R)=s-q.
+\]
+
+Define
+
+\[
+\boxed{
+\mathcal E_T(R)
+=
+b(R)+c(H_T(R))-r.
+}
+\]
+
+The incidence graph has cyclomatic number
+
+\[
+\beta_1(I_R)
+=
+E(I_R)-(r+q)+c(I_R).
+\]
+
+Using
+
+\[
+E(I_R)=s-\mu(R),
+\]
+
+we obtain the exact identity
+
+\[
+\boxed{
+\mathcal E_T(R)
+=
+\beta_1(I_R)+\mu(R).
+}
+\]
+
+Therefore
+
+\[
+\boxed{
+\mathcal E_T(R)\ge0.
+}
+\]
+
+---
+
+# 23. 📉 STRUCTURAL DEFECT BOUND
+
+Whenever the declared structural identity
+
+\[
+d_T(R)
+=
+s-b(R)-c(H_T(R))
+\]
+
+is in scope, the excess identity gives
+
+\[
+\boxed{
+d_T(R)
+=
+s-r-\mathcal E_T(R).
+}
+\]
+
+Equivalently,
+
+\[
+\boxed{
+d_T(R)
+=
+s-r-\beta_1(I_R)-\mu(R).
+}
+\]
+
+Hence
+
+\[
+\boxed{
+d_T(R)\le s-r.
+}
+\]
+
+Equality holds exactly when
+
+\[
+\boxed{
+\beta_1(I_R)=0
+\quad\text{and}\quad
+\mu(R)=0.
+}
+\]
+
+That is:
+
+1. the cycle-block incidence graph is a forest;
+2. every support block contains at most one point from each nontrivial
+   cycle.
+
+This replaces any stronger singleton-only or gcd-only equality
+classification unless such a classification is separately proved.
+
+---
+
+# 24. 🔢 TWO-CYCLE CROSS-PAIR OBJECT
+
+For two cycles of lengths
+
+\[
+a,b,
+\]
+
+define
+
+\[
+d=\gcd(a,b)
+\]
+
+and
+
+\[
+\boxed{
+B(a,b)=a+b-d.
+}
+\]
+
+For a cross-cycle pair \((x,y)\), its residue sectors are determined by
+
+\[
+\phi_{x,y}(z)
+=
+\begin{cases}
+z-x\pmod d,&z\in C_a,\\
+z-y\pmod d,&z\in C_b.
+\end{cases}
+\]
+
+A block is `residue-monochromatic` if all of its elements have the
+same value under \(\phi_{x,y}\).
+
+The equality condition for the two-cycle orbit-join construction must
+refer to this residue structure, not to singleton blocks unless an
+additional theorem establishes singleton equivalence.
+
+---
+
+# 25. 🧭 CROSS-CYCLE GRAPH CONVENTION
+
+For positive integers \(a,b\), define
+
+\[
+H_N(a,b)
+\]
+
+as the bipartite graph with vertices
+
+\[
+A_0,\ldots,A_{a-1},
+\qquad
+B_0,\ldots,B_{b-1},
+\]
+
+and edge
+
+\[
+e_j=
+(A_{j\bmod a},B_{j\bmod b}),
+\qquad
+0\le j<N.
+\]
+
+For
+
+\[
+d=\gcd(a,b),
+\qquad
+N=a+b-d,
+\]
+
+the target structural statement is
+
+\[
+e_j\sim e_k
+\iff
+j\equiv k\pmod d
+\]
+
+at threshold connectivity, with \(d\) residue sectors.
+
+This is a theorem target and must not be promoted merely because finite
+examples agree.
+
+---
+
+# 26. 🚫 FORBIDDEN CONFLATIONS
+
+The following pairs are permanently distinct:
+
+\[
+\boxed{r(\Pi)\neq\rho_T(\Pi)}
+\]
+
+\[
+\boxed{
+T[\Pi]\neq T_*(\Pi)
+}
+\]
+
+for arbitrary maps.
+
+\[
+\boxed{
+J_T^{(1)}\neq C_T
+}
+\]
+
+\[
+\boxed{
+\text{one recurrence step}
+\neq
+\text{three explicit orbit images}
+}
+\]
+
+\[
+\boxed{
+K_T
+\neq
+K_T^\top
+}
+\]
+
+under matrix representation.
+
+\[
+\boxed{
+H_{\mathrm{incidence}}
+\neq
+H_{\mathrm{clique}}
+\neq
+H_{\mathrm{hypergraph}}
+}
+\]
+
+unless an explicit equivalence theorem is supplied.
+
+Also forbidden:
+
+- numeric agreement = theorem;
+- replay = independent reproduction;
+- hash match = semantic correctness;
+- Lean source = Lean proof;
+- public artifact = certified artifact;
+- executable = mathematically true;
+- policy permission = truth;
+- historical receipt = current-HEAD receipt.
+
+---
+
+# 27. 🔒 EVIDENCE CLASSES
+
+### `[D] DEFINED`
+
+The object or convention is explicitly frozen.
+
+### `[V] VERIFIED COMPUTATION`
+
+A declared finite computation returned the expected result.
+
+### `[P] PROVED`
+
+A mathematical proof has been established independently of computation.
+
+### `[PV] PROVED + VERIFIED`
+
+A proof and a matching finite verification both exist.
+
+### `[EXECUTED]`
+
+An actual execution receipt exists for the declared source revision.
+
+### `[INDEPENDENTLY VERIFIED]`
+
+An independent implementation/environment reproduced the result.
+
+### `[FORMALLY CERTIFIED]`
+
+A pinned formal checker establishes the stated formal result under the
+declared assumptions, with the required dependency and axiom audit.
+
+### `[C] CONJECTURE`
+
+A proposed statement not yet proved.
+
+### `[R] RESEARCH`
+
+An active derivation, exploration, or research direction.
+
+### `[F] REFUTED`
+
+A frozen counterexample or semantic contradiction exists.
+
+### `[Q] QUARANTINED`
+
+The object or claim remains visible but cannot be promoted.
+
+### `[UNBOUND]`
+
+The object, convention, scope, or evidence binding is incomplete.
+
+---
+
+# 28. 🧪 SOURCE-LEVEL CONTRACT REQUIREMENTS
+
+Every executable mathematical artifact must make the following
+semantics testable:
+
+### K1 — Koopman orientation
+
+Verify directly that
+
+\[
+(K_T)_{x,T(x)}=1
+\]
+
+under the frozen convention.
+
+### K2 — Transport semantics
+
+Verify that `T_*` is generated by image identifications
+
+\[
+T(x)\sim T(y)
+\]
+
+for points \(x,y\) in one partition block.
+
+### K3 — Raw image distinction
+
+Verify that the raw family
+
+\[
+\{T(B):B\in\Pi\}
+\]
+
+is not assumed to be a partition for arbitrary maps.
+
+### K4 — Join distinction
+
+Verify that one-step join and iterated closure are represented by
+different objects.
+
+### K5 — Defect-rank distinction
+
+Verify that ordinary lattice rank and defect rank have distinct names
+and fields.
+
+### K6 — Graph realization
+
+Every graph-backed rank claim must name its graph carrier and
+connectivity convention.
+
+---
+
+# 29. 🧾 CLAIM BINDING
+
+A claim record may reference this contract using:
+
+```text
+object_contract:
+  path: DOCS/AQARION-OBJECT-OPERATOR-CONTRACT.md
+  id: AQARION-OBJECT-OPERATOR-CONTRACT-v1
