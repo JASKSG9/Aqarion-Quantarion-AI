@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aqarion.org/contracts/SV-001-V2/2.0.0",
+  "contract_id": "SV-001-V2",
+  "version": "2.0.0",
+  "title": "Uniform-Block Koopman Defect Reduced-Gram Identity",
+
+  "domain": {
+    "m": {
+      "min": 2,
+      "max": 8
+    },
+    "k": {
+      "min": 2,
+      "max": 8
+    },
+    "s": {
+      "min": 1,
+      "max_exclusive_expression": "m*k"
+    }
+  },
+
+  "definitions": {
+    "n": "m*k",
+    "r": "s mod k",
+    "alpha_squared": "r*(k-r)/k^2",
+    "U": "U[x,b]=1/sqrt(k) when x is in block b, otherwise 0",
+    "Q": "U*U^T",
+    "K": "K[x,(x+s) mod n]=1",
+    "D": "(I-Q)*K*Q",
+    "L_cyc": "2I-S-S^T with S the cyclic shift",
+    "gram_identity": "U^T*D^T*D*U = alpha_squared*L_cyc",
+    "trace_identity": "trace(U^T*D^T*D*U)=2*m*alpha_squared",
+    "operator_norm": "2*sqrt(alpha_squared) for even m; 2*sqrt(alpha_squared)*cos(pi/(2m)) for odd m"
+  },
+
+  "counts": {
+    "total_cases": 1176,
+    "zero_r_cases": 196,
+    "nonzero_r_cases": 980
+  },
+
+  "tolerance": {
+    "absolute": 1e-12
+  },
+
+  "requirements": [
+    "exact_domain_count",
+    "finite",
+    "gram",
+    "trace",
+    "operator_norm"
+  ],
+
+  "governance": {
+    "promotion_requires_runtime_receipt": true,
+    "current_state": "C4_BLOCKED"
+  }
+}
