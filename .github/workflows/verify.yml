@@ -35,6 +35,18 @@ jobs:
         run: |
           python3 verification/aq_s14/aq_s14_semantic_suite.py
 
+      - name: Run AQ contract semantic suite
+        run: |
+          python3 verification/aq_contract/aq_contract_semantic_suite.py
+
+      - name: Run independent exhaustive oracle
+        run: |
+          python3 verification/aq_oracle/aq_independent_oracle_suite.py
+
+      - name: Run semantic mutation suite
+        run: |
+          python3 verification/aq_mutation_suite.py
+
       - name: Run canonical verification runner
         run: |
           python3 verification/run-all.py \
@@ -70,9 +82,7 @@ jobs:
               )
           )
 
-          if data.get("schema") != (
-              "AQARION-RUN-RECEIPT-2"
-          ):
+          if data.get("schema") != "AQARION-RUN-RECEIPT-2":
               raise SystemExit(
                   "FAIL: incorrect receipt schema"
               )
@@ -83,9 +93,7 @@ jobs:
                   f"{data.get('status')!r}"
               )
 
-          expected_commit = os.environ[
-              "EXPECTED_COMMIT"
-          ]
+          expected_commit = os.environ["EXPECTED_COMMIT"]
 
           actual_commit = data.get(
               "source", {}
@@ -93,8 +101,7 @@ jobs:
 
           if actual_commit != expected_commit:
               raise SystemExit(
-                  "FAIL: receipt commit does not "
-                  "equal GITHUB_SHA"
+                  "FAIL: receipt commit does not equal GITHUB_SHA"
               )
 
           expected_manifest_sha = hashlib.sha256(
@@ -105,9 +112,7 @@ jobs:
               "manifest", {}
           ).get("sha256")
 
-          if actual_manifest_sha != (
-              expected_manifest_sha
-          ):
+          if actual_manifest_sha != expected_manifest_sha:
               raise SystemExit(
                   "FAIL: manifest SHA256 mismatch"
               )
@@ -137,19 +142,16 @@ jobs:
               )
 
           print(
-              "PASS: self-bound Receipt-2 "
-              "verified"
+              "PASS: self-bound Receipt-2 verified"
           )
           print(
               f"PASS: commit = {actual_commit}"
           )
           print(
-              f"PASS: manifest SHA256 = "
-              f"{actual_manifest_sha}"
+              f"PASS: manifest SHA256 = {actual_manifest_sha}"
           )
           print(
-              f"PASS: {len(checks)} "
-              "registered checks passed"
+              f"PASS: {len(checks)} registered checks passed"
           )
           PY
 
