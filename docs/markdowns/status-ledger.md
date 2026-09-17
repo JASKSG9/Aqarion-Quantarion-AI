@@ -214,3 +214,33 @@ WORKLOAD / NOT YET A FROZEN ASSERTION RECEIPT
 
 Layer 3b — T10
 WORKLOAD / NOT YET A FROZEN ASSERTION RECEIPT
+
+╔══════════════════════════════════════════════════════╗
+║         AQARION — 2026-09-17 CLOSURE                ║
+╠══════════════════════════════════════════════════════╣
+║ Mathematical rerun                                  ║
+║   Mutation             5000/5000 + mutant killed    ║
+║   BRT                  200/200                      ║
+║   AQ-001               0 violations                 ║
+║   Depth                rank 0                        ║
+║   Frobenius            90/90                         ║
+║                                                      ║
+║ Mathematical evidence                 PASS          ║
+║                                                      ║
+║ Existing GitHub workflow paths         BROKEN        ║
+║ Corrected workflow                    COMPLETE      ║
+║ Actual GitHub execution                PENDING       ║
+║                                                      ║
+║ Layer 3 support spectrum               WORKLOAD      ║
+║ Layer 3 T10                            WORKLOAD      ║
+║                                                      ║
+║ ARO-1 semantic contract                 COMPLETE      ║
+║ ARO-1 adversarial tests                 PASS          ║
+║                                                      ║
+║ C3                                    OPEN          ║
+║ C4                                    BLOCKED       ║
+║ Publication                           BLOCKED       ║
+║ Lean                                  OPEN          ║
+║ SDS-002                               QUARANTINED   ║
+║ EK-001                                QUARANTINED   ║
+╚══════════════════════════════════════════════════════╝
