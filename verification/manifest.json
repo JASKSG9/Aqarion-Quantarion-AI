@@ -1,13 +1,26 @@
 {
   "schema": "AQARION-VERIFICATION-MANIFEST-1",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "status": "ACTIVE_ADVERSARIAL",
   "checks": [
     {
       "id": "AQ-S14-SEMANTIC-K3",
       "type": "semantic_exact_finite",
-      "command": ["python3", "verification/aq_s14/aq_s14_semantic_suite.py"],
+      "command": [
+        "python3",
+        "verification/aq_s14/aq_s14_semantic_suite.py"
+      ],
       "scope": "K3 forest/incidence semantic suite",
+      "requires_external_repository": false
+    },
+    {
+      "id": "AQ-CONTRACT-OBJECT-OPERATOR",
+      "type": "semantic_contract_exact_finite",
+      "command": [
+        "python3",
+        "verification/aq_contract/aq_contract_semantic_suite.py"
+      ],
+      "scope": "Frozen object/operator semantics: Koopman orientation, arbitrary-map transport, raw image-block distinction, and T_* equivalence generation",
       "requires_external_repository": false
     }
   ],
