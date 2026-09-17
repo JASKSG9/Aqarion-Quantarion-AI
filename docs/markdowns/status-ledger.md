@@ -179,11 +179,38 @@ Publication:
 
 NOT PROMOTED
 
-## Immediate action
+---
 
-1. Repair the live mutation-suite path.
-2. Obtain a new GitHub Actions run.
-3. Inspect every step.
-4. Only then regenerate the current status receipt.
-5. Preserve historical snapshots separately from current-state ledgers.
-6. Bind the support-spectrum executable as a separate mathematical fixture.
+Mutation test run
+
+
+correct convention
+       │
+       ▼
+BRT receipt passes  ──────►  5000/5000
+       │
+       │ mutate K[i,T(i)]
+       ▼
+K[T(i),i]
+       │
+       ▼
+BRT receipt fails  ───────►  0/5000
+
+Layer 1 — MUTATION GATE
+PASS
+5000/5000 canonical
+0/5000 mutant
+Self-refutation demonstrated.
+
+Layer 2 — CANONICAL RECEIPT
+PASS
+R1 200/200
+R2 0 violations
+R3 rank 0
+R4 0/90 failures
+
+Layer 3a — SUPPORT SPECTRUM
+WORKLOAD / NOT YET A FROZEN ASSERTION RECEIPT
+
+Layer 3b — T10
+WORKLOAD / NOT YET A FROZEN ASSERTION RECEIPT
