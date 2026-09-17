@@ -1,0 +1,31 @@
+{
+  "schema": "AQ-RESIDUAL-SPECTRUM-0.1",
+
+  "system": {
+    "n": 5,
+    "m": 3,
+    "operator_convention": "K[x,T[x]]=1"
+  },
+
+  "partition": {
+    "sizes": [2, 2, 1]
+  },
+
+  "residual": {
+    "definition": "(I-Q)PQ",
+    "rank": 2,
+    "frobenius_squared": "...",
+    "singular_values": ["...", "...", "0", "0", "0"],
+    "eigenvalues": ["0", "0", "0", "0", "0"],
+    "square_zero": true
+  },
+
+  "lumpability": {
+    "rank_zero": false
+  },
+
+  "combinatorial": {
+    "component_count": "...",
+    "predicted_rank": "m-c(H)"
+  }
+}
