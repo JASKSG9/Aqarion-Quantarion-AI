@@ -45,7 +45,7 @@ jobs:
 
       - name: Run semantic mutation suite
         run: |
-          python3 verification/aq_mutation_suite.py
+          python3 verification/aq-mutation-suit.py
 
       - name: Run canonical verification runner
         run: |
