@@ -346,3 +346,7 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+      - name: Run closed promotion gate
+        run: |
+          python3 verification/promotion_gate.py
