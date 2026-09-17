@@ -1,0 +1,27 @@
+flowchart TD
+    subgraph Math["1. Mathematical Verification"]
+        M1["Mutation Suite (5000/5000)"] --> MOK["Math Evidence: PASS"]
+        M2["BRT (200/200) & Frobenius (90/90)"] --> MOK
+        M3["AQ-001 Defect Rank"] --> MOK
+    end
+
+    subgraph CI["2. Infrastructure & Automation"]
+        W1["Existing Workflows (BROKEN)"] --> W2["Corrected Workflow (COMPLETE)"]
+        W2 --> W3["Live Remote Execution (PENDING)"]
+    end
+
+    subgraph Gov["3. Governance & Formal Gates"]
+        G1["SDS-002 & EK-001 (QUARANTINED)"] --> G2["Lean Formalization (OPEN)"]
+        G2 --> G3["C3 Transport Safety (OPEN)"]
+        G3 --> G4["C4 & Publication (BLOCKED)"]
+    end
+
+    classDef pass fill:#1b4332,stroke:#40916c,stroke-width:2px,color:#d8f3dc;
+    classDef fail fill:#49111c,stroke:#a4133c,stroke-width:2px,color:#ffccd5;
+    classDef open fill:#3d2605,stroke:#b07d1a,stroke-width:2px,color:#faedcd;
+    classDef neutral fill:#1a1d20,stroke:#495057,stroke-width:2px,color:#e9ecef;
+
+    class MOK pass;
+    class W1,G4 fail;
+    class W2,M1,M2,M3 neutral;
+    class W3,G1,G2,G3 open;
