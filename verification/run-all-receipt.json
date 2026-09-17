@@ -1,0 +1,41 @@
+{
+  "schema": "AQARION-RUN-RECEIPT-2",
+  "generated_at": "<CI-generated UTC timestamp>",
+  "source": {
+    "repository": "JASKSG9/Aqarions-Quantarion-AI",
+    "commit": "<GITHUB_SHA>",
+    "tree": "<HEAD_TREE_SHA>"
+  },
+  "manifest": {
+    "path": "verification/manifest.json",
+    "sha256": "<SHA256_OF_MANIFEST>"
+  },
+  "runtime": {
+    "python": "<CI_PYTHON_VERSION>",
+    "implementation": "CPython",
+    "platform": "<CI_PLATFORM>"
+  },
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "AQ-S14-SEMANTIC-K3",
+      "status": "PASS",
+      "returncode": 0
+    },
+    {
+      "id": "AQ-CONTRACT-OBJECT-OPERATOR",
+      "status": "PASS",
+      "returncode": 0
+    },
+    {
+      "id": "AQ-ORACLE-EXHAUSTIVE-N4",
+      "status": "PASS",
+      "returncode": 0
+    },
+    {
+      "id": "AQ-MUTATION-SEMANTIC",
+      "status": "PASS",
+      "returncode": 0
+    }
+  ]
+}
