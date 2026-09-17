@@ -3,20 +3,22 @@
 """
 AQARION Layer 1 — operator-convention mutation test.
 
-The canonical Koopman convention is
+Canonical convention:
 
-    K[i, T(i)] = 1.
+    K[i, T(i)] = 1
 
-The deliberate mutant swaps the indices:
+Deliberate mutant:
 
-    K[T(i), i] = 1.
+    K[T(i), i] = 1
 
-The test must:
-  * pass the canonical operator on all trials;
-  * reject the mutant;
-  * exit nonzero if either condition fails.
+This is a CI regression/self-refutation test.
 
-This is a regression/self-refutation test, not a theorem proof.
+It must:
+  1. accept the canonical convention on every trial;
+  2. reject the index-swapped mutant;
+  3. exit nonzero if either condition fails.
+
+This is not a theorem proof.
 """
 
 import sys
@@ -26,19 +28,33 @@ import numpy as np
 
 def kaprekar_T(n_digits=4, base=10):
     def gap(x):
-        digits = [(x // (base ** i)) % base for i in range(n_digits)]
+        digits = [
+            (x // (base ** i)) % base
+            for i in range(n_digits)
+        ]
+
         s = sorted(digits)
-        return (s[-1] - s[0], s[-2] - s[1])
+
+        return (
+            s[-1] - s[0],
+            s[-2] - s[1],
+        )
 
     G = [
         (g1, g2)
         for g1 in range(1, base)
         for g2 in range(0, g1 + 1)
     ]
-    state_index = {g: i for i, g in enumerate(G)}
+
+    state_index = {
+        g: i
+        for i, g in enumerate(G)
+    }
 
     T = [
-        state_index[gap(999 * g1 + 90 * g2)]
+        state_index[
+            gap(999 * g1 + 90 * g2)
+        ]
         for g1, g2 in G
     ]
 
@@ -46,18 +62,22 @@ def kaprekar_T(n_digits=4, base=10):
 
 
 def build_K(T, n):
-    """Correct Koopman convention: K[i,T(i)] = 1."""
+    """Canonical Koopman convention."""
     K = np.zeros((n, n))
+
     for i, ti in enumerate(T):
         K[i, ti] = 1.0
+
     return K
 
 
 def build_K_mutant(T, n):
-    """Deliberately wrong transfer-style index swap."""
+    """Deliberate index-swapped mutant."""
     K = np.zeros((n, n))
+
     for i, ti in enumerate(T):
         K[ti, i] = 1.0
+
     return K
 
 
@@ -66,6 +86,7 @@ def build_P(blocks, n):
 
     for block in blocks:
         k = len(block)
+
         for i in block:
             for j in block:
                 P[i, j] = 1.0 / k
@@ -74,13 +95,19 @@ def build_P(blocks, n):
 
 
 def rank_D(blocks, T, n, mutant=False):
-    K = build_K_mutant(T, n) if mutant else build_K(T, n)
+    K = (
+        build_K_mutant(T, n)
+        if mutant
+        else build_K(T, n)
+    )
+
     P = build_P(blocks, n)
-    I = np.eye(n)
 
-    D = (I - P) @ K @ P
+    D = (np.eye(n) - P) @ K @ P
 
-    return int(np.linalg.matrix_rank(D, tol=1e-9))
+    return int(
+        np.linalg.matrix_rank(D, tol=1e-9)
+    )
 
 
 def c_bip(blocks, T):
@@ -98,6 +125,7 @@ def c_bip(blocks, T):
         while parent[x] != x:
             parent[x] = parent[parent[x]]
             x = parent[x]
+
         return x
 
     def union(a, b):
@@ -128,11 +156,17 @@ def main():
     rng = np.random.default_rng(42)
 
     total = 5000
+
     correct_pass = 0
     mutant_pass = 0
 
     for _ in range(total):
-        k = int(rng.integers(2, min(n, 8)))
+        k = int(
+            rng.integers(
+                2,
+                min(n, 8)
+            )
+        )
 
         permutation = rng.permutation(n)
 
@@ -144,11 +178,17 @@ def main():
         expected = 2 - c_bip(blocks, T)
 
         correct_rank = rank_D(
-            blocks, T, n, mutant=False
+            blocks,
+            T,
+            n,
+            mutant=False,
         )
 
         mutant_rank = rank_D(
-            blocks, T, n, mutant=True
+            blocks,
+            T,
+            n,
+            mutant=True,
         )
 
         if correct_rank == expected:
@@ -159,6 +199,7 @@ def main():
 
     mutation_detected = mutant_pass == 0
 
+    print()
     print("CI LAYER 1 -- MUTATION TEST")
     print(
         f"  Correct Koopman: "
@@ -186,7 +227,11 @@ def main():
         )
         return 1
 
-    print("  ✓ CI catches the operator-index mutation.")
+    print(
+        "  PASS: CI catches the "
+        "operator-index mutation."
+    )
+
     return 0
 
 
