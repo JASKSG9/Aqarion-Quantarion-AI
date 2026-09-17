@@ -34,22 +34,44 @@ def test_case(m, k, s):
     ]
 
     blocks = [
-        [b * k + j for j in range(k)]
+        [
+            b * k + j
+            for j in range(k)
+        ]
         for b in range(m)
     ]
 
-    P = build_P(blocks, n)
-    K = build_K(T, n)
+    P = build_P(
+        blocks,
+        n,
+    )
 
-    D = (np.eye(n) - P) @ K @ P
+    K = build_K(
+        T,
+        n,
+    )
+
+    D = (
+        np.eye(n) - P
+    ) @ K @ P
 
     r = s % k
 
     expected = (
-        2 * m * r * (k - r) / k**2
+        2
+        * m
+        * r
+        * (k - r)
+        / k**2
     )
 
-    observed = np.linalg.norm(D, "fro") ** 2
+    observed = (
+        np.linalg.norm(
+            D,
+            "fro",
+        )
+        ** 2
+    )
 
     return observed, expected
 
@@ -60,20 +82,30 @@ def main():
 
     for k in range(2, 6):
         for m in range(2, 5):
-            for s in range(1, k * m):
+            for s in range(
+                1,
+                k * m,
+            ):
                 r = s % k
 
                 if r == 0:
                     continue
 
-                observed, expected = test_case(
-                    m, k, s
+                observed, expected = (
+                    test_case(
+                        m,
+                        k,
+                        s,
+                    )
                 )
 
                 tested += 1
 
-                if abs(observed - expected) > 1e-8:
+                if abs(
+                    observed - expected
+                ) > 1e-8:
                     failures += 1
+
                     print(
                         "FAIL:",
                         f"m={m}",
@@ -84,14 +116,16 @@ def main():
                     )
 
     print(
-        f"R4 ||D||_F²=2mr(k-r)/k²: "
-        f"{failures}/{tested} fails "
+        "R4 ||D||_F²="
+        "2mr(k-r)/k²: "
+        f"{failures}/{tested} "
+        f"fails "
         f"{'PASS' if failures == 0 else 'FAIL'}"
     )
 
     if failures:
         raise AssertionError(
-            f"Frobenius formula failed "
+            "Frobenius formula failed "
             f"{failures}/{tested} cases."
         )
 
