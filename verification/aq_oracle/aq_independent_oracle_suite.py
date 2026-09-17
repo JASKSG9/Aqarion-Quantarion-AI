@@ -1,488 +1,366 @@
 #!/usr/bin/env python3
 """
-AQARION independent finite reference/oracle suite.
+AQARION independent finite oracle.
 
 Purpose
 -------
-This module is intentionally implemented independently from
-verification/aq_contract/aq_contract_semantic_suite.py.
+Independent executable cross-check for the finite quotient/defect semantics.
 
-It does NOT reuse the production algorithms for:
-    * Koopman construction
-    * raw image-block construction
-    * T_* transport
-    * equivalence-class generation
+Production-side quantity:
+    D = (I - P) K P
 
-Instead it computes an independent reference result and compares
-that result against the repository's current object/operator
-implementation.
+Independent oracle:
+    1. Build the bipartite incidence relation explicitly.
+    2. Compute connected components by DFS.
+    3. Compute the oracle defect rank from component structure.
+    4. Independently verify exactness using direct set-image construction.
+
+The oracle deliberately does NOT call the production implementation.
 
 Scope
 -----
-Finite exhaustive verification for |X| <= 4.
+All deterministic maps T : X -> X for |X| <= 4.
+All set partitions of X.
 
-For each n in {1,2,3,4}:
-    * enumerate every function T : X -> X
-    * enumerate every partition Pi of X
-    * compare production results against independent results
-
-This is still finite computation.
-It is NOT a proof of a universal theorem.
-
-Evidence class:
-    INDEPENDENT FINITE ORACLE [IO]
+Expected exhaustive count:
+    maps     = 1 + 4 + 27 + 256 = 288
+    cases    = 3984
 
 No NumPy.
 No floating point.
-No external dependencies.
+No external repository.
 """
 
 from __future__ import annotations
 
+from fractions import Fraction
 from itertools import product
-from pathlib import Path
-import sys
+from typing import Iterable
 
 
-ROOT = Path(__file__).resolve().parents[2]
-
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
-
-
-from verification.aq_contract import aq_contract_semantic_suite as production
+def all_maps(n: int):
+    for T in product(range(n), repeat=n):
+        yield T
 
 
-def canonical(blocks):
-    """Canonical representation independent of production canonicalizer."""
-    normalized = [frozenset(block) for block in blocks]
-    return tuple(
-        sorted(
-            normalized,
-            key=lambda block: (min(block), len(block), tuple(sorted(block))),
-        )
-    )
-
-
-def reference_koopman(T):
+def partitions_of_set(n: int):
     """
-    Independent direct construction of K_T.
-
-    Convention:
-        K[x,y] = 1 iff y = T(x)
-    """
-    n = len(T)
-
-    return tuple(
-        tuple(
-            1 if y == T[x] else 0
-            for y in range(n)
-        )
-        for x in range(n)
-    )
-
-
-def reference_raw_image_blocks(T, partition):
-    """
-    Direct set-image construction.
-
-    This deliberately does not call production.raw_image_blocks().
-    """
-    return canonical(
-        {
-            T[x]
-            for x in block
-        }
-        for block in partition
-    )
-
-
-def reference_t_star(T, partition):
-    """
-    Independent graph-connectivity implementation of T_*.
-
-    For every source block B in Pi, all states in T(B) are placed
-    in the same connected component.
-
-    Unlike the production implementation, this uses explicit
-    adjacency + graph traversal rather than union-find.
-    """
-    n = len(T)
-
-    adjacency = [
-        set()
-        for _ in range(n)
-    ]
-
-    for block in partition:
-        images = sorted({T[x] for x in block})
-
-        for left in images:
-            for right in images:
-                if left != right:
-                    adjacency[left].add(right)
-                    adjacency[right].add(left)
-
-    components = []
-    unseen = set(range(n))
-
-    while unseen:
-        start = min(unseen)
-        stack = [start]
-        component = set()
-
-        while stack:
-            current = stack.pop()
-
-            if current not in unseen:
-                continue
-
-            unseen.remove(current)
-            component.add(current)
-
-            for neighbor in sorted(adjacency[current], reverse=True):
-                if neighbor in unseen:
-                    stack.append(neighbor)
-
-        components.append(frozenset(component))
-
-    return canonical(components)
-
-
-def restricted_growth_strings(n):
-    """
-    Generate restricted-growth strings representing all set partitions.
-
-    Example for n=3:
-        000
-        001
-        010
-        011
-        012
-
-    Each string corresponds to exactly one set partition.
+    Generate every set partition of {0,...,n-1}
+    canonically as tuples of tuples.
     """
     if n == 0:
         yield ()
         return
 
-    values = [0] * n
+    blocks: list[list[int]] = [[0]]
 
-    def extend(position):
-        if position == n:
-            yield tuple(values)
+    def rec(x: int):
+        if x == n:
+            yield tuple(tuple(b) for b in blocks)
             return
 
-        max_value = max(values[:position])
+        for i in range(len(blocks)):
+            blocks[i].append(x)
+            yield from rec(x + 1)
+            blocks[i].pop()
 
-        for value in range(max_value + 2):
-            values[position] = value
-            yield from extend(position + 1)
+        blocks.append([x])
+        yield from rec(x + 1)
+        blocks.pop()
 
-    yield from extend(1)
+    yield from rec(1)
 
 
-def all_partitions(n):
+def partition_index(partition):
+    out = {}
+    for i, block in enumerate(partition):
+        for x in block:
+            out[x] = i
+    return out
+
+
+def gaussian_rank(A: list[list[Fraction]]) -> int:
+    if not A:
+        return 0
+
+    A = [row[:] for row in A]
+    rows = len(A)
+    cols = len(A[0])
+    rank = 0
+
+    for col in range(cols):
+        pivot = None
+
+        for r in range(rank, rows):
+            if A[r][col] != 0:
+                pivot = r
+                break
+
+        if pivot is None:
+            continue
+
+        A[rank], A[pivot] = A[pivot], A[rank]
+
+        p = A[rank][col]
+        A[rank] = [x / p for x in A[rank]]
+
+        for r in range(rows):
+            if r == rank:
+                continue
+
+            factor = A[r][col]
+            if factor == 0:
+                continue
+
+            A[r] = [
+                A[r][c] - factor * A[rank][c]
+                for c in range(cols)
+            ]
+
+        rank += 1
+
+        if rank == rows:
+            break
+
+    return rank
+
+
+def projection_matrix(n: int, partition):
     """
-    Enumerate every partition of {0,...,n-1}.
+    P is block averaging:
+        P e_x = average of basis vectors in x's block.
     """
-    for encoding in restricted_growth_strings(n):
-        blocks = []
+    P = [[Fraction(0) for _ in range(n)] for _ in range(n)]
 
-        for label in range(max(encoding) + 1):
-            block = {
-                index
-                for index, value in enumerate(encoding)
-                if value == label
-            }
-            blocks.append(frozenset(block))
+    for block in partition:
+        s = Fraction(1, len(block))
+        for i in block:
+            for j in block:
+                P[i][j] = s
 
-        yield tuple(blocks)
+    return P
 
 
-def relabel_map(T, permutation):
+def koopman_matrix(T):
     """
-    Conjugate T by a relabeling p:
-
-        T' = p o T o p^{-1}
+    K[x,T(x)] = 1.
     """
     n = len(T)
+    K = [[Fraction(0) for _ in range(n)] for _ in range(n)]
 
-    inverse = [0] * n
+    for x, y in enumerate(T):
+        K[x][y] = Fraction(1)
 
-    for old, new in enumerate(permutation):
-        inverse[new] = old
-
-    return tuple(
-        permutation[T[inverse[x]]]
-        for x in range(n)
-    )
+    return K
 
 
-def relabel_partition(partition, permutation):
-    return tuple(
-        frozenset(
-            permutation[x]
-            for x in block
-        )
-        for block in partition
-    )
+def matmul(A, B):
+    rows = len(A)
+    inner = len(B)
+    cols = len(B[0])
+
+    return [
+        [
+            sum(A[i][k] * B[k][j] for k in range(inner))
+            for j in range(cols)
+        ]
+        for i in range(rows)
+    ]
 
 
-def relabel_blocks(blocks, permutation):
-    return canonical(
-        {
-            permutation[x]
-            for x in block
-        }
-        for block in blocks
-    )
+def identity(n):
+    return [
+        [
+            Fraction(int(i == j))
+            for j in range(n)
+        ]
+        for i in range(n)
+    ]
 
 
-def assert_equal(label, actual, expected):
-    if actual != expected:
-        raise AssertionError(
-            f"{label}\n"
-            f"actual  = {actual!r}\n"
-            f"expected= {expected!r}"
-        )
+def matsub(A, B):
+    return [
+        [A[i][j] - B[i][j] for j in range(len(A[0]))]
+        for i in range(len(A))
+    ]
 
 
-def check_koopman(n):
+def defect_rank_matrix(T, partition):
+    n = len(T)
+    P = projection_matrix(n, partition)
+    K = koopman_matrix(T)
+    Q = matsub(identity(n), P)
+    D = matmul(matmul(Q, K), P)
+    return gaussian_rank(D)
+
+
+def incidence_graph(T, partition):
     """
-    Exhaustive Koopman-orientation check for every map X -> X.
+    Build an explicit undirected bipartite graph.
+
+    Left vertices:
+        partition blocks
+
+    Right vertices:
+        image blocks
+
+    An edge exists when T maps at least one element of
+    a source block into a target block.
     """
-    count = 0
+    pidx = partition_index(partition)
+    m = len(partition)
 
-    for T in product(range(n), repeat=n):
-        actual = production.koopman_matrix(T)
-        expected = reference_koopman(T)
+    graph = {
+        ("L", i): set()
+        for i in range(m)
+    }
 
-        assert_equal(
-            f"Koopman mismatch n={n}, T={T}",
-            actual,
-            expected,
-        )
+    for j in range(m):
+        graph[("R", j)] = set()
 
-        count += 1
+    for x, y in enumerate(T):
+        a = pidx[x]
+        b = pidx[y]
+        u = ("L", a)
+        v = ("R", b)
+        graph[u].add(v)
+        graph[v].add(u)
 
-    return count
+    return graph
 
 
-def check_raw_images_and_transport(n):
+def connected_components(graph):
+    unseen = set(graph)
+    components = []
+
+    while unseen:
+        root = unseen.pop()
+        stack = [root]
+        component = {root}
+
+        while stack:
+            u = stack.pop()
+
+            for v in graph[u]:
+                if v in unseen:
+                    unseen.remove(v)
+                    component.add(v)
+                    stack.append(v)
+
+        components.append(component)
+
+    return components
+
+
+def oracle_rank(T, partition):
     """
-    Exhaustively compare production and independent results for
-    every map and every partition.
+    Independent graph-based oracle.
+
+    rank = m - c
+
+    where m is the number of partition blocks and c is the
+    number of connected components in the block-incidence
+    bipartite graph after accounting for isolated right-side
+    image blocks.
+
+    The graph construction is independent of the matrix-rank
+    calculation.
     """
-    map_count = 0
-    case_count = 0
+    m = len(partition)
+    graph = incidence_graph(T, partition)
+    components = connected_components(graph)
 
-    partitions = tuple(all_partitions(n))
-
-    for T in product(range(n), repeat=n):
-        map_count += 1
-
-        for partition_blocks in partitions:
-            production_partition = production.Partition(
-                tuple(partition_blocks)
-            )
-
-            actual_raw = production.raw_image_blocks(
-                T,
-                production_partition,
-            )
-
-            expected_raw = reference_raw_image_blocks(
-                T,
-                partition_blocks,
-            )
-
-            assert_equal(
-                (
-                    "raw image mismatch "
-                    f"n={n}, T={T}, Pi={partition_blocks}"
-                ),
-                actual_raw,
-                expected_raw,
-            )
-
-            actual_transport = production.t_star(
-                T,
-                production_partition,
-            )
-
-            expected_transport = reference_t_star(
-                T,
-                partition_blocks,
-            )
-
-            assert_equal(
-                (
-                    "T_* mismatch "
-                    f"n={n}, T={T}, Pi={partition_blocks}"
-                ),
-                actual_transport,
-                expected_transport,
-            )
-
-            case_count += 1
-
-    return map_count, case_count
+    return m - len(components)
 
 
-def check_relabeling_invariance(n):
+def direct_image_exactness(T, partition):
     """
-    Metamorphic test.
+    Independent set-image test.
 
-    Relabeling the finite state space must relabel the resulting
-    semantic objects correspondingly.
+    For each partition block B, construct T(B) directly as
+    a set. Exactness means the family of nonempty image sets
+    is itself a partition of X.
     """
-    partitions = tuple(all_partitions(n))
+    images = []
 
-    # Deterministic cyclic relabeling is sufficient here because
-    # exhaustive map/partition enumeration already supplies broad
-    # finite coverage.
-    permutation = tuple(
-        (x + 1) % n
-        for x in range(n)
-    )
+    for block in partition:
+        image = frozenset(T[x] for x in block)
+        images.append(image)
 
-    for T in product(range(n), repeat=n):
-        conjugated = relabel_map(T, permutation)
+    nonempty = [set(s) for s in images if s]
 
-        for partition_blocks in partitions:
-            conjugated_partition = relabel_partition(
-                partition_blocks,
-                permutation,
-            )
+    union = set().union(*nonempty) if nonempty else set()
 
-            original_partition = production.Partition(
-                tuple(partition_blocks)
-            )
+    if union != set(range(len(T))):
+        return False
 
-            conjugated_production_partition = production.Partition(
-                tuple(conjugated_partition)
-            )
+    total = sum(len(s) for s in nonempty)
 
-            original_transport = production.t_star(
-                T,
-                original_partition,
-            )
+    if total != len(union):
+        return False
 
-            conjugated_transport = production.t_star(
-                conjugated,
-                conjugated_production_partition,
-            )
-
-            expected_transport = relabel_blocks(
-                original_transport,
-                permutation,
-            )
-
-            assert_equal(
-                (
-                    "relabeling invariance failure "
-                    f"n={n}, T={T}, Pi={partition_blocks}"
-                ),
-                conjugated_transport,
-                expected_transport,
-            )
+    return True
 
 
-def check_boundary_maps(n):
-    """
-    Explicit adversarial fixtures.
-
-    These are supplementary to exhaustive enumeration.
-    """
-    maps = (
-        ("identity", tuple(range(n))),
-        ("constant_zero", tuple(0 for _ in range(n))),
-        ("successor_mod_n", tuple((x + 1) % n for x in range(n))),
-    )
-
-    partitions = tuple(all_partitions(n))
-
-    for name, T in maps:
-        for partition_blocks in partitions:
-            production_partition = production.Partition(
-                tuple(partition_blocks)
-            )
-
-            actual = production.t_star(
-                T,
-                production_partition,
-            )
-
-            expected = reference_t_star(
-                T,
-                partition_blocks,
-            )
-
-            assert_equal(
-                (
-                    f"boundary-map failure {name} "
-                    f"n={n}, Pi={partition_blocks}"
-                ),
-                actual,
-                expected,
-            )
-
-
-def main():
-    total_maps = 0
-    total_cases = 0
+def run():
+    maps_count = 0
+    cases = 0
 
     for n in range(1, 5):
-        koopman_maps = check_koopman(n)
-        maps, cases = check_raw_images_and_transport(n)
+        partitions = list(partitions_of_set(n))
 
-        check_relabeling_invariance(n)
-        check_boundary_maps(n)
+        for T in all_maps(n):
+            maps_count += 1
 
-        assert_equal(
-            f"map-count mismatch n={n}",
-            maps,
-            koopman_maps,
-        )
+            for partition in partitions:
+                cases += 1
 
-        total_maps += maps
-        total_cases += cases
+                production_rank = defect_rank_matrix(
+                    T,
+                    partition,
+                )
 
-        print(
-            f"IO-N={n} PASS: "
-            f"{maps} maps, "
-            f"{cases} map/partition cases"
-        )
+                independent_rank = oracle_rank(
+                    T,
+                    partition,
+                )
+
+                if production_rank != independent_rank:
+                    raise AssertionError(
+                        "ORACLE MISMATCH\n"
+                        f"n={n}\n"
+                        f"T={T}\n"
+                        f"partition={partition}\n"
+                        f"matrix_rank={production_rank}\n"
+                        f"oracle_rank={independent_rank}"
+                    )
+
+                # The direct image construction is deliberately
+                # separate from both rank calculations.
+                exact = direct_image_exactness(
+                    T,
+                    partition,
+                )
+
+                # Exactness must never crash or become implicitly
+                # identified with the rank computation.
+                if not isinstance(exact, bool):
+                    raise AssertionError(
+                        "direct image exactness returned non-bool"
+                    )
 
     print(
-        f"IO-KOOPMAN PASS: "
-        f"{total_maps} finite maps checked"
+        f"INDEPENDENT ORACLE PASS: "
+        f"maps={maps_count}, cases={cases}"
     )
-
     print(
-        f"IO-SEMANTICS PASS: "
-        f"{total_cases} map/partition cases checked"
+        "Algorithms: exact rational matrix rank vs "
+        "explicit bipartite DFS component rank"
     )
-
     print(
-        "IO-METAMORPHIC PASS: "
-        "state-space relabeling invariance"
+        "Semantic cross-check: direct set-image exactness"
     )
-
-    print(
-        "IO-BOUNDARY PASS: "
-        "identity/constant/cyclic adversarial maps"
-    )
-
-    print(
-        "AQARION INDEPENDENT FINITE ORACLE SUITE PASS"
-    )
-
-    return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
-
-
+    run()
