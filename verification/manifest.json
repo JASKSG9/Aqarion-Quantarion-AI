@@ -67,3 +67,40 @@
     "mutation_suite_required_for_semantic_promotion": true
   }
 }
+{
+  "schema": "AQARION-VERIFICATION-MANIFEST-1",
+  "version": "1.4.0",
+  "status": "ACTIVE_ADVERSARIAL",
+  "checks": [
+    {
+      "id": "SV-001-V2",
+      "type": "independent_exact_finite",
+      "command": ["python3", "verification/sv-001-v2/verifier.py"],
+      "scope": "Cyclic block-shift defect over 1176 canonical cases",
+      "requires_external_repository": false
+    },
+    {
+      "id": "SV-001-V2-MUTATION",
+      "type": "adversarial_mutation",
+      "command": ["python3", "verification/sv-001-v2/mutation/executor.py"],
+      "scope": "Registered SV-001-V2 mutations",
+      "requires_external_repository": false
+    },
+    {
+      "id": "SV-001-V2-METAMORPHIC",
+      "type": "metamorphic",
+      "command": ["python3", "verification/sv-001-v2/mutation/metamorphic.py"],
+      "scope": "SV-001-V2 invariant-preserving transformations",
+      "requires_external_repository": false
+    }
+  ],
+  "excluded_until_bound": [],
+  "promotion_rule": {
+    "pass_requires_all_registered_checks": true,
+    "not_implemented_is_failure": true,
+    "missing_artifact_is_failure": true,
+    "external_fallback_paths_forbidden": true,
+    "independent_oracle_required_for_semantic_promotion": true,
+    "mutation_suite_required_for_semantic_promotion": true
+  }
+}
