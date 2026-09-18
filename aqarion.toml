@@ -1,21 +1,42 @@
+# AQARION repository manifest
+# Exact path: aqarion.toml (repository root)
+#
+# This file binds claim identifiers to executable artifacts.
+# Every path listed here MUST resolve to a real file at the exact
+# case shown, or verification/repo_self_audit.py will fail.
+
 [project]
-name = "aqarion-arithmetic"
-version = "13.2"
+name = "aqarions-quantarion-ai"
 manifest_version = "ARC-1.0"
-[claim.sv-001-v2]
-contract = "verification/sv-001-v2/contract.json"
-verifier = "verification/sv-001-v2/verifier.py"
-oracle = "verification/sv-001-v2/oracle.py"
-mutation_executor = "verification/sv-001-v2/mutation/executor.py"
-metamorphic_tests = "verification/sv-001-v2/mutation/metamorphic.py"
-replay = "verification/sv-001-v2/replay.py"
-receipt_schema = "verification/sv-001-v2/receipt/schema.json"
-receipt_writer = "verification/sv-001-v2/receipt/writer.py"
+
 [environment]
 python = ">=3.11"
 requires = ["numpy"]
+
+[claim.SV-001-V2]
+# All paths lowercase, matching the live repository convention.
+contract         = "verification/sv-001-v2/contract.json"
+oracle           = "verification/sv-001-v2/oracle.py"
+verifier         = "verification/sv-001-v2/verifier.py"
+replay           = "verification/sv-001-v2/replay.py"
+mutation_executor = "verification/sv-001-v2/mutation/executor.py"
+metamorphic_tests = "verification/sv-001-v2/mutation/metamorphic.py"
+receipt_schema   = "verification/sv-001-v2/receipt/schema.json"
+receipt_writer   = "verification/sv-001-v2/receipt/writer.py"
+
+[verification]
+manifest         = "verification/manifest.json"
+self_audit       = "verification/repo_self_audit.py"
+workflow         = ".github/workflows/verify.yml"
+
 [governance]
-C4 = "BLOCKED"
-promotion = false
-deprecated_domain = 5720
+C4               = "BLOCKED"
+promotion        = false
+publication      = "BLOCKED"
+lean             = "OPEN"
 canonical_domain = 1176
+deprecated_domain = 5720
+
+[governance.notes]
+canonical_domain  = "2<=m<=8, 2<=k<=8, 1<=s<=m*k-1. Total 1176 cases."
+deprecated_domain = "Historical only. MUST NOT appear as an active execution count in any verifier or CI step. repo_self_audit.py enforces this."
