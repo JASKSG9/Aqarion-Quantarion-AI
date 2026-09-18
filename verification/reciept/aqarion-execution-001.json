@@ -1,0 +1,28 @@
+{
+  "schema": "AQARION-EXECUTION-RECEIPT-1",
+  "instance_status": "TEMPLATE_NOT_EXECUTED",
+  "claim_id": "C3-N8",
+  "source_root": "",
+  "executable": "verification/fixtures/c3-n8.json",
+  "executable_sha256": "",
+  "command": [],
+  "environment": {
+    "python": "",
+    "platform": ""
+  },
+  "inputs_sha256": "",
+  "observed_output_sha256": "",
+  "expected_output_sha256": "",
+  "execution_performed": false,
+  "independence": {
+    "basis": "",
+    "related_execution": false
+  },
+  "result": null,
+  "limitations": [
+    "No execution evidence is asserted.",
+    "The previously referenced executable verification/fixtures/c3_n8.py does not exist in this repository.",
+    "The C3-N8 fixture exists only as verification/fixtures/c3-n8.json; no executable verifier is bound.",
+    "This record must not be parsed as a PASS receipt."
+  ]
+}
