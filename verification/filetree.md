@@ -1,3 +1,56 @@
+verification/
+├── aq_contract/
+│ └── aq_contract_semantic_suite.py
+├── aq_oracle/
+│ ├── aq_independent_oracle_suite.py
+│ └── mip_dip_audit.py [NEW - FABRICATED from spec §3, does not exist in current HEAD, A22=166484 A23=180]
+├── aq_s14/
+│ ├── aq_s14_semantic_suite.py
+│ └── inite.py [typo - should be __init__.py]
+├── evidence/
+│ ├── aq-evidence-core.py [Level-1 Content Integrity]
+│ ├── aq-s16-evidence-reach.md
+│ └── test-aq-evidence-core.py [14/14 PASS]
+├── fixtures/
+│ ├── c3-n14.json
+│ ├── c3-n8.json
+│ └── k2r-family.json
+├── receipts/
+│ ├── aqarion-ci-verification-receipt...
+│ └── aqarion-execution001.json
+├── LICENSE
+├── adversarial-forged_pass.py
+├── adversarial-init.py
+├── adversarial-missing-executio...
+├── adversarial-self-comparison...
+├── adversarial-stale-root.py
+├── adversarial-wrong-hash.py
+├── aq-mutation-suit.py
+├── aq-support-spectrum.py
+├── aq-t10-graphic-rank-audit.py
+├── aro-1-adversarial-cases.json
+├── aro-1-schema.json
+├── aro-1.md
+├── ci-verification-closure-2026-...
+├── filetree.md [this file]
+├── manifest.json
+├── promotion-gate.py
+├── provenance.py
+├── readme.md
+├── replay-harness.py
+├── reproducibility-policy.md
+├── requirements.txt
+├── run-all-receipt.json
+├── run-all.py
+├── verify-hashes.py
+├── verify-paths.py
+├── verify-pytests.init
+├── verify-repository.py
+├── verify-semantic.py
+└── verify_registry_schema.py
+
+Actions #42 PASS historical. HEAD 7f5f1c6 requires fresh #43 run.
+
 # AQARION Verification Surface
 
 ## Purpose
