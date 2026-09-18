@@ -21,7 +21,7 @@ receipt_writer    = "verification/sv-001-v2/receipt/writer.py"
 
 [verification]
 manifest   = "verification/manifest.json"
-self_audit = "verification/repo_self_audit.py"
+self_audit = "verification/repo-self-audit.py"
 workflow   = ".github/workflows/sv-001-v2.yaml"
 
 [governance]
