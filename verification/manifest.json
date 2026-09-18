@@ -38,7 +38,7 @@
       "type": "adversarial_mutation",
       "command": [
         "python3",
-        "verification/aq-mutation-suit.py"
+        "verification/aq-mutation-suite.py"
       ],
       "scope": "Registered semantic mutations of Koopman orientation, defect placement, and incidence construction",
       "requires_external_repository": false
