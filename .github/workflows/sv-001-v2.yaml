@@ -42,6 +42,10 @@ jobs:
           test -f verification/sv-001-v2/receipt/schema.json
           test -f verification/sv-001-v2/receipt/writer.py
 
+      - name: Repository self-audit
+        run: |
+          python verification/repo-self-audit.py
+
       - name: Reject deprecated 5720 execution domain
         run: |
           if grep -R -n '"cases"[[:space:]]*:[[:space:]]*5720' \
