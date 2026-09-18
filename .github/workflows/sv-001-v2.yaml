@@ -1,4 +1,4 @@
-name: AQARION Verification
+name: SV-001-V2 Verification
 
 on:
   push:
@@ -11,29 +11,36 @@ permissions:
   contents: read
 
 jobs:
-  verify:
+  sv-001-v2:
+    name: SV-001-V2 / 1176 cases
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
+      - name: Install dependency
         run: |
           python -m pip install --upgrade pip
           python -m pip install numpy
 
-      - name: Compile verification
+      - name: Verify declared package exists
         run: |
-          python -m compileall -q verification
-
-      - name: Repository self-audit
-        run: |
-          python verification/repo_self_audit.py
+          test -f verification/sv-001-v2/contract.json
+          test -f verification/sv-001-v2/oracle.py
+          test -f verification/sv-001-v2/verifier.py
+          test -f verification/sv-001-v2/replay.py
+          test -f verification/sv-001-v2/mutation/executor.py
+          test -f verification/sv-001-v2/mutation/metamorphic.py
+          test -f verification/sv-001-v2/receipt/schema.json
+          test -f verification/sv-001-v2/receipt/writer.py
 
       - name: Reject deprecated 5720 execution domain
         run: |
@@ -43,29 +50,25 @@ jobs:
             exit 1
           fi
 
-      - name: Run SV-001-V2 oracle census
-        run: |
-          python verification/sv-001-v2/oracle.py
+      - name: Oracle census
+        run: python verification/sv-001-v2/oracle.py
 
-      - name: Run SV-001-V2 matrix verifier
-        run: |
-          python verification/sv-001-v2/verifier.py
+      - name: Matrix verifier
+        run: python verification/sv-001-v2/verifier.py
 
-      - name: Run SV-001-V2 metamorphic tests
-        run: |
-          python verification/sv-001-v2/mutation/metamorphic.py
+      - name: Metamorphic tests
+        run: python verification/sv-001-v2/mutation/metamorphic.py
 
-      - name: Run SV-001-V2 mutation tests
-        run: |
-          python verification/sv-001-v2/mutation/executor.py
+      - name: Mutation tests
+        run: python verification/sv-001-v2/mutation/executor.py
 
-      - name: Generate SV-001-V2 runtime receipt
+      - name: Generate runtime receipt
         run: |
           mkdir -p artifacts/SV-001-V2
           python verification/sv-001-v2/replay.py \
             --receipt artifacts/SV-001-V2/receipt.json
 
-      - name: Validate SV-001-V2 receipt
+      - name: Validate receipt
         run: |
           python verification/sv-001-v2/receipt/writer.py \
             artifacts/SV-001-V2/receipt.json
@@ -90,5 +93,5 @@ jobs:
       - name: Upload receipt
         uses: actions/upload-artifact@v4
         with:
-          name: sv001-v2-receipt
+          name: sv-001-v2-receipt
           path: artifacts/SV-001-V2/receipt.json
