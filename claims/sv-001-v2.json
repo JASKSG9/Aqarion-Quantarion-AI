@@ -22,3 +22,26 @@
     "governance": "C4=BLOCKED"
   }
 }
+{
+  "claim_id": "SV-001-V2",
+  "version": "2.0.0",
+  "statement": {
+    "text": "For the canonical finite domain 2<=m<=8, 2<=k<=8, 1<=s<=m*k-1, the cyclic block-shift defect satisfies the contracted Gram identity, trace identity, and stated operator-norm formulas.",
+    "scope": "FINITE_CANONICAL_DOMAIN"
+  },
+  "evidence": {
+    "scope": "COMPUTATIONAL_REPLAY",
+    "exact": false,
+    "independent_oracle": true,
+    "artifact": "verification/sv-001-v2/replay.py",
+    "contract": "verification/sv-001-v2/contract.json",
+    "cases": 1176,
+    "zero_r": 196,
+    "nonzero_r": 980
+  },
+  "formal": { "lean_status": "OPEN", "formal_proof_present": false },
+  "ci": { "public_ci_replayed": false, "last_verified_commit": null, "receipt_present": false },
+  "governance": { "c4": "BLOCKED", "promotion": false, "publication_certification": false },
+  "disposition": "DECLARED_PENDING_REPLAY",
+  "honesty_note": "The executable artifact must exist and a real CI run must pass before replayability is asserted. No pre-generated receipt is accepted as proof of execution."
+}
