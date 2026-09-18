@@ -1,6 +1,6 @@
 AQARION × QUANTARION AI is a research repository for finite dynamical systems, observable quotients, and Koopman defect operators, designed to reliably enforce strict claim-level evidence governance by strictly maintaining an absolute architectural separation between IDEA, COMPUTATION, REPLAY, FORMALIZATION, and CERTIFICATION across key workflows. · GitHub
 
-Aqarions-Quantarion-AI, "License" (https://img.shields.io/badge/license-Apache--2.0-blue), "C3" (https://img.shields.io/badge/C3-OPEN-yellow), "C4" (https://img.shields.io/badge/C4-BLOCKED-red), "Lean" (https://img.shields.io/badge/Lean-OPEN-lightgrey), "SDS--002" (https://img.shields.io/badge/SDS--002-QUARANTINED-orange), "Publication" (https://img.shields.io/badge/publication-BLOCKED-red), "Promotable" (https://img.shields.io/badge/promotable-false-lightgrey)
+Aqarions_Quantarion-AI, "License" (https://img.shields.io/badge/license-Apache--2.0-blue), "C3" (https://img.shields.io/badge/C3-OPEN-yellow), "C4" (https://img.shields.io/badge/C4-BLOCKED-red), "Lean" (https://img.shields.io/badge/Lean-OPEN-lightgrey), "SDS--002" (https://img.shields.io/badge/SDS--002-QUARANTINED-orange), "Publication" (https://img.shields.io/badge/publication-BLOCKED-red), "Promotable" (https://img.shields.io/badge/promotable-false-lightgrey)
 
 Governance, policy, provenance, and cross-repository orchestration hub for the AQARION / Quantarion research corpus.
 
