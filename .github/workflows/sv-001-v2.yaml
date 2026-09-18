@@ -44,7 +44,7 @@ jobs:
 
       - name: Repository self-audit
         run: |
-          python verification/repo-self-audit.py
+          python verification/repo_self_audit.py
 
       - name: Reject deprecated 5720 execution domain
         run: |
