@@ -1,4 +1,52 @@
-# AQARION Verification Surface
+# verification/ — AQARION CONTINUATION AUDIT 7f5f1c6 — NO PROMOTION
+
+Root: [STRIPPED 68 bytes]: 7f5f1c63c003b10e0cf9a76bb63aa4b4f8855be9 Create pwn-001.md
+Governance: C4 BLOCKED | Publication BLOCKED | Lean OPEN 4.33.1 | SDS-002 QUARANTINED | promotable=false
+
+## Purpose
+Evidence-core pivot Level-1 Content Integrity only. No provenance, no formal cert.
+
+## Corrections this session — no new claim IDs
+- MIP population n=1..5 = 166,484 incl n=1 pair, 166,483 excl n=1 (was 166,483 reported as incl)
+- DIP equal-block cyclic k=2..6 m=2..4 = 180 = Σ k*m (was 165)
+- mip_dip_audit.py syntax: `,mip,,cong=` invalid → fixed to `M,mip,dip,cong=`
+
+Scope must be stated explicitly in SPEC/MULTIPLICITY_MATRIX.md
+
+## Frozen math — no new IDs
+Keep: MIP=1 iff D=0 iff forward invariance — elementary + 166,484 exhaustive 0 violations
+Keep: DIP ((k-r)^2+r^2)/k^2 — 180 cases 0 violations
+Keep: Corrected projector UᵀDᵀDU = UᵀKᵀKU - AᵀA under UᵀU=I
+Keep: Isometric needs KᵀK=I, K[i,T(i)]=1 => KᵀK=diag(|T⁻¹|) => bijective iff I
+Witness T=[0][0][1] old universal FAIL corrected PASS
+Killed: b(M) as congruence criterion — witnessed by depth partition M_* deterministic MIP=1 DIP=1 D=0
+GDIP: (1/m)Σ C_qp²/(n_q n_p) — equal-block reduces to DIP, under isometry ||D||_F²=m(1-GDIP) — OPEN NOT PROMOTED
+Killed: UᵀDᵀDU=I-AᵀA universal, b(M)=0 iff D=0, τ_D=gcd(k,d) universal, same-α-fiber transport, unrestricted T3 equality
+
+## Evidence-core pivot — delivered
+Location: [STRIPPED 79 bytes].py Level-1 only
+tests/test_aq_evidence_core.py 14/14 PASS mutation suite
+receipts/AQ-EVIDENCE-SAT-001.json content_hash 9ef07405... receipt_hash 71a68ce0...
+manifests/AQ-RUN-MANIFEST.schema.json schema AQ-RUN-MANIFEST/1
+
+Level 0 Computation = program produced result
+Level 1 Content Integrity = SHA256(C(evidence)) == receipt.hash — IMPLEMENTED
+Level 2 Provenance = signed digest — DEFERRED
+content integrity!= provenance!= mathematical truth!= formal certification
+
+## Lean target — highest value next
+Single file: AQARION-LAKE/AQ_S16_SAT_LEAN/RankKerOnePerp.lean — hardened
+theorems: sum_eq_zero_of_mulVec_eq_zero_of_vecMul_one, exists_mulVec_eq_zero_iff_rank_lt_card, rank_lt_iff_ker_meets_one_perp, rank_lt_iff_ker_meets_one_perp_doublyStochastic
+0 sorry in source, kernel receipt OPEN. Do not claim KERNEL-ACCEPTED until lake build passes.
+
+## How to run
+python3 verification/aq_oracle/mip_dip_audit.py
+# Expected: A22 total=166484 violations=0, A23 checked=180 violations=0
+python3 -m pytest verification/evidence/test-aq-evidence-core.py -q
+python3 verification/run-all.py
+
+## No promotion
+Actions #42 PASS historical. HEAD 7f5f1c6 requires fresh #43 run. No promotion claimed this pass.
 
 ## Purpose
 
