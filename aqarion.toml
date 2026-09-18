@@ -2,19 +2,20 @@
 name = "aqarion-arithmetic"
 version = "13.2"
 manifest_version = "ARC-1.0"
-
-[claim.SV-001-V2]
-contract = "VERIFICATION/SV-001-V2/contract.json"
-verifier = "VERIFICATION/SV-001-V2/sv001_v2_check.py"
-oracle = "VERIFICATION/SV-001-V2/oracle.py"
-adversary = "VERIFICATION/SV-001-V2/adversary.py"
-replay = "VERIFICATION/SV-001-V2/replay.py"
-receipt_schema = "VERIFICATION/SV-001-V2/receipt.schema.json"
-
+[claim.sv-001-v2]
+contract = "verification/sv-001-v2/contract.json"
+verifier = "verification/sv-001-v2/verifier.py"
+oracle = "verification/sv-001-v2/oracle.py"
+mutation_executor = "verification/sv-001-v2/mutation/executor.py"
+metamorphic_tests = "verification/sv-001-v2/mutation/metamorphic.py"
+replay = "verification/sv-001-v2/replay.py"
+receipt_schema = "verification/sv-001-v2/receipt/schema.json"
+receipt_writer = "verification/sv-001-v2/receipt/writer.py"
 [environment]
 python = ">=3.11"
 requires = ["numpy"]
-
 [governance]
 C4 = "BLOCKED"
 promotion = false
+deprecated_domain = 5720
+canonical_domain = 1176
