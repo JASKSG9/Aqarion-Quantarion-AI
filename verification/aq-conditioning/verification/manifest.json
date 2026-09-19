@@ -1,0 +1,24 @@
+{
+  "schema_id": "AQ-CONDITIONING-MANIFEST-001",
+  "version": "0.1.0",
+  "project": "AQARION-CONDITION8NG",
+  "checks": [
+    {
+      "id": "AQ-COND-SELF-AUDIT-001",
+      "path": "aq_conditioning/self_audit.py",
+      "command": "python -m aq_conditioning.self_audit",
+      "required": true
+    },
+    {
+      "id": "AQ-COND-REPLAY-001",
+      "path": "aq_conditioning/replay.py",
+      "command": "python -m aq_conditioning.replay",
+      "required": true
+    }
+  ],
+  "governance": {
+    "c4": "BLOCKED",
+    "publication": "BLOCKED",
+    "promotion_allowed": false
+  }
+}
