@@ -1,45 +1,42 @@
 name: AQARION Replay
+
 on:
   push:
   pull_request:
   workflow_dispatch:
+
 permissions:
   contents: read
+
 jobs:
   replay:
     name: AQARION executable replay
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout exact repository revision
         uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
       - name: Show repository revision
         run: |
           git rev-parse HEAD
           git rev-parse HEAD^{tree}
+
       - name: Compile verification Python
         run: |
           python3 -m compileall -q verification
-      - name: Run AQ-S14 semantic suite
-        run: |
-          python3 verification/aq_s14/aq_s14_semantic_suite.py
-      - name: Run AQ contract semantic suite
-        run: |
-          python3 verification/aq_contract/aq_contract_semantic_suite.py
-      - name: Run independent exhaustive oracle
-        run: |
-          python3 verification/aq_oracle/aq_independent_oracle_suite.py
-      - name: Run semantic mutation suite
-        run: |
-          python3 verification/aq-mutation-suite.py
+
       - name: Run canonical verification runner
         run: |
           python3 verification/run-all.py \
             --manifest verification/manifest.json \
             --receipt verification/receipts/run_all_receipt.json
+
       - name: Validate self-bound verification receipt
         env:
           EXPECTED_COMMIT: ${{ github.sha }}
@@ -49,31 +46,84 @@ jobs:
           import json
           import os
           from pathlib import Path
-          receipt_path = Path("verification/receipts/run_all_receipt.json")
-          manifest_path = Path("verification/manifest.json")
+
+          receipt_path = Path(
+              "verification/receipts/run_all_receipt.json"
+          )
+          manifest_path = Path(
+              "verification/manifest.json"
+          )
+
           if not receipt_path.is_file():
-              raise SystemExit("FAIL: verification receipt missing")
-          data = json.loads(receipt_path.read_text(encoding="utf-8"))
+              raise SystemExit(
+                  "FAIL: verification receipt missing"
+              )
+
+          data = json.loads(
+              receipt_path.read_text(
+                  encoding="utf-8"
+              )
+          )
+
           if data.get("schema") != "AQARION-RUN-RECEIPT-2":
-              raise SystemExit("FAIL: incorrect receipt schema")
+              raise SystemExit(
+                  "FAIL: incorrect receipt schema"
+              )
+
           if data.get("status") != "PASS":
-              raise SystemExit(f"FAIL: receipt status is {data.get('status')!r}")
+              raise SystemExit(
+                  f"FAIL: receipt status is "
+                  f"{data.get('status')!r}"
+              )
+
           expected_commit = os.environ["EXPECTED_COMMIT"]
-          actual_commit = data.get("source", {}).get("commit")
+          actual_commit = (
+              data.get("source", {}).get("commit")
+          )
+
           if actual_commit != expected_commit:
-              raise SystemExit("FAIL: receipt commit does not equal GITHUB_SHA")
-          expected_manifest_sha = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
-          actual_manifest_sha = data.get("manifest", {}).get("sha256")
+              raise SystemExit(
+                  "FAIL: receipt commit does not "
+                  "equal GITHUB_SHA"
+              )
+
+          expected_manifest_sha = hashlib.sha256(
+              manifest_path.read_bytes()
+          ).hexdigest()
+
+          actual_manifest_sha = (
+              data.get("manifest", {}).get("sha256")
+          )
+
           if actual_manifest_sha != expected_manifest_sha:
-              raise SystemExit("FAIL: manifest SHA256 mismatch")
+              raise SystemExit(
+                  "FAIL: manifest SHA256 mismatch"
+              )
+
           checks = data.get("checks")
+
           if not isinstance(checks, list) or not checks:
-              raise SystemExit("FAIL: checks invalid")
-          failed = [c for c in checks if c.get("status") != "PASS"]
+              raise SystemExit(
+                  "FAIL: checks invalid"
+              )
+
+          failed = [
+              check
+              for check in checks
+              if check.get("status") != "PASS"
+          ]
+
           if failed:
-              raise SystemExit("FAIL: non-PASS checks: " + repr(failed))
-          print("PASS: self-bound Receipt-2 verified")
+              raise SystemExit(
+                  "FAIL: non-PASS checks: "
+                  + repr(failed)
+              )
+
+          print(
+              "PASS: self-bound Receipt-2 verified"
+          )
           PY
+
       - name: Display verification receipt
         run: |
           cat verification/receipts/run_all_receipt.json
