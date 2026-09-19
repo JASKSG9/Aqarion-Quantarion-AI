@@ -1,0 +1,14 @@
+{
+  "fixture_id": "AQ-COND-FIX-002",
+  "description": "Permutation matrix negative control: exact full rank and no nonzero kernel.",
+  "matrix": [
+    ["0", "1", "0"],
+    ["0", "0", "1"],
+    ["1", "0", "0"]
+  ],
+  "expected": {
+    "exact_rank": 3,
+    "exact_nullity": 0,
+    "column_sum_invariant_holds": true
+  }
+}
