@@ -1,7 +1,125 @@
+# AQARION-GAP — Exact Gap Identity for the 3-Cycle Support
 
+**Path in repo:** [`verification/AQARION-GAP/`](https://github.com/JASKSG9/Aqarion-Quantarion-AI/tree/main/verification/AQARION-GAP)  
+**CI workflow:** [`.github/workflows/aqarion-gap-lean-ci.yaml`](https://github.com/JASKSG9/Aqarion-Quantarion-AI/blob/main/.github/workflows/aqarion-gap-lean-ci.yaml)  
+**Status:** Algebraic proof **[P]** · Finite regression **[V]** · Lean formalization **OPEN** · C4 **BLOCKED** · Promotion **false**
 
+---
 
-**Working GitHub CI is in place** under `/home/workdir/artifacts/AQARION-Gap/`.
+## One-sentence claim
+
+Under the fixed 3-cycle \(T=(0\ 1\ 2)\) on support \(S=\{0,1,2\}\), for every pair of partitions \(P,Q\) of an \(n\)-set with \(n\ge 3\),
+
+\[
+\Delta_d(P,Q)-(c_S-c_G)
+=
+\begin{cases}
+2 & \text{if \(M=P\wedge Q\) is SEP-pure and neither \(P\) nor \(Q\) is SEP-pure},\\
+0 & \text{otherwise}.
+\end{cases}
+\]
+
+This is an **all-\(n\) algebraic identity**, not a census-bounded observation.
+
+---
+
+## What lives in this folder
+
+| File | Role |
+|------|------|
+| `defs.lean` | `T3`, restriction types (`ALL3` / `PAIR` / `SEP`), purity predicates |
+| `restriction.lean` | Restriction to \(S\), meet/join, \(c_S\), \(c_G\), \(c_S\ge c_G\) |
+| `defect.lean` | Orbit join \(J_T\), defect \(d_T\), four-way lemma, \(\Delta_d\), gap quantity |
+| `gap-identity.lean` | Main theorem + cancellation / inheritance lemmas (case split on \(c_S\)) |
+| `aqarion-gap.lean` | Root import + module documentation |
+| `lakefile.toml` | Lake package pin (Mathlib) |
+| `verify-gap-n6.py` | **Independent** pure-Python exhaustive check for \(n=6\) (no Lean) |
+| `stdlib-gap-check.lean` | Optional Lean-side stub / notes for the stdlib regression |
+| `filetree.md` | Layout snapshot |
+| `subprocess.md` | Notes on subprocess / CI harness expectations |
+| `readme.md` | This file (or mirror) |
+
+Flat layout is intentional for the current `verification/` tree. Nested `AQARIONGap/` packages remain compatible if you later promote this to a standalone Lake package.
+
+---
+
+## Mathematical core (locked)
+
+### Definitions (fixed conventions)
+
+- \(S=\{0,1,2\}\), \(T=(0\ 1\ 2)\) extended by identity off \(S\).
+- \(J_T(\Pi)=\Pi\vee T(\Pi)\vee T^2(\Pi)\).
+- \(d_T(\Pi)=|\Pi|-|J_T(\Pi)|\).
+- \(\tau(\Pi)=\) restriction of \(\Pi\) to \(S\).
+- \(M=P\wedge Q\), \(U=P\vee Q\).
+- \(c_S=|\tau(P)\vee\tau(Q)|\), \(c_G=|\tau(U)|\).
+- \(\Delta_d=d_T(P)+d_T(Q)-d_T(M)-d_T(U)\).
+
+### Four-way \(d_T\) table (proved for all \(n\ge 3\))
+
+| Restriction class on \(S\) | \(d_T\) |
+|----------------------------|--------:|
+| ALL3 (one block) | 0 |
+| PAIR (exactly two together) | 1 |
+| SEP-pure (blocks exactly \(\{0\},\{1\},\{2\}\)) | 0 |
+| SEP-ext (separate blocks, ≥1 carries external points) | 2 |
+
+### Gap identity (proved)
+
+Proof is a finite case analysis on \(c_S\in\{1,2,3\}\):
+
+1. **\(c_S=1\)** — forces \(\tau(U)=\mathrm{ALL3}\), \(d_T(U)=0\), \(c_G=1\); reduces to local types.
+2. **\(c_S=2\)** — cancellation \(d_T(U)-c_G=-1\); finite type pairs on the 3-set lattice.
+3. **\(c_S=3\)** — pure input forces pure meet; both SEP-ext uses inheritance of extension so \(d_T(U)=c_G-1\).
+
+No dependence on ambient \(n\) beyond \(n\ge 3\).
+
+### Finite regression (supporting, not the proof)
+
+| \(n\) | Partitions \(B_n\) | Unordered pairs | Mismatches |
+|------:|------------------:|----------------:|-----------:|
+| 6 | 203 | 20 503 | 0 |
+| 7 | 877 | 384 126 | 0 (reported) |
+| 8 | 4 140 | 8 567 730 | 0 (reported) |
+| **Total** | — | **≈ 8.97M** | **0** |
+
+Independent stdlib replay for \(n=6\) is the file `verify-gap-n6.py` in this folder.
+
+---
+
+## How to reproduce
+
+### A. Pure Python (no Lean, no Mathlib) — must stay green
+
+```bash
+cd verification/AQARION-GAP
+python3 verify-gap-n6.py
+```
+
+Expected output (shape):
+
+```text
+n=6 partitions=203
+pairs_checked=20503
+d_T_mismatches=0
+gap_mismatches=0
+diff_distribution={0: 12157, 2: 8346}
+STATUS=PASS
+GOVERNANCE: algebraic [P] · finite [V] · Lean [FV] OPEN · C4 BLOCKED
+```
+
+### B. Lean / Lake (when toolchain available)
+
+```bash
+cd verification/AQARION-GAP
+lake update
+lake build
+```
+
+**Honest expectation today:** the scaffold type-checks with i
+... 
+
+---
 
 ### What was added
 
