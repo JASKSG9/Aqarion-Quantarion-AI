@@ -1,0 +1,13 @@
+{
+  "fixture_id": "AQ-COND-FIX-003",
+  "description": "Full-rank but near-singular exact rational matrix for tolerance-sensitivity testing.",
+  "matrix": [
+    ["1", "1"],
+    ["1", "1000000000001/1000000000000"]
+  ],
+  "expected": {
+    "exact_rank": 2,
+    "exact_nullity": 0,
+    "column_sum_invariant_holds": false
+  }
+}
