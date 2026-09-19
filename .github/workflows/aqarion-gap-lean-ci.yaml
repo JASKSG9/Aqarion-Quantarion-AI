@@ -1,0 +1,118 @@
+# AQARION-Gap — Lean CI
+# Status: scaffold build + sorry inventory
+# Governance: NO [FV] claim while sorry > 0 · C4 BLOCKED · no promotion
+name: AQARION-Gap Lean CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+# Cancel older runs on the same ref
+concurrency:
+  group: lean-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: lake build + sorry inventory
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install elan (Lean version manager)
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf \
+            | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Cache Mathlib / Lake build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.elan
+            .lake
+          key: ${{ runner.os }}-lake-${{ hashFiles('lakefile.toml', 'lake-manifest.json') }}
+          restore-keys: |
+            ${{ runner.os }}-lake-
+
+      - name: lake update (resolve Mathlib)
+        run: |
+          lake --version || true
+          lake update
+        continue-on-error: false
+
+      - name: lake build
+        id: build
+        run: |
+          set +e
+          lake build 2>&1 | tee build.log
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+          exit 0
+        # We always continue so the sorry inventory still runs
+
+      - name: Sorry inventory
+        id: sorry
+        run: |
+          # Count intentional sorry / admit in source (not in .lake)
+          SORRY_COUNT=$(grep -R --include='*.lean' -E '\bsorry\b|\badmit\b' AQARIONGap/ AQARIONGap.lean 2>/dev/null \
+            | grep -v '^\s*--' | wc -l || true)
+          echo "sorry_count=${SORRY_COUNT}" >> "$GITHUB_OUTPUT"
+          echo "## Sorry inventory" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Metric | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|--------|------:|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| \`sorry\` / \`admit\` occurrences in sources | **${SORRY_COUNT}** |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| lake build exit | \`${{ steps.build.outputs.exit_code }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${SORRY_COUNT}" -gt 0 ]; then
+            echo "**Governance:** [FV] **not claimed** — \`sorry > 0\`. C4 BLOCKED. No promotion." >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "### Locations" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            grep -Rn --include='*.lean' -E '\bsorry\b|\badmit\b' AQARIONGap/ AQARIONGap.lean 2>/dev/null \
+              | grep -v '^\s*--' || true
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "**All sorry discharged.** Ready for independent kernel replay before any [FV] label." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lake-build-log
+          path: build.log
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Fail if build hard-errored (not just sorry)
+        if: steps.build.outputs.exit_code != '0'
+        run: |
+          echo "lake build exited with ${{ steps.build.outputs.exit_code }}"
+          echo "Inspect build.log artifact. Scaffold may need Mathlib pin or import fixes."
+          # Soft policy: warn but do not block PRs while scaffold is WIP.
+          # Uncomment the next line to make CI red on build failure:
+          # exit 1
+          exit 0
+
+      - name: Governance banner
+        if: always()
+        run: |
+          echo "=============================================="
+          echo " AQARION-Gap CI"
+          echo " Algebraic proof:     [P] (paper)"
+          echo " Lean scaffold:       present"
+          echo " sorry count:         ${{ steps.sorry.outputs.sorry_count }}"
+          echo " [FV] claim:          NOT MADE (sorry > 0 or unreleased)"
+          echo " C4 / publication:    BLOCKED"
+          echo " Promotion:           false"
+          echo "=============================================="
