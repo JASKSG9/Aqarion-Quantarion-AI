@@ -1,0 +1,46 @@
+{
+  "@context": "https://w3id.org/ro/crate/1.1/context",
+  "@graph": [
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "conformsTo": {
+        "@id": "https://w3id.org/ro/crate/1.1"
+      },
+      "about": {
+        "@id": "./"
+      }
+    },
+    {
+      "@id": "./",
+      "@type": "Dataset",
+      "name": "Aqarions-Quantarion-AI SV-001-v2",
+      "datePublished": "2026-09-18",
+      "description": "Louisville night shift 94 lines semantic adequacy upgrade",
+      "license": "MIT",
+      "hasPart": [
+        {
+          "@id": "verification/sv-001-v2/mutation/semantic_executor.py"
+        },
+        {
+          "@id": "verification/sv-001-v2/mutation/residue_metamorphic.py"
+        },
+        {
+          "@id": "docs/termux/sessions/2026-09-18-night-shift.md"
+        }
+      ]
+    },
+    {
+      "@id": "verification/sv-001-v2/mutation/semantic_executor.py",
+      "@type": "File",
+      "name": "Semantic executor 60 lines CANONICAL+killers",
+      "encodingFormat": "text/x-python"
+    },
+    {
+      "@id": "verification/sv-001-v2/mutation/residue_metamorphic.py",
+      "@type": "File",
+      "name": "Residue metamorphic 784/784 G(s)=G(s+qk)",
+      "encodingFormat": "text/x-python"
+    }
+  ]
+}
