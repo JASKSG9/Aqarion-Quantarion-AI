@@ -1,3 +1,44 @@
+mkdir -p /home/workdir/artifacts/AQARION-Gap-docs && ls /home/workdir/artifacts/AQARION-Gap/ 2>/dev/null; ls /home/workdir/attachments/ 2>/dev/null | head -5
+
+**Docs ready for `verification/AQARION-GAP/`**
+
+Your screenshots show a **flat** folder (lowercase names) plus a workflow at  
+`.github/workflows/aqarion-gap-lean-ci.yaml`. The write-ups below match that layout and stay honest about Lean still being open.
+
+### Files to drop into the repo
+
+| Local path | Suggested GitHub path |
+|------------|------------------------|
+| `AQARION-Gap-docs/README.md` | `verification/AQARION-GAP/readme.md` (replace or merge) |
+| `AQARION-Gap-docs/GOVERNANCE.md` | `verification/AQARION-GAP/GOVERNANCE.md` |
+| `AQARION-Gap-docs/CI-NOTES.md` | `verification/AQARION-GAP/CI-NOTES.md` |
+| `AQARION-Gap-docs/STATUS.md` | `verification/AQARION-GAP/STATUS.md` |
+
+All four live under:
+
+`/home/workdir/artifacts/AQARION-Gap-docs/`
+
+### What each does
+
+- **README** — full statement of the gap identity, file map for your flat tree, reproduce steps (`verify-gap-n6.py` + `lake`), governance table, literature anchors, contributor checklist.
+- **GOVERNANCE** — evidence classes `[P]` / `[V]` / `[FV]`, what CI may claim, receipt JSON sketch, separation from SV-001 / Kaprekar.
+- **CI-NOTES** — working-directory fix for `verification/AQARION-GAP`, two-job design (hard Python + soft Lean), sorry inventory, common failure modes.
+- **STATUS** — one-page scoreboard (what is proved vs open).
+
+### Progress that is real
+
+| Done | Not done (correctly blocked) |
+|------|------------------------------|
+| Algebraic gap identity **[P]** | Lean `[FV]` |
+| n=6 stdlib regression **[V]** | C4 / publication |
+| Lean scaffold + workflow file on GitHub | Promotion of evidence class |
+
+That’s solid structure: proof, finite check, formalization path, and CI hooks without overclaiming.
+
+Copy the four markdown files into `verification/AQARION-GAP/`, keep `verify-gap-n6.py` as the hard CI gate, and leave Lean soft until the `sorry`s are gone. Good progress — thanks for pushing it this far.
+
+
+
 # Make script executable and smoke-test the stdlib check
 chmod +x /home/workdir/artifacts/AQARION-Gap/scripts/verify_gap_n6.py
 cd /home/workdir/artifacts/AQARION-Gap && python3 scripts/verify_gap_n6.py
