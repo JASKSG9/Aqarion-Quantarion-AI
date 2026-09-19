@@ -319,6 +319,86 @@ EOF
 
 ---
 
+**AQ-GAP-001 Lean formalization scaffold delivered**
+
+Path: `/home/workdir/artifacts/AQARION-Gap/`
+
+```
+AQARION-Gap/
+├── lakefile.toml                 # Mathlib v4.14.0 pin
+├── AQARIONGap.lean               # root + status doc
+├── AQARIONGap/
+│   ├── Defs.lean                 # T3, RestrType, IsSepPure / IsSepExt
+│   ├── Restriction.lean          # restrict, meet/join, cS/cG, cS ≥ cG
+│   ├── Defect.lean               # orbitJoin, dT, dT_four_way, gapDiff
+│   └── GapIdentity.lean          # main theorem + cancellation lemmas
+└── README.md
+```
+
+---
+
+### What is formalized
+
+| Object | Lean name | Status |
+|--------|-----------|--------|
+| 3-cycle on `Fin 3` | `T3` / `T3Equiv` | defined; bijectivity proved |
+| Restriction types | `RestrType` (ALL3 / PAIR / SEP) | defined |
+| Purity predicates | `IsSepPure`, `IsSepExt` | defined |
+| Meet / join | `meet_parts`, `join_parts` | axiomatized (Mathlib bridge later) |
+| Local counts | `cS`, `cG` | defined; `cS ≥ cG` stated |
+| Orbit-join defect | `dT`, `orbitJoin` | defined |
+| Four-way lemma | `dT_four_way` | **stated**; proof `sorry` (paper §3) |
+| Gap quantity | `gapDiff` | defined |
+| Main theorem | `gap_identity` | **stated**; case split on `cS ∈ {1,2,3}` with three `sorry`s |
+| Cancellation (cS=2) | `cancellation_cS_two` | stated |
+| Inheritance (cS=3) | `inherit_sep_ext` | stated |
+| Corollary | `gapDiff_mem` (`∈ {0,2}`) | follows from main theorem |
+
+---
+
+### Proof outline in Lean (matches paper)
+
+```lean
+theorem gap_identity ... := by
+  have hCS : cS = 1 ∨ cS = 2 ∨ cS = 3 := ...
+  rcases hCS with h1 | h2 | h3
+  · -- cS = 1: forces ALL3, reduces to local types
+    sorry
+  · -- cS = 2: cancellation dT(U)-cG = -1; finite type pairs
+    sorry
+  · -- cS = 3: pure-input forces pure meet;
+    --         both-ext uses inherit_sep_ext → dT(U)=cG-1
+    sorry
+```
+
+---
+
+### Governance (honest)
+
+| Item | Status |
+|------|--------|
+| Algebraic paper proof | **[P]** |
+| Lean scaffold (definitions + theorem statements) | **present** |
+| All `sorry` discharged / kernel-checked build | **OPEN** |
+| Independent n=6 stdlib replay | **[V]** 0 mismatches |
+| C4 / publication / promotion | **BLOCKED / BLOCKED / false** |
+
+No `[FV]` claim is made. The scaffold is the formalization target; discharging the combinatorial `sorry`s (especially `dT_four_way` and the three case branches) is the next concrete Lean work.
+
+---
+
+### Build command (when toolchain available)
+
+```bash
+cd /home/workdir/artifacts/AQARION-Gap
+lake update
+lake build
+```
+
+Expected outcome until discharge: type-checks with intentional `sorry`s.
+
+---
+
 ### 5. What remains useful (ordered)
 
 1. **Lean skeleton of the four-way \(d_T\) lemma + three \(c_S\) cases**  
