@@ -1,0 +1,11 @@
+{
+  "fixture_id": "AQ-COND-FIX-NEG-001",
+  "description": "Negative control: non-rectangular matrix must be rejected.",
+  "matrix": [
+    ["1", "0"],
+    ["0"]
+  ],
+  "expected": {
+    "must_fail_fixture_validation": true
+  }
+}
