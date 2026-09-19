@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AQARION-CONDITION8NG Matrix Fixture",
+  "type": "object",
+  "required": [
+    "fixture_id",
+    "description",
+    "matrix",
+    "expected"
+  ],
+  "properties": {
+    "fixture_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "matrix": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "anyOf": [
+            { "type": "integer" },
+            { "type": "string", "pattern": "^-?[0-9]+(/[1-9][0-9]*)?$" }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}
