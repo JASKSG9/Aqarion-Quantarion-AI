@@ -1,0 +1,83 @@
+# AQARION-GAP — Governance & evidence classes
+
+**Folder:** `verification/AQARION-GAP/`  
+**Last aligned:** 2026-09-19  
+**Promotion:** false · **C4:** BLOCKED · **Publication:** BLOCKED
+
+---
+
+## Evidence taxonomy (this folder only)
+
+| Class | Definition | Current AQARION-GAP status |
+|-------|------------|----------------------------|
+| **[P]** | Written mathematical proof with explicit assumptions | Gap identity + four-way \(d_T\) — **yes** |
+| **[V]** | Exhaustive check on a finite, declared domain | n=6 stdlib: 20 503 pairs, 0 mismatches — **yes**; n=7/8 reported — supporting |
+| **[FV]** | Lean (or other) kernel accepts fully discharged proof | **No** — scaffold has intentional `sorry` |
+| **[CV]** | Randomized / sampled computational support | Not the primary evidence here |
+| **[O]** | Open problem | Lean discharge; optional representation-robust second implementation |
+
+**Rule:** Never write `[FV]` in README, CI summary, or commit messages while any `sorry`/`admit` remains in the proof path of the claimed theorem.
+
+---
+
+## What CI is allowed to claim
+
+**Allowed**
+
+- `verify-gap-n6.py` passed / failed (exit code, pair count, mismatch count).
+- `lake build` exit code and sorry count.
+- “Scaffold present”; “algebraic proof [P]”; “finite regression [V]”.
+
+**Forbidden**
+
+- “Formally verified”, “theorem proved in Lean”, “C4 ready”, “publication ready”.
+- Silent upgrade of evidence class without a new artifact (discharged Lean file + green hard CI).
+
+---
+
+## Receipt fields (recommended for each green CI run)
+
+```json
+{
+  "claim": "AQARION-GAP gap identity",
+  "algebraic": "[P]",
+  "finite_regression": {
+    "n": 6,
+    "partitions": 203,
+    "pairs": 20503,
+    "mismatches": 0,
+    "script": "verification/AQARION-GAP/verify-gap-n6.py"
+  },
+  "lean": {
+    "scaffold": true,
+    "sorry_count": "<from CI>",
+    "fv_claimed": false
+  },
+  "governance": {
+    "C4": "BLOCKED",
+    "publication": "BLOCKED",
+    "promotion": false
+  },
+  "commit": "<SHA>",
+  "workflow": "aqarion-gap-lean-ci.yaml"
+}
+```
+
+---
+
+## Separation of concerns
+
+| Do **not** mix into this folder’s claims | Why |
+|------------------------------------------|-----|
+| SV-001 residual Gram / cyclic energy | Different contract, different observables |
+| Kaprekar chamber geometry | Motivating context only |
+| Rank/SNF of \(a L(C_k)\) | Independent exact-rank thread |
+| Semi-decidable equivalence relations on infinite domains | Category error for finite \(\Pi_n\) |
+
+---
+
+## Change control
+
+1. Mathematical statement change → update paper note + Lean statement + Python oracle in the same PR when possible.
+2. Representation change (tuple vs frozenset vs bitmask) → update `verify-gap-n6.py` assertions and document in this file.
+3. Evidence-class upgrade → only after CI green **and** explicit human acknowledgment in PR description.
