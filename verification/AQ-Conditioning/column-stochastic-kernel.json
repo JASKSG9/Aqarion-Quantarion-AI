@@ -1,0 +1,17 @@
+{
+  "fixture_id": "AQ-COND-FIX-004",
+  "description": "Column-stochastic singular matrix with an exact zero-sum kernel witness.",
+  "matrix": [
+    ["1", "1", "0"],
+    ["0", "0", "1"],
+    ["0", "0", "0"]
+  ],
+  "expected": {
+    "exact_rank": 2,
+    "exact_nullity": 1,
+    "column_sum_invariant_holds": true,
+    "kernel_witness": ["1", "-1", "0"],
+    "kernel_witness_is_exact": true,
+    "kernel_witness_zero_sum": true
+  }
+}
