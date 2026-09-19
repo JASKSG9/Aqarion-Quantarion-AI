@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AQARION-CONDITION8NG Receipt",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "generated_at_utc",
+    "claim_id",
+    "contract_sha256",
+    "runtime",
+    "fixture_count",
+    "fixtures",
+    "status",
+    "governance"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "AQ-CONDITIONING-RECEIPT-001"
+    },
+    "generated_at_utc": {
+      "type": "string"
+    },
+    "claim_id": {
+      "type": ["string", "null"]
+    },
+    "contract_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "runtime": {
+      "type": "object"
+    },
+    "fixture_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "fixtures": {
+      "type": "array"
+    },
+    "status": {
+      "enum": ["PASS", "FAIL"]
+    },
+    "governance": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}
