@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# Test and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments and editor state
+.env
+.idea/
+.vscode/
+*.swp
+
+# Runtime-generated evidence
+artifacts/*
+!artifacts/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
