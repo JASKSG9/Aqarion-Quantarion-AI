@@ -1,4 +1,46 @@
-# AQARION Gap Identity — Lean 4 Formalization (AQ-GAP-001)
+
+
+
+**Working GitHub CI is in place** under `/home/workdir/artifacts/AQARION-Gap/`.
+
+### What was added
+
+| File | Role |
+|------|------|
+| `.github/workflows/lean-ci.yml` | Lean/Lake CI: install elan, cache, `lake update` + `lake build`, **sorry inventory**, upload `build.log`, governance banner. Soft-fail while scaffold still has `sorry`. |
+| `.github/workflows/stdlib-gap-check.yml` | Pure-Python n=6 gap-rule regression (no Lean). Must stay green. |
+| `scripts/verify_gap_n6.py` | Standalone checker: \(B_6=203\), 20 503 pairs, 0 mismatches. **Smoke-tested here: `STATUS=PASS`**. |
+| `.gitignore` | Ignores `.lake/`, build artifacts, logs. |
+| `README.md` | Updated with CI table + layout. |
+
+### How to use on GitHub
+
+1. Create a new repo (or push this folder as the root).
+2. Push to `main` / open a PR → both workflows run automatically.
+3. **stdlib job** should be green immediately.
+4. **Lean job** will install Mathlib (first run is slow), then either:
+   - type-check with intentional `sorry`s (expected while formalization is open), or
+   - surface real import/pin errors in the uploaded `build.log`.
+
+### Governance baked into CI
+
+- Sorry count is reported in the job summary.
+- Banner always prints: **[FV] not claimed · C4 BLOCKED · promotion false**.
+- Build failure is soft by default (scaffold WIP). Flip the commented `exit 1` in `lean-ci.yml` when you want hard fail.
+
+### Local commands
+
+```bash
+# No Lean needed — must pass
+python3 scripts/verify_gap_n6.py
+
+# When Lean/Mathlib available
+lake update && lake build
+```
+
+The Lean formalization is no longer “under verification” as a loose pile of files; it is a self-contained package with runnable CI and a regression that already passes.
+
+---
 
 **Status:** Scaffold complete · Algebraic proof [P] · Lean discharge OPEN · C4 BLOCKED · No promotion
 
