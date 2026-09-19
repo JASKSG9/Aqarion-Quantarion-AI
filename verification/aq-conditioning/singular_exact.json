@@ -1,0 +1,16 @@
+{
+  "fixture_id": "AQ-COND-FIX-001",
+  "description": "Exact singular rational matrix with known nullity one.",
+  "matrix": [
+    ["1", "2"],
+    ["2", "4"]
+  ],
+  "expected": {
+    "exact_rank": 1,
+    "exact_nullity": 1,
+    "column_sum_invariant_holds": false,
+    "kernel_witness": ["2", "-1"],
+    "kernel_witness_is_exact": true,
+    "kernel_witness_zero_sum": false
+  }
+}
