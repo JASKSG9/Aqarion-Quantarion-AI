@@ -1,0 +1,18 @@
+{
+  "claim_id": "AQ-CONDITIONING-001",
+  "matrix_domain": "rational",
+  "numerical_precisions_bits": [53, 106, 212, 424],
+  "rank_method_exact": "fraction_free_elimination",
+  "rank_method_numeric": "svd",
+  "singular_value_thresholds": [1e-10, 1e-12, 1e-14],
+  "required_metrics": [
+    "exact_rank",
+    "exact_nullity",
+    "sigma_min",
+    "kernel_residual",
+    "sum_constraint_residual",
+    "condition_number",
+    "precision_stability"
+  ],
+  "promotion_allowed": false
+}
