@@ -1,0 +1,24 @@
+name: federation-sync
+on:
+  schedule:
+    - cron: '0 */6 * * *' # every 6 hours
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch receipts from Replit Hubs
+        run: |
+          mkdir -p receipts
+          curl -s https://quantarion-federation-hub--aqarionaaron.replit.app/api/receipts > receipts/replit_aaron.json
+          curl -s https://quantarion-federation-hub--quantarion9.replit.app/api/receipts > receipts/replit_quantarion9.json || echo "{}" > receipts/replit_quantarion9.json
+          curl -s https://quantarion-federation-hub--aqarionaaron.replit.app/api/federation/status > receipts/federation_status.json
+      - name: Commit if changed
+        run: |
+          git config user.name "AQARION Bot"
+          git config user.email "bot@aqarion.local"
+          git add receipts/
+          git diff --staged --quiet || git commit -m "federation sync $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push
