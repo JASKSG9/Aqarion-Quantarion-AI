@@ -1,0 +1,55 @@
+{
+  "schema": "AQ-S15-BRT-CASES-001",
+  "cases": [
+    {
+      "name": "identity_singletons",
+      "transition": [0, 1, 2],
+      "partition": [0, 1, 2]
+    },
+    {
+      "name": "constant_map_singletons",
+      "transition": [0, 0, 0],
+      "partition": [0, 1, 2]
+    },
+    {
+      "name": "constant_map_one_block",
+      "transition": [0, 0, 0],
+      "partition": [0, 0, 0]
+    },
+    {
+      "name": "three_cycle_singletons",
+      "transition": [1, 2, 0],
+      "partition": [0, 1, 2]
+    },
+    {
+      "name": "three_cycle_one_block",
+      "transition": [1, 2, 0],
+      "partition": [0, 0, 0]
+    },
+    {
+      "name": "three_cycle_pair_block",
+      "transition": [1, 2, 0],
+      "partition": [0, 0, 1]
+    },
+    {
+      "name": "two_cycle_fixed_point",
+      "transition": [1, 0, 2],
+      "partition": [0, 0, 1]
+    },
+    {
+      "name": "noninjective_map",
+      "transition": [1, 1, 2],
+      "partition": [0, 1, 2]
+    },
+    {
+      "name": "nontrivial_partition",
+      "transition": [2, 0, 1, 3],
+      "partition": [0, 0, 1, 1]
+    },
+    {
+      "name": "four_cycle",
+      "transition": [1, 2, 3, 0],
+      "partition": [0, 0, 1, 1]
+    }
+  ]
+}
