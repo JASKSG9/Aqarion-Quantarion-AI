@@ -1,0 +1,32 @@
+name: AQARION BRT Validation
+
+on:
+  push:
+    branches: [ "master" ]
+  # Allows you to trigger the validation manually from the GitHub UI
+  workflow_dispatch: 
+
+jobs:
+  validate-kernel:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up runtime environment
+        # Adjust to your exact runtime (Python, Julia, C++, etc.)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          # Add any additional math/algebra libraries required for the exact rational-arithmetic enumeration
+
+      - name: Execute BRT Graph & Semantic Control Validation
+        # Replace 'validate_brt.py' with the actual entry point of your test suite
+        run: |
+          echo "Initiating BRT graph normalization checks..."
+          python validate_brt.py
