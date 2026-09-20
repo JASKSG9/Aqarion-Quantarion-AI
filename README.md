@@ -438,6 +438,324 @@ Precision of language is part of the verification system.
 
 ---
 
+Verification Infrastructure — Current Audit Boundary
+
+
+Governance: FROZEN AUDIT · NO PROMOTION · C4 BLOCKED · PUBLICATION BLOCKED
+
+
+The canonical executable verification registry is:
+
+
+verification/manifest.json
+
+
+
+Current manifest:
+
+
+AQARION-VERIFICATION-MANIFEST-1
+version 1.4.0
+status ACTIVE_ADVERSARIAL
+
+
+
+The manifest currently contains seven registered executable checks:
+
+
+AQ-S14-SEMANTIC-K3
+AQ-CONTRACT-OBJECT-OPERATOR
+AQ-ORACLE-EXHAUSTIVE-N4
+AQ-MUTATION-SEMANTIC
+SV-001-V2
+SV-001-V2-MUTATION
+SV-001-V2-METAMORPHIC
+
+
+
+The manifest-bound mutation executable is:
+
+
+verification/aq-mutation-suite.py
+
+
+
+The manifest is authoritative for the executable filename. Documentation must not substitute another spelling.
+
+
+Verification Documentation
+
+
+The complete verification-directory documentation is:
+
+
+verification/README.md
+
+
+
+It defines:
+
+
+
+
+the active verification boundary;
+
+
+manifest semantics;
+
+
+registered checks;
+
+
+excluded checks;
+
+
+fail-closed requirements;
+
+
+receipt policy;
+
+
+independence requirements;
+
+
+mutation requirements;
+
+
+AQ-S15 research-side verification;
+
+
+anti-overclaiming rules;
+
+
+runtime evidence classifications.
+
+
+
+
+Manifest Binding Audit
+
+
+The repository now includes:
+
+
+verification/manifest_binding_audit.py
+
+
+
+Identifier:
+
+
+AQ-SIDE-PIVOT-002
+
+
+
+This audit checks the binding between the active manifest and the executable filesystem without executing the registered checks.
+
+
+Run:
+
+
+python3 verification/manifest_binding_audit.py
+
+
+
+A successful result is reported as:
+
+
+RESULT=PASS
+
+
+
+This audit is infrastructure evidence. Its existence does not itself modify the active seven-check manifest.
+
+
+AQ-S15 Exact Bridge Audit
+
+
+The repository also contains the research-side exact verifier:
+
+
+verification/sv-001-v2/bridge_exact.py
+
+
+
+Identifier:
+
+
+AQ-S15-SIDE-PIVOT-002
+
+
+
+It uses exact rational arithmetic and independently constructs the block-incidence matrix, projection, Koopman pullback, defect, and compressed operator.
+
+
+It checks the finite identity:
+
+
+A_actual = Wᵀ K W / k
+
+
+
+against:
+
+
+A_model = q S^b + p S^(b+1)
+
+
+
+with:
+
+
+s = b k + r
+p = r/k
+q = (k-r)/k
+0 < r < k
+
+
+
+and then checks:
+
+
+AᵀA = I - p q L_m
+
+
+
+and:
+
+
+UᵀDᵀDU = p q L_m.
+
+
+
+The audit uses exact Fraction arithmetic rather than floating-point numerical comparison.
+
+
+Its finite execution domain is:
+
+
+m = 2,...,20
+k = 2,...,12
+b = 0,...,m-1
+r = 1,...,k-1
+
+
+
+A successful execution is classified:
+
+
+EXACT_FINITE_REPLAY
+
+
+
+and explicitly retains the boundary:
+
+
+NOT_A_UNIVERSAL_PROOF
+
+
+
+Therefore this artifact must not be described as a universal proof merely because its finite exact checks pass.
+
+
+Current Verification Rule
+
+
+The repository distinguishes:
+
+
+computed
+verified computation
+independent computation
+formalized
+proved
+
+
+
+These are separate evidence states.
+
+
+In particular:
+
+
+CI PASS ≠ mathematical proof
+finite exhaustive replay ≠ universal theorem
+policy PASS ≠ mathematical truth
+different scripts ≠ automatic independence
+public artifact ≠ certification
+
+
+
+Current Governance
+
+
+The current governance boundary remains:
+
+
+C3              OPEN
+C4              BLOCKED
+Lean            OPEN
+Publication     BLOCKED
+Promotion       BLOCKED
+
+
+
+Adding verification infrastructure does not automatically change any of these states.
+
+
+The repository remains under:
+
+
+FROZEN AUDIT · NO PROMOTION · C4 BLOCKED · PUBLICATION BLOCKED
+
+
+
+Canonical Verification Entry Point
+
+
+The primary fail-closed runner remains:
+
+
+python3 verification/run-all.py \
+  --manifest verification/manifest.json \
+  --receipt verification/receipts/run_all_receipt.json
+
+
+
+The exact registered checks are determined by the manifest, not by an independently maintained README list.
+
+
+For the full verification-directory specification, see:
+
+
+verification/README.md
+
+
+
+Evidence Boundary
+
+
+The strongest permissible statement about any result is determined by the evidence actually generated.
+
+
+A finite executable result establishes finite computational evidence over its tested domain.
+
+
+A formal proof establishes a formal proposition only after the formal system actually checks that proof.
+
+
+A provenance receipt establishes evidence concerning an execution.
+
+
+A promotion gate establishes satisfaction of its stated policy conditions.
+
+
+None of these categories may be silently substituted for another.
+
+
+No fabricated receipts. No fabricated execution counts. No fabricated hashes. No promotion by repetition.
+
+
 Final interpretation rule
 
 The strongest statement that can safely be made about an AQARION result is determined by its actual evidence.
