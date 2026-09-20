@@ -1,4 +1,0 @@
-#!/bin/sh
-# Automatically push to master after a successful commit
-echo "Commit detected. Pushing to origin master..."
-git push origin master
