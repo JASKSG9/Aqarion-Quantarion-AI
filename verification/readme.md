@@ -120,6 +120,333 @@ Executable verification surface for AQARION claims.
 | AQ-ORACLE-EXHAUSTIVE-N4 | `verification/aq_oracle/` | ACTIVE |
 | AQ-MUTATION-SEMANTIC | `verification/aq-mutation-suit.py` | ACTIVE |
 
+AQ-S15 — Equal-Margin Gram Spectral Split
+
+
+Theorem
+
+
+Let M\in\mathbb N^{k\times k}, n>0, and assume
+
+
+[
+M\mathbf 1=n\mathbf 1,
+\qquad
+M^\top\mathbf 1=n\mathbf 1.
+]
+
+
+Define
+
+
+[
+A=\frac1nM,
+\qquad
+G_M=I-A^\top A.
+]
+
+
+Then A is doubly stochastic and
+
+
+[
+0\preceq G_M\preceq I.
+]
+
+
+Moreover,
+
+
+[
+\boxed{
+\lambda_{\max}
+\left(
+G_M\big|_{\mathbf1^\perp}
+\right)=1
+\iff
+\ker M\neq{0}
+\iff
+\rank(M)<k.
+}
+]
+
+
+Because A^\top\mathbf1=\mathbf1,
+
+
+[
+\ker M=\ker A\subseteq\mathbf1^\perp,
+]
+
+
+so the restriction to \mathbf1^\perp introduces no additional condition.
+
+
+
+Support theorem
+
+
+Let \mathcal B(M) be the bipartite support graph with row vertices
+R_1,\ldots,R_k, column vertices C_1,\ldots,C_k, and edge
+
+
+[
+R_i-C_j
+\iff
+M_{ij}>0.
+]
+
+
+Let c(\mathcal B(M)) denote its number of connected components.
+
+
+Then
+
+
+[
+\boxed{
+\operatorname{mult}_{G_M}(0)
+
+
+c(\mathcal B(M))
+}
+]
+
+
+and consequently
+
+
+[
+\boxed{
+\rank(G_M)=k-c(\mathcal B(M)).
+}
+]
+
+
+The eigenvalue-1 multiplicity is independently
+
+
+[
+\boxed{
+\operatorname{mult}_{G_M}(1)
+
+
+\dim\ker(M)
+
+
+k-\rank(M).
+}
+]
+
+
+Thus the two invariants separate:
+
+
+[
+\begin{array}{c|c}
+\text{Invariant} & \text{Controlled quantity}\
+\hline
+\text{support connectivity} & \operatorname{mult}(0),\ \rank(G_M)\
+\text{matrix nullity} & \operatorname{mult}(1),\ \lambda_{\max}(G_M)
+\end{array}
+]
+
+
+In particular, support connectivity cannot replace the rank/singularity condition in the saturation theorem.
+
+
+
+Zero-Gram classification
+
+
+[
+\boxed{
+G_M=0
+\iff
+A^\top A=I
+\iff
+A=P
+}
+]
+
+
+for a permutation matrix P.
+
+
+Therefore
+
+
+[
+\boxed{
+G_M=0
+\iff
+M=nP.
+}
+]
+
+
+There are exactly k! such matrices.
+
+
+
+Exact 3\times3 consequences
+
+
+For k=3,
+
+
+[
+\lambda_{\max}(G_M)=1
+\iff
+\det M=0.
+]
+
+
+The support-component census is
+
+
+[
+#{c=3}=6,
+]
+
+
+[
+#{c=2}=9(n-1),
+]
+
+
+and
+
+
+[
+#{c=1}
+
+
+\frac{
+n^4+6n^3+15n^2-54n+32
+}{8}.
+]
+
+
+The total number of equal-margin 3\times3 tables is
+
+
+[
+\boxed{
+T(n)=
+\frac{
+n^4+6n^3+15n^2+18n+8
+}{8}.
+}
+]
+
+
+Hence
+
+
+[
+\rank(G_M)=0,1,2
+]
+
+
+occur respectively with counts
+
+
+[
+6,\qquad
+9(n-1),\qquad
+\frac{
+n^4+6n^3+15n^2-54n+32
+}{8}.
+]
+
+
+These support counts do not equal the number of saturated matrices: saturation is determined by \det M=0, including matrices whose support graph is connected.
+
+
+
+Explicit connected-support saturation witness
+
+
+[
+M=
+\begin{pmatrix}
+0&1&2\
+1&1&1\
+2&1&0
+\end{pmatrix}
+]
+
+
+has equal margin 3, connected support, and
+
+
+[
+v=
+\begin{pmatrix}
+1\-2\1
+\end{pmatrix}
+]
+
+
+satisfies
+
+
+[
+Mv=0.
+]
+
+
+Therefore
+
+
+[
+\rank M=2,
+\qquad
+\lambda_{\max}(G_M)=1.
+]
+
+
+This is the required separation witness:
+
+
+[
+\boxed{
+c(\mathcal B(M))=1
+\quad\text{but}\quad
+\lambda_{\max}(G_M)=1.
+}
+]
+
+
+
+Status
+
+
+MATHEMATICS:
+DERIVED
+
+
+FINITE COMPUTATION:
+EXACT ENUMERATION ARTIFACT SPECIFIED
+
+
+LEAN:
+OPEN
+
+
+C4:
+BLOCKED
+
+
+PUBLICATION:
+BLOCKED
+
+
+No computational enumeration is being promoted to a general theorem; the general statements above are algebraic/analytic claims whose formal verification remains open.
+
+
+
 ## Evidence boundary
 
 A passing verifier establishes **finite computational evidence only**. It does
