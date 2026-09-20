@@ -77,7 +77,7 @@
   "excluded_until_bound": [
     {
       "id": "K2R-PARAMETRIC",
-      "reason": "fixture verification/fixtures/k2r-family.json is present, but no executable verifier is bound to it"
+      "reason": "fixture verification/fixtures/k2r-family.json is present, but no executable verifier is currently bound to it"
     },
     {
       "id": "BETA-ENVELOPE",
