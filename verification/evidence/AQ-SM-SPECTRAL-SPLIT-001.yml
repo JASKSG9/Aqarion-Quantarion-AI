@@ -1,0 +1,179 @@
+id: AQ-SM-SPECTRAL-SPLIT-001
+
+title: Support–Nullity Separation for Equal-Margin Multiplicity Grams
+
+governance:
+  status: FROZEN
+  exact: true
+  promotion: BLOCKED
+  c4: BLOCKED
+  publication: BLOCKED
+  lean: OPEN
+
+scope:
+  object: k x k nonnegative integer multiplicity matrix M
+  assumptions:
+    - n > 0
+    - M * 1 = n * 1
+    - M^T * 1 = n * 1
+
+definitions:
+  A: M / n
+  G_M: I - A^T * A
+  support_graph:
+    vertices: row vertices R_1,...,R_k and column vertices C_1,...,C_k
+    edge: R_i -- C_j iff M[i,j] > 0
+  c_support: number of connected components of support_graph
+
+theorem_1:
+  name: Gram spectral bounds
+  statement:
+    - A is doubly stochastic
+    - ||A||_2 <= 1
+    - 0 <= G_M <= I
+
+theorem_2:
+  name: Saturation/nullity equivalence
+  statement: |
+    lambda_max(G_M restricted to 1_perp) = 1
+    iff ker(M) != {0}
+    iff rank(M) < k
+
+  proof_core:
+    - G_M v = v iff A^T A v = 0
+    - A^T A v = 0 iff A v = 0
+    - A^T * 1 = 1
+    - therefore every v in ker(A) satisfies 1^T v = 0
+    - hence ker(A) is already contained in 1_perp
+    - ker(A) = ker(M)
+
+theorem_3:
+  name: Support-component theorem
+  statement: |
+    multiplicity of eigenvalue 0 of G_M
+    =
+    c_support
+
+  equivalent_statement: |
+    rank(G_M) = k - c_support
+
+  proof_core:
+    - Jensen/Cauchy gives ||Ax||_2 <= ||x||_2
+    - equality holds iff x is constant on every support-connected component
+    - the component-indicator vectors form a c_support-dimensional
+      eigenspace of A^T A at eigenvalue 1
+    - G_M = I - A^T A
+
+theorem_4:
+  name: Eigenvalue-1 multiplicity
+  statement: |
+    multiplicity of eigenvalue 1 of G_M
+    =
+    nullity(M)
+
+  equivalent_statement: |
+    dim ker(M) = k - rank(M)
+
+separation:
+  support_controls:
+    - multiplicity of eigenvalue 0 of G_M
+    - rank(G_M)
+  algebra_controls:
+    - multiplicity of eigenvalue 1 of G_M
+    - maximal residual saturation
+  warning: |
+    Support connectivity and matrix singularity are distinct invariants.
+    Connected support does NOT imply nonsingularity.
+    Disconnected support does NOT imply lambda_max(G_M) = 1.
+
+theorem_5:
+  name: Zero-Gram classification
+  statement: |
+    G_M = 0
+    iff
+    M = n P
+    for a permutation matrix P
+
+  consequence: |
+    There are exactly k! equal-margin matrices with G_M = 0.
+
+three_by_three:
+  saturation_condition: det(M) = 0
+  possible_rank_G:
+    rank_M_3:
+      rank_G: 0
+    rank_M_2:
+      rank_G: 1 or 2 depending on support components
+    rank_M_1:
+      rank_G: 2
+  exact_support_counts:
+    c_support_3: 6
+    c_support_2: 9 * (n - 1)
+    c_support_1: |
+      (n^4 + 6*n^3 + 15*n^2 - 54*n + 32) / 8
+
+  total_tables:
+    formula: |
+      (n^4 + 6*n^3 + 15*n^2 + 18*n + 8) / 8
+
+  consequence:
+    rank_G_0_count: 6
+    rank_G_1_count: 9 * (n - 1)
+    rank_G_2_count: |
+      (n^4 + 6*n^3 + 15*n^2 - 54*n + 32) / 8
+
+explicit_saturation_witness:
+  M:
+    - [0, 1, 2]
+    - [1, 1, 1]
+    - [2, 1, 0]
+  null_vector: [1, -2, 1]
+  exact_check:
+    M_times_v: [0, 0, 0]
+  conclusion:
+    rank_M: 2
+    lambda_max_G: 1
+
+counterexample_to_support_only_claim:
+  M:
+    - [n, 0, 0]
+    - [0, n, 0]
+    - [0, 0, n]
+  support_components: 3
+  G_M: zero_matrix
+  lambda_max_G: 0
+  lesson: |
+    Disconnected support alone does not imply residual saturation.
+
+unequal_margin_extension:
+  assumptions:
+    - n_i > 0
+    - M * 1 = N * 1
+    - M^T * 1 = N * 1
+    - N = diag(n_i)
+  normalization:
+    A: N^(-1/2) * M * N^(-1/2)
+  fixed_vector:
+    v: sqrt(n)
+  Gram:
+    G: I - A^T * A
+  saturation:
+    statement: |
+      lambda_max(G restricted to sqrt(n)_perp) = 1
+      iff rank(M) < k
+
+formalization_status:
+  mathematical_derivation: derived
+  computational_scope:
+    support_rank_relation: checked separately for 3x3 equal-margin tables
+    singularity_enumeration: exact integer determinant/rank enumeration
+  lean: OPEN
+  c4: BLOCKED
+  publication: BLOCKED
+
+prohibited_claims:
+  - Do not claim Lean compilation.
+  - Do not claim zero-sorry formalization.
+  - Do not claim C4 closure.
+  - Do not claim publication readiness.
+  - Do not replace matrix singularity by support connectivity.
