@@ -1,53 +1,144 @@
-name: AQARION BRT Validation
+name: BRT Validation
 
 on:
   push:
-    branches: [main]
-    paths:
-      - "verify.sh"
-      - "PUBLIC-DELIVERABLES/**"
-      - "verification/**"
-      - ".github/workflows/brt-validation.yaml"
+    branches:
+      - main
+      - master
   pull_request:
-    branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"
 
 permissions:
   contents: read
 
+concurrency:
+  group: brt-validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  validate:
-    name: BRT validation
+  validation:
+    name: BRT Exact Validation
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
-      - name: Checkout exact revision
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
-      - name: Verify required files
+      - name: Verify BRT package
+        shell: bash
         run: |
-          test -f verify.sh
-          test -f PUBLIC-DELIVERABLES/DELIVERY_MANIFEST.json
-          python -m json.tool PUBLIC-DELIVERABLES/DELIVERY_MANIFEST.json > /dev/null
+          set -euo pipefail
 
-      - name: Make verifier executable
-        run: chmod +x ./verify.sh
+          test -f verification/brt_validation.py
+          test -f verification/brt_cases.json
+          test -f verification/BRT-THEOREM-CARD.md
+          test -f verification/BRT-WORKFLOW-VALIDATION.md
 
-      - name: Run BRT verification
+      - name: Validate Python syntax
+        shell: bash
         run: |
-          set -o pipefail
-          ./verify.sh 2>&1 | tee brt-validation.log
+          set -euo pipefail
+          python -m py_compile verification/brt_validation.py
 
-      - name: Upload validation log
+      - name: Run BRT validator
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 verification/brt_validation.py
+
+      - name: Validate generated report
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          report_path = Path("validation-report/brt-validation.json")
+
+          if not report_path.is_file():
+              raise SystemExit("Missing validation report")
+
+          report = json.loads(report_path.read_text())
+
+          required = {
+              "schema",
+              "claim",
+              "scope",
+              "method",
+              "case_file_sha256",
+              "case_count",
+              "pass_count",
+              "failure_count",
+              "status",
+          }
+
+          missing = required - report.keys()
+
+          if missing:
+              raise SystemExit(
+                  "Missing report fields: " + ", ".join(sorted(missing))
+              )
+
+          if report["status"] != "PASS":
+              raise SystemExit(
+                  f"Validation status: {report['status']}"
+              )
+
+          if report["failure_count"] != 0:
+              raise SystemExit(
+                  f"Validation failures: {report['failure_count']}"
+              )
+
+          if report["pass_count"] != report["case_count"]:
+              raise SystemExit(
+                  f"Only {report['pass_count']}/{report['case_count']} "
+                  "cases passed"
+              )
+
+          print("BRT validation report: PASS")
+          print(f"Cases : {report['case_count']}")
+          print(f"Pass  : {report['pass_count']}")
+          print(f"Fail  : {report['failure_count']}")
+          PY
+
+      - name: Generate SHA-256 receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          sha256sum validation-report/brt-validation.json \
+            > validation-report/brt-validation.sha256
+
+          cat validation-report/brt-validation.sha256
+
+      - name: Upload BRT evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: brt-validation-log
-          path: brt-validation.log
+          name: brt-validation-${{ github.sha }}
+          path: |
+            validation-report/brt-validation.json
+            validation-report/brt-validation.sha256
           if-no-files-found: error
+          retention-days: 90
+
+      - name: Governance boundary
+        if: always()
+        shell: bash
+        run: |
+          echo "BRT computational validation only."
+          echo "No Lean certification claimed."
+          echo "No C4 certification claimed."
+          echo "No publication promotion claimed."
