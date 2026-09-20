@@ -1,37 +1,53 @@
-name: AQARION BRT Validation & Sync
+name: AQARION BRT Validation
 
 on:
   push:
-    branches: [ master ]
+    branches: [main]
+    paths:
+      - "verify.sh"
+      - "PUBLIC-DELIVERABLES/**"
+      - "verification/**"
+      - ".github/workflows/brt-validation.yaml"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  validate-and-alert:
+  validate:
+    name: BRT validation
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout exact revision
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
-      - name: Run BRT Validation Script
-        id: verify
+      - name: Verify required files
         run: |
-          chmod +x ./verify.sh
-          ./verify.sh
+          test -f verify.sh
+          test -f PUBLIC-DELIVERABLES/DELIVERY_MANIFEST.json
+          python -m json.tool PUBLIC-DELIVERABLES/DELIVERY_MANIFEST.json > /dev/null
 
-      - name: Send Email Alert on Failure
-        if: failure()
-        uses: dawidd6/action-send-mail@v3
+      - name: Make verifier executable
+        run: chmod +x ./verify.sh
+
+      - name: Run BRT verification
+        run: |
+          set -o pipefail
+          ./verify.sh 2>&1 | tee brt-validation.log
+
+      - name: Upload validation log
+        uses: actions/upload-artifact@v4
         with:
-          server_address: ${{ secrets.SMTP_SERVER }}
-          server_port: 465
-          username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "[ALERT] AQARION-BRT CI Build Failure on Master"
-          to: ${{ secrets.ALERT_EMAIL }}
-          from: "AQARION CI <ci@aqarion.local>"
-          body: "The automated validation step failed for commit ${{ github.sha }}. Check workflow logs for BRT normalization and semantic control errors."
+          name: brt-validation-log
+          path: brt-validation.log
+          if-no-files-found: error
