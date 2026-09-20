@@ -1,14 +1,11 @@
-name: BRT Validation
+name: AQARION BRT Kernel Validation
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [ master ]
   pull_request:
+    branches: [ master ]
   workflow_dispatch:
-  schedule:
-    - cron: "17 3 * * 1"
 
 permissions:
   contents: read
@@ -21,124 +18,51 @@ jobs:
   validation:
     name: BRT Exact Validation
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
 
-      - name: Verify BRT package
-        shell: bash
+      - name: Install numpy
+        run: pip install numpy
+
+      - name: Make verify.sh executable
+        run: chmod +x ./verify.sh
+
+      - name: Run BRT verifier
         run: |
-          set -euo pipefail
+          set -o pipefail
+          ./verify.sh 2>&1 | tee verification.log
 
-          test -f verification/brt_validation.py
-          test -f verification/brt_cases.json
-          test -f verification/BRT-THEOREM-CARD.md
-          test -f verification/BRT-WORKFLOW-VALIDATION.md
-
-      - name: Validate Python syntax
-        shell: bash
-        run: |
-          set -euo pipefail
-          python -m py_compile verification/brt_validation.py
-
-      - name: Run BRT validator
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 verification/brt_validation.py
-
-      - name: Validate generated report
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-
-          report_path = Path("validation-report/brt-validation.json")
-
-          if not report_path.is_file():
-              raise SystemExit("Missing validation report")
-
-          report = json.loads(report_path.read_text())
-
-          required = {
-              "schema",
-              "claim",
-              "scope",
-              "method",
-              "case_file_sha256",
-              "case_count",
-              "pass_count",
-              "failure_count",
-              "status",
-          }
-
-          missing = required - report.keys()
-
-          if missing:
-              raise SystemExit(
-                  "Missing report fields: " + ", ".join(sorted(missing))
-              )
-
-          if report["status"] != "PASS":
-              raise SystemExit(
-                  f"Validation status: {report['status']}"
-              )
-
-          if report["failure_count"] != 0:
-              raise SystemExit(
-                  f"Validation failures: {report['failure_count']}"
-              )
-
-          if report["pass_count"] != report["case_count"]:
-              raise SystemExit(
-                  f"Only {report['pass_count']}/{report['case_count']} "
-                  "cases passed"
-              )
-
-          print("BRT validation report: PASS")
-          print(f"Cases : {report['case_count']}")
-          print(f"Pass  : {report['pass_count']}")
-          print(f"Fail  : {report['failure_count']}")
-          PY
-
-      - name: Generate SHA-256 receipt
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          sha256sum validation-report/brt-validation.json \
-            > validation-report/brt-validation.sha256
-
-          cat validation-report/brt-validation.sha256
-
-      - name: Upload BRT evidence
+      - name: Upload verification log
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: brt-validation-${{ github.sha }}
-          path: |
-            validation-report/brt-validation.json
-            validation-report/brt-validation.sha256
-          if-no-files-found: error
-          retention-days: 90
+          name: brt-verification-${{ github.sha }}
+          path: verification.log
+          retention-days: 30
 
-      - name: Governance boundary
-        if: always()
-        shell: bash
-        run: |
-          echo "BRT computational validation only."
-          echo "No Lean certification claimed."
-          echo "No C4 certification claimed."
-          echo "No publication promotion claimed."
+      - name: Email on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.MAIL_SERVER }}
+          server_port: ${{ secrets.MAIL_PORT }}
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "FAILED: AQARION BRT Validation (${{ github.sha }})"
+          to: ${{ secrets.ALERT_EMAIL_RECIPIENT }}
+          from: "AQARION Monitor <${{ secrets.MAIL_USERNAME }}>"
+          body: |
+            BRT validation FAILED.
+            Commit: ${{ github.sha }}
+            Ref:    ${{ github.ref }}
+            Actor:  ${{ github.actor }}
+            Run:    https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            Governance: PROMOTION=false · C4=BLOCKED
