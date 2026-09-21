@@ -1,0 +1,46 @@
+{
+  "schema": "AQ-EVIDENCE-CORE/1",
+  "claim_id": "AQ-CYCLE-DELTA-001",
+
+  "execution": "PASS",
+
+  "reported_independent_execution": {
+    "three_layer": "119/119",
+    "distribution": {
+      "1": 66,
+      "2": 47,
+      "3": 4,
+      "4": 2
+    },
+    "extended_scalar": "3150/3150",
+    "exit_code": 0
+  },
+
+  "supporting_claims": {
+    "D_nonzero": {
+      "result": "434/434",
+      "failures": 0
+    },
+    "gcd_lag_refutation": {
+      "matches": "5/119",
+      "universal_claim": "REFUTED"
+    }
+  },
+
+  "crosscheck": {
+    "direct_vs_factorized": "MATCH",
+    "factorized_vs_scalar": "MATCH",
+    "scalar_vs_theorem": "MATCH"
+  },
+
+  "negative_controls": {
+    "gcd_lag_conjecture": "DETECTED"
+  },
+
+  "formal": "OPEN",
+  "semantic": "UNREVIEWED",
+  "governance": "BLOCKED",
+
+  "publication": "BLOCKED",
+  "promotion": false
+}
