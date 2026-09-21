@@ -1,18 +1,23 @@
 AqarionLean/
+├── .github/
+│   └── workflows/
+│       └── lean.yml
 ├── AqarionLean/
-│   └── Pullback.lean             2 theorems, 0 axioms
-├── pending/
-│   ├── PullbackStableJoin.lean           OPEN — unconditional
-│   └── PullbackStableJoinSurjective.lean OPEN — surjective case, likely provable
+│   └── Pullback.lean
 ├── killed/
-│   └── PullbackStableEquivGen.lean       FALSE — counterexample recorded
+│   └── PullbackStableEquivGen.lean
+├── pending/
+│   ├── PullbackStableJoin.lean
+│   └── PullbackStableJoinSurjective.lean
 ├── scripts/
 │   ├── check_axioms.lean
 │   ├── verify.sh
-│   └── verify_axioms.sh
-├── .github/workflows/lean.yml
+│   ├── verify_axioms.sh
+│   └── verify_all.sh
+├── .gitignore
+├── AqarionLean.lean
+├── LICENSE
+├── README.md
 ├── lakefile.lean
 ├── lean-toolchain
-├── README.md
-├── LICENSE
 └── SESSION_RECORD.md
