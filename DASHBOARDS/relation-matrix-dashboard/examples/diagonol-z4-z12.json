@@ -1,0 +1,9 @@
+{
+  "name": "Diagonal finite abelian group",
+  "matrix_convention": "A: Z^n -> Z^m; quotient is coker(A) = Z^m / im(A)",
+  "matrix": [
+    [4, 0],
+    [0, 12]
+  ],
+  "expected_structure": "Z/4Z ⊕ Z/12Z"
+}
