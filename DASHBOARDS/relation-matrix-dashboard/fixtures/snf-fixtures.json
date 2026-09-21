@@ -1,0 +1,108 @@
+
+***
+
+# `relation-matrix-dashboard/fixtures/snf-fixtures.json`
+
+```json
+{
+  "schema": "aqarion-snf-fixtures-v1",
+  "convention": "A: Z^n -> Z^m; output group is coker(A)=Z^m/im(A)",
+  "fixtures": [
+    {
+      "id": "SNF-001",
+      "name": "Cyclic quotient",
+      "matrix": [
+        [12, 4]
+      ],
+      "smith_diagonal": [4],
+      "free_rank": 0,
+      "torsion_invariant_factors": [4],
+      "finite": true,
+      "quotient_order": 4,
+      "cyclic": true
+    },
+    {
+      "id": "SNF-002",
+      "name": "Diagonal finite quotient",
+      "matrix": [
+        [4, 0],
+        [0, 12]
+      ],
+      "smith_diagonal": [4, 12],
+      "free_rank": 0,
+      "torsion_invariant_factors": [4, 12],
+      "finite": true,
+      "quotient_order": 48,
+      "cyclic": false
+    },
+    {
+      "id": "SNF-003",
+      "name": "Free plus torsion",
+      "matrix": [
+        [0],
+        [6]
+      ],
+      "smith_diagonal": [6],
+      "free_rank": 1,
+      "torsion_invariant_factors": [6],
+      "finite": false,
+      "quotient_order": null,
+      "cyclic": false
+    },
+    {
+      "id": "SNF-004",
+      "name": "Free rank two",
+      "matrix": [
+        [],
+        []
+      ],
+      "smith_diagonal": [],
+      "free_rank": 2,
+      "torsion_invariant_factors": [],
+      "finite": false,
+      "quotient_order": null,
+      "cyclic": false
+    },
+    {
+      "id": "SNF-005",
+      "name": "Non-cyclic elementary 2-group",
+      "matrix": [
+        [2, 0],
+        [0, 2]
+      ],
+      "smith_diagonal": [2, 2],
+      "free_rank": 0,
+      "torsion_invariant_factors": [2, 2],
+      "finite": true,
+      "quotient_order": 4,
+      "cyclic": false
+    },
+    {
+      "id": "SNF-006",
+      "name": "Trivial quotient",
+      "matrix": [
+        [1]
+      ],
+      "smith_diagonal": [1],
+      "free_rank": 0,
+      "torsion_invariant_factors": [],
+      "finite": true,
+      "quotient_order": 1,
+      "cyclic": true
+    },
+    {
+      "id": "SNF-007",
+      "name": "Mixed relation matrix",
+      "matrix": [
+        [2, 4],
+        [0, 6]
+      ],
+      "smith_diagonal": [2, 6],
+      "free_rank": 0,
+      "torsion_invariant_factors": [2, 6],
+      "finite": true,
+      "quotient_order": 12,
+      "cyclic": false
+    }
+  ]
+}
