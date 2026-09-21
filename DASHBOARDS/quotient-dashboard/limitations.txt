@@ -1,0 +1,12 @@
+Supported:
+- Finite abelian groups.
+- Finitely generated abelian groups.
+- Finite lists of subgroup generators.
+- Exact integer input.
+
+Not supported:
+- Arbitrary infinitely generated abelian groups.
+- Nonabelian quotients.
+- Automatic subgroup-membership proof from non-coordinate input.
+- Formal proof-assistant certification.
+- Action-orbit closure under one non-generating translation.
