@@ -1,0 +1,9 @@
+{
+  "name": "Free plus torsion",
+  "matrix_convention": "A: Z^n -> Z^m; quotient is coker(A) = Z^m / im(A)",
+  "matrix": [
+    [0],
+    [6]
+  ],
+  "expected_structure": "Z ⊕ Z/6Z"
+}
