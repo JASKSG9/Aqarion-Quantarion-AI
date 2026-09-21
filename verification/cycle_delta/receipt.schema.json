@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AQ-EVIDENCE-CORE Receipt",
+  "type": "object",
+
+  "required": [
+    "schema",
+    "claim_id",
+    "execution",
+    "crosscheck",
+    "negative_controls",
+    "formal",
+    "semantic",
+    "governance"
+  ],
+
+  "properties": {
+    "schema": {
+      "const": "AQ-EVIDENCE-CORE/1"
+    },
+
+    "claim_id": {
+      "type": "string"
+    },
+
+    "execution": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "FAIL",
+        "NOT_RUN",
+        "BLOCKED",
+        "UNKNOWN"
+      ]
+    },
+
+    "crosscheck": {
+      "type": "object",
+      "required": [
+        "direct_vs_factorized",
+        "factorized_vs_scalar",
+        "scalar_vs_theorem"
+      ],
+      "properties": {
+        "direct_vs_factorized": {
+          "enum": ["MATCH", "MISMATCH", "NOT_RUN"]
+        },
+        "factorized_vs_scalar": {
+          "enum": ["MATCH", "MISMATCH", "NOT_RUN"]
+        },
+        "scalar_vs_theorem": {
+          "enum": ["MATCH", "MISMATCH", "NOT_RUN"]
+        }
+      }
+    },
+
+    "negative_controls": {
+      "type": "object",
+      "additionalProperties": {
+        "enum": [
+          "DETECTED",
+          "NOT_DETECTED",
+          "NOT_RUN"
+        ]
+      }
+    },
+
+    "formal": {
+      "type": "string",
+      "enum": [
+        "PROVED",
+        "OPEN",
+        "FAILED"
+      ]
+    },
+
+    "semantic": {
+      "type": "string",
+      "enum": [
+        "ALIGNED",
+        "MISALIGNED",
+        "UNREVIEWED"
+      ]
+    },
+
+    "governance": {
+      "type": "string",
+      "enum": [
+        "PROMOTABLE",
+        "BLOCKED"
+      ]
+    }
+  }
+}
