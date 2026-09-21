@@ -1,0 +1,23 @@
+name: Lean
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install elan
+        run: curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none && echo "$HOME/.elan/bin" >> $GITHUB_PATH
+      - name: Build
+        run: lake build
+      - name: Verify no sorry in public library
+        run: scripts/verify.sh
+      - name: Verify all public theorems are axiom-free
+        run: scripts/verify_axioms.sh
