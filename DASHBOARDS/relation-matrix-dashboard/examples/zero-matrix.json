@@ -1,0 +1,9 @@
+{
+  "name": "Free rank two group",
+  "matrix_convention": "A: Z^0 -> Z^2; quotient is coker(A) = Z^2",
+  "matrix": [
+    [],
+    []
+  ],
+  "expected_structure": "Z^2"
+}
