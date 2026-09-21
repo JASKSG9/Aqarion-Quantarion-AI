@@ -1,0 +1,12 @@
+Supported:
+- Integer presentation matrices.
+- Finitely generated abelian quotient groups.
+- Exact BigInt arithmetic.
+- Smith normal form invariant factors.
+- Finite-order calculation when free rank is zero.
+
+Not supported:
+- Arbitrary non-finitely-generated abelian groups.
+- Nonabelian quotient groups.
+- Formal proof-assistant certification.
+- Large matrix performance guarantees.
