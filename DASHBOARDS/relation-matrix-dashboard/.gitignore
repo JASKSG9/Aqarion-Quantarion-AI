@@ -1,0 +1,22 @@
+
+***
+
+# `relation-matrix-dashboard/.gitignore`
+
+```gitignore
+# Generated dashboard evidence
+artifacts/*.json
+artifacts/*.log
+artifacts/*.sha256
+artifacts/*.txt
+artifacts/*.tmp
+
+# Preserve the tracked directory marker
+!artifacts/.gitkeep
+
+# Editor and operating-system noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
