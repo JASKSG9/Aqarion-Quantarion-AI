@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+  <meta
+    name="description"
+    content="AQARION Smith Normal Form dashboard for finitely generated abelian quotients."
+  >
+  <title>AQARION Smith Normal Form Dashboard</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="page-width">
+      <p class="eyebrow">AQARION · INTEGER PRESENTATION LAB</p>
+      <h1>Smith Normal Form Quotient Dashboard</h1>
+
+      <p class="lead">
+        Enter an integer relation matrix
+        <span class="math">A ∈ Mat(m × n, ℤ)</span>
+        and compute the finitely generated abelian quotient
+        <span class="math">coker(A) = ℤ<sup>m</sup> / im(A)</span>.
+      </p>
+
+      <div class="scope-banner">
+        <strong>Convention:</strong>
+        columns of <span class="math">A</span> are relation generators in
+        <span class="math">ℤ<sup>m</sup></span>. The dashboard computes the
+        quotient structure, not a proof-assistant certificate.
+      </div>
+    </div>
+  </header>
+
+  <main class="page-width dashboard">
+    <section class="control-card" aria-labelledby="matrix-input-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">INPUT</p>
+          <h2 id="matrix-input-title">Integer relation matrix</h2>
+        </div>
+
+        <button
+          class="tooltip-button"
+          type="button"
+          data-tooltip="Interpret A as a homomorphism A: ℤⁿ → ℤᵐ. Each column is a relation vector. The quotient group is coker(A)=ℤᵐ/im(A)."
+          aria-label="Explain the relation matrix convention"
+        >
+          ?
+        </button>
+      </div>
+
+      <div class="dimension-grid">
+        <label>
+          Ambient generators m
+          <input
+            id="rowCount"
+            type="number"
+            min="1"
+            max="10"
+            value="2"
+          >
+          <span class="field-help">
+            The quotient begins from (mathbb Z^m).
+          </span>
+        </label>
+
+        <label>
+          Relation columns n
+          <input
+            id="columnCount"
+            type="number"
+            min="0"
+            max="12"
+            value="1"
+          >
+          <span class="field-help">
+            Each column supplies one integer relation.
+          </span>
+        </label>
+      </div>
+
+      <div class="button-row">
+        <button id="resizeMatrixButton" class="secondary-button" type="button">
+          Resize matrix
+        </button>
+
+        <button id="computeButton" class="primary-button" type="button">
+          Compute Smith normal form
+        </button>
+
+        <button id="clearMatrixButton" class="secondary-button" type="button">
+          Clear matrix
+        </button>
+      </div>
+
+      <div class="preset-row">
+        <span class="preset-label">Experiment matrices</span>
+
+        <button
+          class="preset-button"
+          type="button"
+          data-preset="cyclic"
+        >
+          ℤ/12ℤ / ⟨4⟩
+        </button>
+
+        <button
+          class="preset-button"
+          type="button"
+          data-preset="diagonal"
+        >
+          ℤ/4ℤ ⊕ ℤ/12ℤ
+        </button>
+
+        <button
+          class="preset-button"
+          type="button"
+          data-preset="freeTorsion"
+        >
+          ℤ ⊕ ℤ/6ℤ
+        </button>
+
+        <button
+          class="preset-button"
+          type="button"
+          data-preset="zero"
+        >
+          Free group
+        </button>
+
+        <button
+          class="preset-button"
+          type="button"
+          data-preset="nonCyclic"
+        >
+          Non-cyclic quotient
+        </button>
+      </div>
+
+      <div class="matrix-workspace">
+        <div class="matrix-label-row">
+          <div>
+            <span class="matrix-label">A</span>
+            <span class="matrix-type">: ℤ<sup>n</sup> → ℤ<sup>m</sup></span>
+          </div>
+
+          <div id="matrixShape" class="matrix-shape">2 × 1</div>
+        </div>
+
+        <div id="matrixEditor" class="matrix-editor" aria-label="Integer relation matrix"></div>
+      </div>
+
+      <p class="input-note">
+        Use ordinary signed decimal integers. The displayed quotient is
+        <span class="math">ℤ<sup>m</sup>/im(A)</span>.
+      </p>
+    </section>
+
+    <section class="results-layout">
+      <article class="result-card main-result">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">SMITH NORMAL FORM</p>
+            <h2>Canonical decomposition</h2>
+          </div>
+
+          <button
+            class="tooltip-button"
+            type="button"
+            data-tooltip="If UAV=D=diag(d₁,…,dₖ,0,…,0) with dᵢ dividing dᵢ₊₁, then coker(A) ≅ ℤ^(m-k) ⊕ ⨁ᵢ ℤ/dᵢℤ. Factors dᵢ=1 are trivial and omitted."
+            aria-label="Explain Smith normal form decomposition"
+          >
+            ?
+          </button>
+        </div>
+
+        <div id="decompositionResult" class="empty-result">
+          Enter a matrix and choose “Compute Smith normal form.”
+        </div>
+      </article>
+
+      <aside class="explanation-card">
+        <p class="eyebrow">DIAGONAL GUIDE</p>
+        <h2>How (d_i) determine the group</h2>
+
+        <div class="diagonal-guide">
+          <div class="guide-item">
+            <span class="guide-symbol">0</span>
+            <div>
+              <strong>Free direction</strong>
+              <p>
+                Each missing nonzero diagonal pivot contributes one copy of
+                (mathbb Z) to the quotient.
+              </p>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <span class="guide-symbol">1</span>
+            <div>
+              <strong>Trivial factor</strong>
+              <p>
+                (mathbb Z/1mathbb Z) is trivial, so factors equal to
+                (1) are not shown in the final decomposition.
+              </p>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <span class="guide-symbol">d&gt;1</span>
+            <div>
+              <strong>Torsion factor</strong>
+              <p>
+                A diagonal entry (d) contributes the cyclic summand
+                (mathbb Z/dmathbb Z).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <div class="math-block">
+            [
+            operatorname{coker}(A)
+            cong
+            mathbb Z^{m-k}
+            oplus
+            \bigoplus_{d_i>1}
+            mathbb Z/d_imathbb Z.
+            ]
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="results-layout secondary-layout">
+      <article class="result-card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">PROJECTION</p>
+            <h2>Canonical projection map</h2>
+          </div>
+
+          <button
+            class="tooltip-button"
+            type="button"
+            data-tooltip="The canonical projection sends a vector x in ℤᵐ to its coset x+im(A). It is surjective. Its kernel is im(A)."
+            aria-label="Explain canonical projection"
+          >
+            ?
+          </button>
+        </div>
+
+        <div id="projectionResult" class="empty-result">
+          No matrix has been computed.
+        </div>
+      </article>
+
+      <article class="result-card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">INVARIANTS</p>
+            <h2>Rank and torsion tracker</h2>
+          </div>
+        </div>
+
+        <div id="invariantResult" class="empty-result">
+          No matrix has been computed.
+        </div>
+      </article>
+    </section>
+
+    <section class="result-card visualization-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">VISUALIZATION</p>
+          <h2>Canonical projection to quotient classes</h2>
+        </div>
+
+        <button
+          class="tooltip-button"
+          type="button"
+          data-tooltip="The left side is the ambient lattice ℤᵐ. The relation columns generate im(A), whose vectors become zero in the quotient. The projection identifies lattice points differing by an element of im(A)."
+          aria-label="Explain the projection visualization"
+        >
+          ?
+        </button>
+      </div>
+
+      <div id="projectionVisualization" class="projection-visualization">
+        <div class="empty-result">
+          Compute a matrix to visualize the quotient projection.
+        </div>
+      </div>
+    </section>
+
+    <section class="result-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">DETAILS</p>
+          <h2>Relation matrix and Smith diagonal</h2>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div>
+          <h3>Input relation matrix</h3>
+          <pre id="relationMatrixDisplay" class="matrix-display">—</pre>
+        </div>
+
+        <div>
+          <h3>Smith diagonal</h3>
+          <pre id="smithMatrixDisplay" class="matrix-display">—</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="notes-card">
+      <p class="eyebrow">SCOPE NOTES</p>
+      <h2>Interpretation boundaries</h2>
+
+      <ul>
+        <li>
+          The dashboard computes the cokernel
+          (operatorname{coker}(A)=mathbb Z^m/operatorname{im}(A)).
+        </li>
+        <li>
+          If (A) has (m) rows, the quotient has free rank
+          (m-operatorname{rank}(A)).
+        </li>
+        <li>
+          The quotient has finite order exactly when its free rank is zero.
+        </li>
+        <li>
+          If finite, its order is the product of its nontrivial invariant
+          factors.
+        </li>
+        <li>
+          The quotient is cyclic when it has at most one nontrivial torsion
+          factor and no free rank greater than one.
+        </li>
+        <li>
+          This is an exact finite-integer computation, but it is not a Lean,
+          Coq, or other proof-assistant formalization.
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <div id="tooltip" class="tooltip hidden" role="tooltip"></div>
+
+  <footer class="site-footer">
+    AQARION Smith Normal Form Dashboard · finitely generated abelian quotient scope
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+  </html>
