@@ -1,0 +1,72 @@
+
+# `.github/workflows/quotient-dashboard-check.yml`
+
+```yaml
+name: AQARION Quotient Dashboard Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "quotient-dashboard/**"
+      - ".github/workflows/quotient-dashboard-check.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "quotient-dashboard/**"
+      - ".github/workflows/quotient-dashboard-check.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-dashboard-check:
+    name: Static dashboard integrity
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify dashboard files
+        run: |
+          set -euo pipefail
+          test -f quotient-dashboard/index.html
+          test -f quotient-dashboard/styles.css
+          test -f quotient-dashboard/app.js
+          test -f quotient-dashboard/README.md
+
+      - name: Check JavaScript syntax
+        run: |
+          set -euo pipefail
+          node --check quotient-dashboard/app.js
+
+      - name: Check expected dashboard labels
+        run: |
+          set -euo pipefail
+          grep -F "Quotient Structures Dashboard" quotient-dashboard/index.html
+          grep -F "Smith normal form" quotient-dashboard/index.html
+          grep -F "Identity preservation tracker" quotient-dashboard/index.html
+          grep -F "Canonical projection" quotient-dashboard/index.html
+          grep -F "G/H" quotient-dashboard/README.md
+
+      - name: Create integrity receipt
+        run: |
+          set -euo pipefail
+          {
+            echo "timestamp_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "git_head=$(git rev-parse HEAD)"
+            sha256sum \
+              quotient-dashboard/index.html \
+              quotient-dashboard/styles.css \
+              quotient-dashboard/app.js \
+              quotient-dashboard/README.md
+          } > quotient-dashboard/dashboard-receipt.sha256
+
+      - name: Upload dashboard receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: quotient-dashboard-receipt-${{ github.run_id }}
+          if-no-files-found: error
+          path: quotient-dashboard/dashboard-receipt.sha256
