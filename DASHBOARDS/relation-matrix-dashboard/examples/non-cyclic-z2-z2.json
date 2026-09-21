@@ -1,0 +1,17 @@
+{
+  "schema": "aqarion-relation-matrix-v1",
+  "name": "Non-cyclic finite quotient Z/2Z direct sum Z/2Z",
+  "convention": "A: Z^n -> Z^m; output group is coker(A)=Z^m/im(A)",
+  "matrix": [
+    [2, 0],
+    [0, 2]
+  ],
+  "expected": {
+    "smith_diagonal": [2, 2],
+    "free_rank": 0,
+    "torsion_invariant_factors": [2, 2],
+    "canonical_structure": "Z/2Z ⊕ Z/2Z",
+    "finite": true,
+    "quotient_order": 4
+  }
+}
