@@ -1,0 +1,30 @@
+name: AQ-CYCLE-DELTA-001 Verification
+
+on:
+  push:
+    paths:
+      - "verification/cycle_delta/**"
+      - ".github/workflows/verify-cycle-delta.yml"
+  pull_request:
+    paths:
+      - "verification/cycle_delta/**"
+      - ".github/workflows/verify-cycle-delta.yml"
+  workflow_dispatch:
+
+jobs:
+  cycle-delta:
+    name: Exact Three-Layer Cycle-Delta Verification
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run AQ-CYCLE-DELTA-001 verifier
+        run: |
+          python3 verification/cycle_delta/verify_cycle_delta_compact.py
