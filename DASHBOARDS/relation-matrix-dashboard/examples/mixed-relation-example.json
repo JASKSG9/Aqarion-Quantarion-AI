@@ -1,0 +1,17 @@
+{
+  "schema": "aqarion-relation-matrix-v1",
+  "name": "Mixed two-generator relation example",
+  "convention": "A: Z^n -> Z^m; output group is coker(A)=Z^m/im(A)",
+  "matrix": [
+    [2, 4],
+    [0, 6]
+  ],
+  "expected": {
+    "smith_diagonal": [2, 6],
+    "free_rank": 0,
+    "torsion_invariant_factors": [2, 6],
+    "canonical_structure": "Z/2Z ⊕ Z/6Z",
+    "finite": true,
+    "quotient_order": 12
+  }
+}
