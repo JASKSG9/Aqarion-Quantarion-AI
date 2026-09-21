@@ -1,0 +1,95 @@
+name: AQARION Relation Matrix Dashboard Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "relation-matrix-dashboard/**"
+      - ".github/workflows/relation-matrix-dashboard-check.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "relation-matrix-dashboard/**"
+      - ".github/workflows/relation-matrix-dashboard-check.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dashboard-check:
+    name: Relation matrix dashboard integrity
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify required dashboard files
+        run: |
+          set -euo pipefail
+          test -f relation-matrix-dashboard/index.html
+          test -f relation-matrix-dashboard/styles.css
+          test -f relation-matrix-dashboard/app.js
+          test -f relation-matrix-dashboard/README.md
+          test -f relation-matrix-dashboard/examples/cyclic-z12-mod-4.json
+          test -f relation-matrix-dashboard/examples/diagonal-z4-z12.json
+          test -f relation-matrix-dashboard/examples/free-plus-torsion.json
+          test -f relation-matrix-dashboard/examples/zero-matrix.json
+
+      - name: Validate example JSON
+        run: |
+          set -euo pipefail
+          python -m json.tool \
+            relation-matrix-dashboard/examples/cyclic-z12-mod-4.json \
+            > /dev/null
+          python -m json.tool \
+            relation-matrix-dashboard/examples/diagonal-z4-z12.json \
+            > /dev/null
+          python -m json.tool \
+            relation-matrix-dashboard/examples/free-plus-torsion.json \
+            > /dev/null
+          python -m json.tool \
+            relation-matrix-dashboard/examples/zero-matrix.json \
+            > /dev/null
+
+      - name: Check JavaScript syntax
+        run: |
+          set -euo pipefail
+          node --check relation-matrix-dashboard/app.js
+
+      - name: Check expected dashboard labels
+        run: |
+          set -euo pipefail
+          grep -F "Smith Normal Form Quotient Dashboard" \
+            relation-matrix-dashboard/index.html
+          grep -F "Canonical projection map" \
+            relation-matrix-dashboard/index.html
+          grep -F "Integer relation matrix" \
+            relation-matrix-dashboard/index.html
+          grep -F "coker(A)" \
+            relation-matrix-dashboard/README.md
+
+      - name: Create dashboard receipt
+        run: |
+          set -euo pipefail
+          {
+            echo "timestamp_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "git_head=$(git rev-parse HEAD)"
+            sha256sum \
+              relation-matrix-dashboard/index.html \
+              relation-matrix-dashboard/styles.css \
+              relation-matrix-dashboard/app.js \
+              relation-matrix-dashboard/README.md \
+              relation-matrix-dashboard/examples/cyclic-z12-mod-4.json \
+              relation-matrix-dashboard/examples/diagonal-z4-z12.json \
+              relation-matrix-dashboard/examples/free-plus-torsion.json \
+              relation-matrix-dashboard/examples/zero-matrix.json
+          } > relation-matrix-dashboard/dashboard-receipt.sha256
+
+      - name: Upload dashboard receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: relation-matrix-dashboard-receipt-${{ github.run_id }}
+          if-no-files-found: error
+          path: relation-matrix-dashboard/dashboard-receipt.sha256
