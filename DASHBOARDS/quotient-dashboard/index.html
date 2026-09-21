@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+  <meta
+    name="description"
+    content="AQARION interactive quotient structures dashboard for cyclic and finitely generated abelian groups."
+  >
+  <title>AQARION Quotient Structures Dashboard</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="header-content">
+      <p class="eyebrow">AQARION · FINITE ALGEBRA LAB</p>
+      <h1>Quotient Structures Dashboard</h1>
+      <p class="lead">
+        Compare cyclic quotients
+        <span class="math">ℤ/nℤ</span>
+        with arbitrary finitely generated abelian quotients
+        <span class="math">G/H</span>.
+      </p>
+
+      <div class="governance-banner">
+        <strong>Scope:</strong>
+        finite and finitely generated abelian groups only.
+        Smith normal form output is exact integer-presentation computation.
+        This dashboard is not a formal proof certificate.
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-shell">
+    <section class="mode-panel" aria-labelledby="mode-heading">
+      <div>
+        <p class="section-kicker">MODEL</p>
+        <h2 id="mode-heading">Choose quotient model</h2>
+      </div>
+
+      <div class="mode-buttons" role="tablist" aria-label="Group model">
+        <button
+          id="cyclicModeButton"
+          class="mode-button active"
+          type="button"
+          role="tab"
+          aria-selected="true"
+        >
+          Cyclic: ℤ/nℤ
+        </button>
+
+        <button
+          id="generalModeButton"
+          class="mode-button"
+          type="button"
+          role="tab"
+          aria-selected="false"
+        >
+          General: G/H
+        </button>
+      </div>
+    </section>
+
+    <section
+      id="cyclicPanel"
+      class="input-panel"
+      aria-labelledby="cyclic-heading"
+    >
+      <div class="panel-heading">
+        <div>
+          <p class="section-kicker">CYCLIC QUOTIENT</p>
+          <h2 id="cyclic-heading">Compute ((ℤ/nℤ)/langle d
+angle)</h2>
+        </div>
+
+        <button
+          class="tooltip-button"
+          type="button"
+          aria-label="Explain cyclic quotient behavior"
+          data-tooltip="
+In a cyclic group every subgroup is cyclic. If H = ⟨d⟩ inside ℤ/nℤ,
+then the quotient is cyclic:
+
+(ℤ/nℤ)/⟨d⟩ ≅ ℤ/gcd(n,d)ℤ.
+
+The number of cosets is gcd(n,d).
+"
+        >
+          ?
+        </button>
+      </div>
+
+      <div class="form-grid two-columns">
+        <label>
+          Modulus n
+          <input
+            id="cyclicN"
+            type="number"
+            min="1"
+            step="1"
+            value="12"
+          >
+        </label>
+
+        <label>
+          Subgroup generator d
+          <input
+            id="cyclicD"
+            type="number"
+            min="0"
+            step="1"
+            value="4"
+          >
+        </label>
+      </div>
+
+      <div class="button-row">
+        <button id="runCyclicButton" class="primary-button" type="button">
+          Compute cyclic quotient
+        </button>
+
+        <button id="loadCyclicExampleButton" class="secondary-button" type="button">
+          Load example: ℤ/12ℤ / ⟨4⟩
+        </button>
+      </div>
+
+      <div class="inline-note">
+        The generator is reduced modulo <span class="math">n</span>.
+        For <span class="math">d=0</span>,
+        <span class="math">H={0}</span> and the quotient is unchanged.
+      </div>
+    </section>
+
+    <section
+      id="generalPanel"
+      class="input-panel hidden"
+      aria-labelledby="general-heading"
+    >
+      <div class="panel-heading">
+        <div>
+          <p class="section-kicker">FINITELY GENERATED ABELIAN QUOTIENT</p>
+          <h2 id="general-heading">Compute (G/H) by Smith normal form</h2>
+        </div>
+
+        <button
+          class="tooltip-button"
+          type="button"
+          aria-label="Explain finitely generated abelian quotient behavior"
+          data-tooltip="
+Represent G as ℤ^r ⊕ ℤ/n₁ℤ ⊕ ... ⊕ ℤ/n_tℤ.
+
+Add the torsion relations and the entered subgroup generators as columns
+of an integer relation matrix. Smith normal form gives the invariant factors
+of G/H.
+
+A quotient of a finitely generated abelian group is finitely generated
+abelian, but it need not be cyclic.
+"
+        >
+          ?
+        </button>
+      </div>
+
+      <div class="form-grid two-columns">
+        <label>
+          Free rank r
+          <input
+            id="freeRank"
+            type="number"
+            min="0"
+            step="1"
+            value="0"
+          >
+        </label>
+
+        <label>
+          Torsion invariant factors
+          <input
+            id="torsionInvariants"
+            type="text"
+            value="12,18"
+            placeholder="Example: 4,12,60"
+          >
+          <span class="field-help">
+            Enter integers greater than 1, separated by commas.
+          </span>
+        </label>
+      </div>
+
+      <div class="subgroup-input-header">
+        <div>
+          <h3>Subgroup generators for H</h3>
+          <p>
+            Each row is one integer coordinate vector in the displayed basis of
+            <span class="math">G</span>.
+          </p>
+        </div>
+
+        <button id="addGeneratorButton" class="secondary-button" type="button">
+          Add generator
+        </button>
+      </div>
+
+      <div class="basis-card">
+        <span class="basis-label">Current coordinate basis</span>
+        <code id="basisDisplay">e₁, e₂</code>
+      </div>
+
+      <div id="subgroupGeneratorRows" class="generator-table"></div>
+
+      <div class="button-row">
+        <button id="runGeneralButton" class="primary-button" type="button">
+          Compute quotient G/H
+        </button>
+
+        <button id="loadGeneralExampleButton" class="secondary-button" type="button">
+          Load example: ℤ/12ℤ ⊕ ℤ/18ℤ / ⟨(4,6)⟩
+        </button>
+      </div>
+
+      <div class="inline-note">
+        The dashboard computes the quotient presentation
+        <span class="math">ℤ^q / L</span>,
+        where <span class="math">L</span> includes both torsion relations
+        and the entered subgroup-generator relations.
+      </div>
+    </section>
+
+    <section class="filter-panel" aria-labelledby="filter-heading">
+      <div>
+        <p class="section-kicker">FILTERS</p>
+        <h2 id="filter-heading">Structural filters</h2>
+      </div>
+
+      <div class="filter-grid">
+        <label>
+          Quotient rank filter
+          <select id="rankFilter">
+            <option value="all">All ranks</option>
+            <option value="finite">Finite quotients only</option>
+            <option value="positive">Positive free rank only</option>
+            <option value="zero">Free rank 0 only</option>
+          </select>
+        </label>
+
+        <label>
+          Torsion filter
+          <select id="torsionFilter">
+            <option value="all">All torsion profiles</option>
+            <option value="torsion-free">Torsion-free only</option>
+            <option value="has-torsion">Has nontrivial torsion</option>
+            <option value="cyclic">Cyclic quotient only</option>
+            <option value="noncyclic">Non-cyclic quotient only</option>
+          </select>
+        </label>
+      </div>
+
+      <p id="filterMessage" class="filter-message">
+        Filters apply to the most recently computed quotient.
+      </p>
+    </section>
+
+    <section class="results-grid" aria-live="polite">
+      <article class="result-card wide-card">
+        <div class="card-heading">
+          <div>
+            <p class="section-kicker">STRUCTURE</p>
+            <h2>Quotient decomposition</h2>
+          </div>
+
+          <button
+            class="tooltip-button"
+            type="button"
+            aria-label="Explain invariant-factor decomposition"
+            data-tooltip="
+Every finitely generated abelian group has the form
+
+ℤ^r ⊕ ℤ/n₁ℤ ⊕ ... ⊕ ℤ/n_tℤ,
+
+where n₁ divides n₂ divides ... divides n_t.
+
+Smith normal form computes these factors from an integer relation matrix.
+"
+          >
+            ?
+          </button>
+        </div>
+
+        <div id="structureResult" class="result-placeholder">
+          Choose a model and compute a quotient.
+        </div>
+      </article>
+
+      <article class="result-card">
+        <div class="card-heading">
+          <div>
+            <p class="section-kicker">PROJECTION</p>
+            <h2>Canonical map</h2>
+          </div>
+
+          <button
+            class="tooltip-button"
+            type="button"
+            aria-label="Explain canonical quotient projection"
+            data-tooltip="
+The quotient projection is always:
+
+π : G → G/H
+π(g) = g + H.
+
+It is surjective and has kernel H.
+"
+          >
+            ?
+          </button>
+        </div>
+
+        <div id="projectionResult" class="result-placeholder">
+          No quotient has been computed.
+        </div>
+      </article>
+
+      <article class="result-card">
+        <div class="card-heading">
+          <div>
+            <p class="section-kicker">IDENTITY</p>
+            <h2>Identity preservation tracker</h2>
+          </div>
+
+          <button
+            class="tooltip-button"
+            type="button"
+            aria-label="Explain identity preservation"
+            data-tooltip="
+The identity element of the ambient additive group is 0_G.
+
+Under the quotient map:
+
+π(0_G) = H,
+
+and H is the identity coset of G/H.
+"
+          >
+            ?
+          </button>
+        </div>
+
+        <div id="identityResult" class="result-placeholder">
+          No quotient has been computed.
+        </div>
+      </article>
+
+      <article class="result-card">
+        <div class="card-heading">
+          <div>
+            <p class="section-kicker">PROPAGATION</p>
+            <h2>Property tracker</h2>
+          </div>
+        </div>
+
+        <div id="propertyResult" class="result-placeholder">
+          No quotient has been computed.
+        </div>
+      </article>
+
+      <article class="result-card wide-card">
+        <div class="card-heading">
+          <div>
+            <p class="section-kicker">PROJECTION VISUALIZATION</p>
+            <h2>Ambient group to quotient cosets</h2>
+          </div>
+        </div>
+
+        <div id="projectionVisualization" class="projection-visualization">
+          <div class="visualization-placeholder">
+            Compute a quotient to render the canonical projection.
+          </div>
+        </div>
+      </article>
+
+      <article class="result-card wide-card">
+        <div class="card-heading">
+          <div>
+            <p class="section-kicker">COMPARISON</p>
+            <h2>Cyclic versus general quotient behavior</h2>
+          </div>
+        </div>
+
+        <div class="comparison-table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Cyclic quotient</th>
+                <th>General finitely generated abelian quotient</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ambient group</td>
+                <td>(mathbb Z/nmathbb Z)</td>
+                <td>(mathbb Z^roplus\bigoplus_imathbb Z/n_imathbb Z)</td>
+              </tr>
+              <tr>
+                <td>Projection</td>
+                <td>(pi(x)=x+langle d
+angle)</td>
+                <td>(pi(g)=g+H)</td>
+              </tr>
+              <tr>
+                <td>Identity image</td>
+                <td>(pi(0)=langle d
+angle)</td>
+                <td>(pi(0_G)=H)</td>
+              </tr>
+              <tr>
+                <td>Kernel</td>
+                <td>(kerpi=langle d
+angle)</td>
+                <td>(kerpi=H)</td>
+              </tr>
+              <tr>
+                <td>Quotient structure</td>
+                <td>Always cyclic</td>
+                <td>May be cyclic or non-cyclic</td>
+              </tr>
+              <tr>
+                <td>Finite order</td>
+                <td>(|G/H|=gcd(n,d))</td>
+                <td>(|G/H|=|G|/|H|) when finite</td>
+              </tr>
+              <tr>
+                <td>Algorithm</td>
+                <td>GCD arithmetic</td>
+                <td>Smith normal form of a presentation matrix</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="notes-panel">
+      <p class="section-kicker">BOUNDARY CONDITIONS</p>
+      <h2>Interpretation notes</h2>
+
+      <ul>
+        <li>
+          Every subgroup of an abelian group is normal, so every subgroup
+          <span class="math">H≤G</span> defines a quotient group
+          <span class="math">G/H</span>.
+        </li>
+        <li>
+          The quotient is finite exactly when its Smith-normal-form
+          decomposition has free rank zero.
+        </li>
+        <li>
+          A quotient of a cyclic group is cyclic. A quotient of a non-cyclic
+          finitely generated abelian group may be cyclic or non-cyclic.
+        </li>
+        <li>
+          The quotient free rank cannot exceed the ambient free rank.
+        </li>
+        <li>
+          Torsion-free ambient groups can have torsion quotients, for example
+          <span class="math">ℤ/2ℤ</span> is a quotient of
+          <span class="math">ℤ</span>.
+        </li>
+        <li>
+          A single translation action only produces global coset closure when
+          its translation generators span the ambient group. This dashboard
+          computes algebraic quotients, not action-orbit closure by itself.
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <div id="tooltip" class="tooltip hidden" role="tooltip"></div>
+
+  <footer class="site-footer">
+    AQARION Quotient Structures Dashboard · finite and finitely generated abelian scope
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
