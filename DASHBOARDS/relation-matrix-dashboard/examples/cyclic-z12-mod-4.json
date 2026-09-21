@@ -1,0 +1,10 @@
+
+## `relation-matrix-dashboard/examples/cyclic-z12-mod-4.json`
+
+```json
+{
+  "name": "Cyclic quotient: Z/12Z modulo <4>",
+  "matrix_convention": "A: Z^n -> Z^m; quotient is coker(A) = Z^m / im(A)",
+  "matrix": [[12, 4]],
+  "expected_structure": "Z/4Z"
+}
