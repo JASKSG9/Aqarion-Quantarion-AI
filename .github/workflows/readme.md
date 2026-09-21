@@ -1,4 +1,42 @@
-#.github/workflows
+# AQARION CI Verification Policy
+
+Every verification workflow must execute the actual artifact.
+
+A workflow MUST NOT replace an executable verification step with:
+
+- a prose assertion;
+- a hard-coded expected PASS;
+- a grep against a fabricated output;
+- a second implementation copied directly from the first;
+- an unexecuted placeholder.
+
+The CI result is evidence of execution only.
+
+---
+
+## Reference pattern
+
+```yaml
+name: AQ-ARTIFACT Verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Execute artifact
+        run: python3 PATH/TO/ACTUAL_ARTIFACT.py
 
 ## Purpose
 Executable CI surface for AQARION / QUANTARION-AI hub.
