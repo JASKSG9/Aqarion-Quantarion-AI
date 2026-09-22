@@ -1,0 +1,57 @@
+{
+"schema_version": "1.0",
+"certificate_type": "computational_verification_receipt",
+"project": "AQARION-ARITHMETIC",
+"date": "2026-09-22",
+"operator_convention": "K[i,T(i)] = 1",
+"governance": {
+"computation_is_proof": false,
+"c4": "BLOCKED",
+"publication_promotion": "BLOCKED",
+"lean": "OPEN"
+},
+"layer_1": {
+"status": "PASS",
+"canonical_trials": 5000,
+"canonical_passes": 5000,
+"mutant_trials": 5000,
+"mutant_passes": 0,
+"mutation_detected": true,
+"evidence_class": "SUP"
+},
+"layer_2": {
+"status": "PASS",
+"r1_brt": {
+"trials": 200,
+"passes": 200,
+"status": "PASS"
+},
+"r2_aq001": {
+"violations": 0,
+"status": "PASS",
+"scope": "tested_partition_instances"
+},
+"r3_depth_partition": {
+"rank": 0,
+"status": "PASS"
+},
+"r4_frobenius": {
+"tested_cases": 90,
+"failures": 0,
+"status": "PASS"
+}
+},
+"layer_3": {
+"status": "EXPLORATORY",
+"promotion": "NONE"
+},
+"mathematical_claims": {
+"abstract_bipartite_support_envelope": "THEOREM",
+"aqarion_exact_support_spectrum": "OPEN",
+"k2_2_abstract_obstruction": "THEOREM",
+"aqarion_k2_2_realizability": "OPEN",
+"pullback_quotient_bijection": "REFUTED",
+"pullback_join_stability": "OPEN"
+}
+}
+
