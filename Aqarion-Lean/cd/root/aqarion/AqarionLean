@@ -1,0 +1,57 @@
+cd /root/aqarion/AqarionLean
+
+cat > .github/workflows/lean.yml <<'EOF'
+name: Lean
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Lean build and proof gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install elan
+        run: |
+          set -eu
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Install pinned Lean toolchain
+        run: |
+          set -eu
+          TOOLCHAIN="$(cat lean-toolchain)"
+          elan toolchain install "$TOOLCHAIN"
+          lean --version
+          lake --version
+
+      - name: Build public Lean library
+        run: |
+          set -eu
+          lake build
+
+      - name: Verify public source has no sorry or admit
+        run: |
+          set -eu
+          chmod +x scripts/verify.sh
+          scripts/verify.sh
+
+      - name: Verify public theorem axiom policy
+        run: |
+          set -eu
+          chmod +x scripts/verify_axioms.sh
+          scripts/verify_axioms.sh
+EOF
