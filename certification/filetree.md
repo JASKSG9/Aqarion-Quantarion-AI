@@ -1,321 +1,205 @@
-Certification file tree
+AQARION Research File Tree
 
 
-Repository: AQARION-ARITHMETIC
-
-Certification scope: verification, receipts, governance status, and certification metadata
-
-Status: working deliverable tree
-
-Authority: this file describes the intended certification package; it is not itself a certification result.
+September 22, 2026
 
 
-certification/
-├── file_tree.md
+aqarion-arithmetic/
 │
-├── layer_1_mutation_receipt.txt
-│   └── Correct Koopman operator vs mutated transfer operator
-│       ├── correct implementation: 5000/5000 pass
-│       ├── mutant implementation: 0/5000 pass
-│       └── mutation detected: true
+├── README.md
+├── CHECKPOINT.md
+├── CLAIMS.md
+├── STATUS.md
+├── FILE_TREE.md
 │
-├── layer_2_canonical_receipt.txt
-│   ├── R1: BRT rank = m - c_bip
-│   │   └── 200-trial computational receipt
-│   ├── R2: AQ-001 D = 0 ↔ congruence
-│   │   └── 2-partition regression receipt
-│   ├── R3: depth partition rank
-│   │   └── computational receipt for the canonical depth partition
-│   └── R4: Frobenius identity
-│       └── 90-case exact regression receipt
+├── governance/
+│   ├── evidence-policy.md
+│   ├── claim-status.md
+│   ├── audit-policy.md
+│   ├── promotion-policy.md
+│   ├── no-computation-as-proof.md
+│   └── reproducibility-policy.md
 │
-├── layer_3_exploratory.md
-│   ├── support-spectrum workload
-│   ├── T10 workload
-│   ├── exploratory results
-│   └── explicit non-promotion status
+├── theory/
+│   ├── definitions.md
+│   ├── finite-dynamics.md
+│   ├── partition-lattice.md
+│   ├── equivalence-relations.md
+│   ├── kernel-pairs.md
+│   ├── congruences.md
+│   ├── behavioral-refinement.md
+│   ├── quotient-descent.md
+│   ├── invariant-subspaces.md
+│   ├── koopman-operator.md
+│   ├── koopman-convention.md
+│   ├── defect-operator.md
+│   ├── defect-kernel.md
+│   ├── incidence-graph.md
+│   ├── marked-support.md
+│   ├── support-curvature.md
+│   ├── cycle-rank.md
+│   ├── support-spectrum-theorem.md
+│   ├── support-spectrum-constructions.md
+│   └── backward-closure.md
 │
-└── aqarion_certificate.json
-    ├── certification layers
-    ├── governance state
-    ├── reproducibility state
-    ├── formalization state
-    └── publication state
+├── theorems/
+│   ├── t0-definitions.md
+│   ├── t1-factor-map.md
+│   ├── t2-invariant-subspace.md
+│   ├── t3-defect-zero.md
+│   ├── t4-transport-identity.md
+│   ├── t5-closure-properties.md
+│   ├── t6-meet-join-relation.md
+│   ├── t7-closure-loss.md
+│   ├── t8-support-graph-identity.md
+│   ├── t9-support-curvature.md
+│   ├── t10-c3-nonnegativity.md
+│   ├── t11-c3-exact-spectrum.md
+│   ├── t12-general-support-spectrum.md
+│   ├── t13-first-negative-support.md
+│   └── t14-finite-backward-closure.md
+│
+├── transport/
+│   ├── transport-identity.md
+│   ├── delta-definition.md
+│   ├── mt-definition.md
+│   ├── mt-zero-equivalence.md
+│   ├── delta-equals-kappa.md
+│   └── witnesses.md
+│
+├── witnesses/
+│   ├── README.md
+│   ├── n8/
+│   │   ├── witness.json
+│   │   └── receipt.md
+│   ├── n14/
+│   │   ├── witness.json
+│   │   └── receipt.md
+│   ├── p5/
+│   │   └── receipt.md
+│   └── k2_2/
+│       ├── witness.json
+│       └── receipt.md
+│
+├── kaprekar/
+│   ├── definitions.md
+│   ├── digit-map.md
+│   ├── gap-projection.md
+│   ├── semiconjugacy.md
+│   ├── q54-quotient.md
+│   ├── q55-null-inclusive.md
+│   ├── image-chains.md
+│   ├── spectrum.md
+│   └── universal-bases.md
+│
+├── audits/
+│   ├── audit-ledger.md
+│   ├── adversarial-findings.md
+│   ├── counterexamples.md
+│   ├── claim-downgrades.md
+│   ├── refuted-claims.md
+│   └── open-claims.md
+│
+├── audits/
+│   └── pullback/
+│       ├── quotient-bijection-refuted.md
+│       └── kernel-pair-correction.md
+│
+├── certification/
+│   ├── aqarion-certificate.json
+│   ├── layer-1-mutation-receipt.md
+│   ├── layer-2-canonical-receipt.md
+│   ├── layer-3-exploratory.md
+│   ├── reproducibility-contract.md
+│   └── hashes.md
+│
+├── tests/
+│   ├── mutation_test.py
+│   ├── test_brt_q54.py
+│   ├── test_aq001.py
+│   ├── test_depth_exact.py
+│   ├── test_frob_equal.py
+│   ├── support_spectrum.py
+│   └── test_t10.py
+│
+├── lean/
+│   ├── README.md
+│   ├── SupportSpectrum.lean
+│   ├── Transport.lean
+│   ├── Defect.lean
+│   └── BackwardClosure.lean
+│
+├── literature/
+│   └── source-matrix.md
+│
+├── open-problems/
+│   ├── pullback-join-stability.md
+│   ├── lean-support-spectrum.md
+│   └── general-quotient-theory.md
+│
+├── archive/
+│   ├── disproved/
+│   │   ├── quotient-bijection.md
+│   │   ├── submodularity-route.md
+│   │   ├── commutator-shortcut.md
+│   │   └── invariant-kernel-assumption.md
+│   └── superseded/
+│       ├── old-c3-bound.md
+│       ├── old-support-counts.md
+│       └── old-quotient-model.md
+│
+└── .github/
+    └── workflows/
+        └── aqarion-ci.yml
 
 
 
-Certification boundary
+Execution rule
 
 
-The certification/ directory contains receipts and certification metadata.
+.github/workflows/aqarion-ci.yml is the executable GitHub Actions workflow.
 
 
-It does not contain:
+A copy under ci/ is documentation only and must not be treated as an active workflow.
 
 
+Naming rule
 
 
-canonical theorem definitions;
+All newly introduced paths use lowercase names.
 
 
-research proofs;
+Existing legacy paths are not silently renamed by this specification.
 
 
-experimental source code;
+A capitalization migration is a separate repository operation.
 
 
-Lean proofs;
+Physical-existence rule
 
 
-literature reviews;
+This file describes the target research organization.
 
 
-raw witness construction;
+It does not assert that every listed artifact currently exists.
 
 
-publication manuscripts.
+The current repository must be reconciled against this tree before any commit.
 
 
+Promotion rule
 
 
-Those belong to their respective repository directories.
+Only artifacts with an explicit evidence class and claim status may enter the active theorem/certification spine.
 
+Yes. For now, only create this one file in the canonical repo:
 
-Evidence classification
 
+AQARION-ARITHMETIC/certification/file_tree.md
 
 
+This is the complete certification subtree for the deliverables we just defined; it does not claim that unrelated files elsewhere in the repository already exist.
 
-Artifact
-Evidence type
-Certification role
 
-
-
-
-layer_1_mutation_receipt.txt
-computational verification
-mutation gate
-
-
-layer_2_canonical_receipt.txt
-computational verification
-canonical regression gate
-
-
-layer_3_exploratory.md
-exploratory computation
-non-promotion evidence
-
-
-aqarion_certificate.json
-governance metadata
-machine-readable status
-
-
-file_tree.md
-documentation
-package structure only
-
-
-
-
-Layer 1 — mutation gate
-
-
-layer_1_mutation_receipt.txt
-
-
-
-Records whether the test suite distinguishes the canonical Koopman implementation from the intentionally mutated implementation.
-
-
-A passing mutation gate demonstrates mutation detection for the specified test workload. It does not constitute a mathematical proof of the underlying Koopman theorem.
-
-
-Layer 2 — canonical receipts
-
-
-layer_2_canonical_receipt.txt
-
-
-
-Contains the four canonical regression receipts:
-
-
-R1  BRT rank = m - c_bip
-R2  AQ-001 D = 0 ↔ congruence
-R3  depth-partition rank
-R4  Frobenius identity
-
-
-
-The receipt must preserve the actual workload size and method.
-
-
-In particular:
-
-
-
-
-R1 is a 200-trial computational receipt, not an exhaustive proof.
-
-
-R2 is a two-partition regression, not a universal exhaustive test.
-
-
-R3 is a computational verification of the canonical depth partition.
-
-
-R4 contains the 90 specified cases.
-
-
-
-
-Layer 3 — exploratory workload
-
-
-layer_3_exploratory.md
-
-
-
-Contains support-spectrum and T10 exploratory computations.
-
-
-Layer 3 is explicitly not promotion-grade certification until the associated assertions, exact definitions, and realization conditions are closed.
-
-
-Machine-readable certification state
-
-
-aqarion_certificate.json
-
-
-
-The certificate records status rather than asserting unsupported mathematical conclusions.
-
-
-It must distinguish at minimum:
-
-
-PASS
-WORKLOAD
-OPEN
-BLOCKED
-QUARANTINED
-
-
-
-It must not encode:
-
-
-PROVED
-CERTIFIED
-PUBLISHED
-
-
-
-unless the corresponding governance and evidence conditions have actually been satisfied.
-
-
-Certification exclusions
-
-
-The following are intentionally outside this directory:
-
-
-tests/
-theory/
-audits/
-witnesses/
-lean/
-literature/
-open_problems/
-governance/
-reproducibility/
-
-
-
-Those directories contain the evidence or definitions consumed by certification; they are not themselves certification receipts.
-
-
-Current governance boundary
-
-
-Layer 1 mutation       PASS
-Layer 2 canonical      PASS
-Layer 3 exploratory    WORKLOAD / NOT FROZEN
-
-C3                      OPEN
-C4                      BLOCKED
-Publication             BLOCKED
-Lean                    OPEN
-SDS-002                 FROZEN-QUARANTINED
-EK-001                  QUARANTINED
-Repository mutation     NONE
-
-
-
-These statuses describe the certification package state and must be updated only when new evidence changes the corresponding gate.
-
-
-Reproducibility requirement
-
-
-Every future certification receipt should identify:
-
-
-
-
-specification or claim identifier;
-
-
-specification digest where applicable;
-
-
-exact input/workload;
-
-
-implementation identifier;
-
-
-execution environment;
-
-
-reference execution;
-
-
-reproduction execution;
-
-
-reproduction relationship;
-
-
-output digest;
-
-
-evidence classification;
-
-
-governance disposition.
-
-
-
-
-A matching output is evidence of reproducibility only when the executions satisfy the stated independence/reproduction contract.
-
-
-A rerun of the same implementation is not an independent reproduction.
-
-
-File-tree rule
-
-
-This tree is authoritative only for the certification package.
-
-
-It does not imply that every referenced file currently exists.
-
-
-A file becomes a certification artifact only when its contents have been created, executed where required, inspected, and assigned an evidence status.
+Create exactly that file for now: certification/file_tree.md. No other repo or directory needs to be touched yet.
 
