@@ -1,221 +1,3 @@
-
-### `AI/JOIN-STABILITY/Filetree.md`
-
-```text
-# AI/JOIN-STABILITY/
-
-AI/JOIN-STABILITY/
-├── Filetree.md
-├── Parent_Wondering.md
-├── README.md
-├── Session_2026-09-23.md
-├── Subprocess.txt
-├── parent_wandering_search.py
-└── parent_wandering_receipt.json
-```
-
-### Inventory notes
-
-The following files are referenced in earlier documentation but were not included in the currently observed directory inventory:
-
-```text
-census.py
-checker_v1_buggy.py
-PROOF.md
-PROOF_v1_retracted.md
-receipt.json
-MANIFEST.json
-PARENT_WANDERING.md
-SESSION_2026-09-23.md
-```
-
-The repository uses these actual filenames:
-
-```text
-Parent_Wondering.md
-Session_2026-09-23.md
-```
-
-The names above must not be silently normalized to uppercase variants unless the files are actually renamed in the repository.
-
-### `AI/JOIN-STABILITY/README.md`
-
-````markdown
-# AQARION — Join-Stability of Pullback-Stable Equivalence Relations
-
-**Program:** AQARION / Quantarion
-**Track:** Join-Stability
-**Status:** OPEN
-**C4:** BLOCKED
-**Publication:** BLOCKED
-**Promotion:** FALSE
-
----
-
-## Research Question
-
-Let:
-
-- `X` be a finite set;
-- `T : X -> X` be a deterministic map;
-- `E` and `F` be equivalence relations on `X`;
-- `E ∨ F` denote the join of the two equivalence relations;
-- `T⁻¹(E) <= E` and `T⁻¹(F) <= F` denote pullback stability.
-
-The central question is:
-
-```text
-If E and F are pullback-stable under T,
-must E ∨ F also be pullback-stable under T?
-````
-
-The original join-stability proof was retracted after a logical gap was identified.
-
-The present package preserves the surviving reductions, exploratory searches, and research status without promoting the open theorem.
-
-### Current Mathematical Reduction
-
-Let:
-
-```text
-G = E ∨ F
-Y = im(T)
-```
-
-Suppose `E` and `F` are pullback-stable but `G` is not.
-
-A necessary obstruction is a range-gap:
-
-> Some connected component of `G` has an intersection with `Y = im(T)` that is disconnected when the relation is restricted to `Y`.
-
-Equivalently, a potential join failure requires a `G`-component whose image points cannot be connected entirely through image points using the `E`\- and `F`-edges.
-
-This reduction does not prove that range-gaps are impossible. It only narrows the search space for possible counterexamples.
-
-### Included Files
-
-```text
-Filetree.md
-Parent_Wondering.md
-README.md
-Session_2026-09-23.md
-Subprocess.txt
-parent_wandering_search.py
-parent_wandering_receipt.json
-```
-
-### File descriptions
-
-| File                          | Purpose                                                    |
-| ----------------------------- | ---------------------------------------------------------- |
-| README.md                     | Research overview, status, and reproducibility notes       |
-| Filetree.md                   | Current package inventory                                  |
-| Parent_Wondering.md           | Range-gap reduction and exploratory analysis               |
-| Session_2026-09-23.md         | Session record and next mathematical targets               |
-| Subprocess.txt                | Preserved subprocess/search output                         |
-| parent_wandering_search.py    | Search for range-gap candidates and possible join failures |
-| parent_wandering_receipt.json | Receipt for the parent-wandering search                    |
-
-### Search Tool
-
-`parent_wandering_search.py` searches finite deterministic maps and constructs pullback-stable equivalence relations through closure.
-
-The search checks:
-
-* Whether `E` is pullback-stable;
-
-* Whether `F` is pullback-stable;
-
-* Whether `G = E ∨ F` has a range-gap;
-
-* Whether `G` is actually unstable.
-
-A range-gap is not automatically a counterexample.
-
-The relevant classifications are:
-
-```text
-NO_RANGE_GAP
-RANGE_GAP_ONLY
-JOIN_COUNTEREXAMPLE
-```
-
-Only the final classification would constitute a direct computationally observed counterexample to join-stability.
-
-### Reproduction
-
-From the repository root:
-
-```bash
-python3 AI/JOIN-STABILITY/parent_wandering_search.py
-```
-
-Example with explicit parameters:
-
-```bash
-python3 AI/JOIN-STABILITY/parent_wandering_search.py \
-  --n 8 \
-  --maps 1000 \
-  --seeds-per-map 100 \
-  --seed 22092026
-```
-
-The exact command and output should be recorded in the corresponding session or receipt file when a search is executed.
-
-### Evidence and Governance
-
-This package distinguishes the following evidence classes:
-
-| Evidence | Meaning                               |
-| -------- | ------------------------------------- |
-| [D]      | Mathematical derivation               |
-| [P]      | Proof-level argument                  |
-| [V]      | Finite computation                    |
-| [PV]     | Proof-supported computation           |
-| [R]      | Research or literature review         |
-| [Q]      | Quarantined or unresolved material    |
-| [F]      | Frozen and registry-approved material |
-
-Computation is corroboration. It does not replace a general proof.
-
-Hash equality does not establish semantic correctness. A successful script run does not establish theorem validity. A finite search without a counterexample does not prove universal join-stability.
-
-### Known Status
-
-```text
-Join-stability theorem: OPEN
-Original proof: RETRACTED
-Range-gap reduction: SURVIVING RESEARCH DIRECTION
-Range-gap searches: EXPLORATORY
-C4 certification: BLOCKED
-Publication readiness: BLOCKED
-Promotion: FALSE
-```
-
-No universal theorem is claimed by this directory.
-
-### Important Naming Note
-
-The current repository inventory uses:
-
-```text
-Parent_Wondering.md
-Session_2026-09-23.md
-```
-
-Earlier notes used the alternative names:
-
-```text
-PARENT_WANDERING.md
-SESSION_2026-09-23.md
-```
-
-Those alternative names should not appear in active documentation unless the files are actually present under those names.
-
-```
-
-These two files are the clean documentation correction; they do **not** claim that absent legacy files exist or that the open theorem has been resolved.
-```
 Based on the ZIP file data provided, here are the **COMPLETE DELIVERABLES**:
 
 ---
@@ -2593,6 +2375,120 @@ The first is a proof.
   
 The second is an experiment.  
   
-The join theorem remains OPEN.  
+The join theorem remains OPEN.  Worked for 24s
+
+There is a real proof-level issue in the reconstruction you pasted, and it is exactly the kind of issue AQARION should catch before changing OPEN → [P].
+
+The quotient-permutation idea is promising, but the stated argument skips one necessary step.
+
+The missing step
+
+From
+
+\[
+T^{-1}(E)\le E
+\]
+
+we know
+
+\[
+T(x)ET(y)\Rightarrow xEy.
+\]
+
+But the draft immediately treats \(T\) as inducing a map
+
+\[
+\bar T_E:X/E\to X/E.
+\]
+
+That is not automatic: to be well-defined we also need
+
+\[
+xEy\Rightarrow T(x)ET(y).
+\]
+
+Fortunately, on a finite \(X\), that missing direction can actually be proved. So the idea may be salvageable, but the proof needs to be written correctly rather than promoted as-is.
+
+The clean finite argument is:
+
+Let \(E\) have \(m\) classes.
+
+For every \(E\)-class \(C\), consider the nonempty target classes met by \(T(C)\).
+
+If one source \(E\)-class \(C\) met two distinct target \(E\)-classes \(D_1,D_2\), then \(D_1,D_2\) each have preimages intersecting \(C\). Stability says the entire preimage of each \(D_i\) lies in a single \(E\)-class. Those two target classes therefore consume two distinct source classes. More generally, stability gives an injection
+
+\[
+\{\text{target }E\text{-classes hit by }T\}
+\hookrightarrow
+X/E.
+\]
+
+Hence
+
+\[
+|\operatorname{im}(\text{target classes})|\le m.
+\]
+
+On the other hand, every source class has an image, so assigning each source class to the target classes met by it gives the reverse counting constraint. A split image would create more distinct target classes than available source classes. Consequently, finiteness forces:
+
+\[
+\boxed{
+xEy\Longrightarrow T(x)ET(y).
+}
+\]
+
+Together with the assumed implication,
+
+\[
+\boxed{
+xEy\iff T(x)ET(y).
+}
+\]
+
+Thus the induced quotient map really is well-defined and injective, and because \(X/E\) is finite, it is bijective.
+
+Then the join argument can be made rigorous
+
+Once this lemma is established independently for both \(E\) and \(F\),
+
+\[
+\bar T_E:X/E\to X/E
+\]
+
+and
+
+\[
+\bar T_F:X/F\to X/F
+\]
+
+are permutations.
+
+Since \(G=E\vee F\) is generated by \(E\)- and \(F\)-edges, forward preservation follows:
+
+\[
+xGy\Rightarrow T(x)GT(y).
+\]
+
+The remaining question is whether the induced map on \(X/G\) is surjective. That can then be established using the quotient permutations, after which finiteness gives bijectivity and hence
+
+\[
+T(x)GT(y)\Rightarrow xGy.
+\]
+
+So the promising theorem is:
+
+\[
+\boxed{
+T^{-1}(E)\le E,\quad T^{-1}(F)\le F
+\quad\Longrightarrow\quad
+T^{-1}(E\vee F)\le E\vee F
+}
+\]
+
+but I would not yet label the pasted proof [P]. The quotient-permutation lemma itself needs to be isolated, proved without handwaving, and then adversarially checked.
+
+That is a much better target than more blind census work: attack the finite quotient-permutation lemma first. If that lemma survives, the range-gap/parent-wandering machinery becomes historical obstruction analysis rather than the active bottleneck.
+
+And importantly: do not update README.md from OPEN to proved yet. The current evidence boundary should remain THEOREM-READY / FORMALIZATION OPEN / C4 BLOCKED until this repaired proof is independently checked and formalized.
   
 https://github.com/JASKSG9/Aqarion-Quantarion-AI/tree/main/AI/JOIN-STABILITY
