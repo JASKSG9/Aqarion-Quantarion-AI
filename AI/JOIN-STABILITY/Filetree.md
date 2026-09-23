@@ -6,5 +6,5 @@ AI/JOIN-STABILITY/
 ├── README.md
 ├── Session_2026-09-23.md
 ├── Subprocess.txt
-├── parent_wandering_search.py
-└── parent_wandering_receipt.json
+├── parent_wondering_search.py
+└── parent_wondering_receipt.json
