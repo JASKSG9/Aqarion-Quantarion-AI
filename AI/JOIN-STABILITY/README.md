@@ -1,8 +1,4 @@
-
-README.md & ZIP.md
-
-
-Based on the ZIP file data provided, here are the **COMPLETE DELIVERABLES**:
+AQARION JOIN-STABILITY 
 
 ---
 
