@@ -1,0 +1,59 @@
+{
+  "artifact": "parent_wandering_search.py",
+  "claim_target": "Join-stability of pullback-stable equivalence relations",
+  "status": "OPEN",
+  "evidence_role": "CORROBORATION_ONLY",
+  "mathematical_lemma": {
+    "id": "LEMMA-E",
+    "name": "range-gap necessity",
+    "evidence_level": "[P]",
+    "statement": "Any counterexample to join stability requires a G-component whose range points are disconnected under G restricted to im(T), where G = E join F."
+  },
+  "execution": {
+    "python": "3.13.5",
+    "seed": 22092026,
+    "generator": "stable_closure",
+    "network": false
+  },
+  "runs": [
+    {
+      "n": 7,
+      "maps": 2000,
+      "seeds_per_map": 500,
+      "stable_pair_samples": 36735,
+      "range_gap_candidates": 0,
+      "status": "NO_COUNTEREXAMPLE"
+    },
+    {
+      "n": 8,
+      "maps": 1000,
+      "seeds_per_map": 500,
+      "stable_pair_samples": 23663,
+      "range_gap_candidates": 0,
+      "status": "NO_COUNTEREXAMPLE"
+    },
+    {
+      "n": 9,
+      "maps": 500,
+      "seeds_per_map": 500,
+      "stable_pair_samples": 15493,
+      "range_gap_candidates": 0,
+      "status": "NO_COUNTEREXAMPLE"
+    },
+    {
+      "n": 10,
+      "maps": 200,
+      "seeds_per_map": 1000,
+      "stable_pair_samples": 4199,
+      "range_gap_candidates": 0,
+      "status": "NO_COUNTEREXAMPLE"
+    }
+  ],
+  "negative_controls": [
+    "checker_v1_buggy.py",
+    "PROOF_v1_retracted.md"
+  ],
+  "promotion": false,
+  "publication": false,
+  "lean": "OPEN"
+}
