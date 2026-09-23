@@ -1,0 +1,31 @@
+{
+  "claim_id": "AQARION-JOIN-STABILITY",
+  "version": "2.1.0",
+  "timestamp": "2026-09-23T01:45:00Z",
+  "status": "FROZEN",
+  "governance": {
+    "C4": "BLOCKED",
+    "promotion": false
+  },
+  "definitions": {
+    "pullback_stable": "T^{-1}(E) ⊆ E where T^{-1}(E) = {(a,b): (T(a),T(b))∈E}",
+    "c_bip": "connected components of bipartite graph Left=blocks, Right=blocks, edge i->j if T(Block_i)∩Block_j≠∅",
+    "rank_formula": "rank(D_Π)=m - c_bip(Π,T,n) with D=(I-P)KP",
+    "join": "P∨Q = transitive closure of P∪Q"
+  },
+  "domains": {
+    "negative_control": {"n": 3, "expected": "COUNTEREXAMPLE for E,F stable => E∨F stable"},
+    "finite_census": {"n": "1..5", "expected_pairs": 166484, "expected_violations": 0},
+    "bridge_lemmas": {"n": 6, "samples": 300, "expected_mismatches": 0}
+  },
+  "evidence_states": {
+    "AQ-DYN-PULL-PREIMAGE-JOIN-001": "REFUTED",
+    "AQ-DYN-PULL-JOIN-001": "COMPUTATIONALLY VERIFIED IN FINITE DOMAIN",
+    "BRT-KERNEL": "PROVED finite domain + null-space proof"
+  },
+  "nonclaims": [
+    "Not a general theorem for n>5 without additional proof",
+    "SV-001-V2 remains CONTRACT ALIGNMENT REQUIRED",
+    "C4 BLOCKED until independent Kotlin + Lean fill"
+  ]
+}
