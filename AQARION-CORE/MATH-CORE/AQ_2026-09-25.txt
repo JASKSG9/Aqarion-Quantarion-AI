@@ -1,0 +1,240 @@
+MATH-CORE — AQARION Mathematical Nucleus — 2026-09-25
+
+C4 BLOCKED / Lean OPEN / Publication BLOCKED / Promotion FALSE
+Receipt: AQ-CYCLE-DELTA-001 — source_sha256 43b56842ebf5c9042c100a8a1327e1cf4c2cd191bbef34596259408878e7fde9
+counts k3_16=119 k6_80=3150 ok d_nonzero 434 delta_k_over_gcd_refuted 5/119
+
+Purpose
+
+Minimal frozen mathematical spine, separate from experimental branches, HF mirror, and repository truth.
+
+Core = 3-level hierarchy:
+
+arbitrary partition Π ↓ D_Π = (I-P_Π) K_T P_Π measures failureforward-invariant (D=0) — E ⊆ T^{-1}(E) ↓ finite + reflectionpullback-stable quotient — T^{-1}(E)=E ⇒ permutation on X/E ↓join-closed sublattice Fix(T^{-1}) ⊆ Eq(X)
+
+ContentsDEFINITIONS.md — frozen D, P, K, reflection, incidence graphTHEOREMS.md — Theorems A-F with exact statementsLEMMAS/JS-04-KernelEquality.md — finite kernel lemma cleanTHEOREMS/JS-11-JoinStability.md — incidence automorphism proof candidatePROOFS/ — cardinality argument + indeg/outdeg argumentVERIFICATION/ — independent census n≤4 reproducedLEAN/ — Lean skeleton v4.14.0 targetMANIFEST.json — case-sensitive paths, hashes
+
+Governance:
+
+No file claims [P]/[PV] until Lean + receipt + auditcensus PASS ≠ proofengagement ≠ evidencehistorical/Killed/ files remain quarantinedOne-line status
+
+D=0 criterion established, BRT rank m-c(Γ) proof candidate with exhaustive n≤5 check, finite kernel equality analytic clean + census PASS, join stability proof candidate via incidence automorphism, Lean OPEN, C4 BLOCKED.
+
+
+MATH-CORE DEFINITIONS — FrozenD-001 Finite deterministic system
+
+X finite set, T:X→X. No surjectivity assumed.
+
+D-002 Partition and quotient
+
+Π = {B1..Bm} partition of X. V_Π = {f:X→R | f constant on each Bi}. P_Π orthogonal projection (block-average) onto V_Π, Q=I-P.
+
+D-003 Koopman operator
+
+K_T f = f∘T. Matrix representation on standard basis e_x.
+
+D-004 Canonical defect operator — FROZEN
+
+D_Π = (I-P_Π) K_T P_Π = K P - P K P
+Domain V_Π → V_Π^⊥. D_Π^2 =0 on relevant domain. Left variant K-PK is NOT canonical.
+
+Exactness: D_Π=0 ⇔ K(V_Π)⊆V_Π ⇔ T_Π well-defined ⇔ forward stability: x∼_Π y ⇒ T(x)∼_Π T(y) ⇔ E ⊆ T^{-1}(E)
+
+D-005 Reflection / pullback-stability
+
+E equivalence on X. T^{-1}(E) = {(x,y): T(x) E T(y)} = ker(q_E∘T).
+Reflection: T(x) E T(y) ⇒ x E y, i.e. T^{-1}(E) ⊆ E. Also written E is pullback-stable.
+
+D-006 Kernel of quotient composition
+
+S_E = q_E∘T : X→X/E. ker(S_E)=T^{-1}(E).
+
+D-007 Incidence graph Γ(E,F)
+
+Bipartite: vertices (X/E)⊔(X/F), edge between [x]_E and [x]_F for each x∈X. Components ↔ blocks of E∨F (classical red-blue graph).
+
+D-008 Block transition relation R_T on X/E
+
+A R_T B iff ∃x∈A with [T(x)]_E = B. indeg(B)≤1 under reflection, outdeg(A)≥1 always.
+
+D-009 BRT objects
+
+R_i = {j: T(B_i)∩B_j≠∅}. Target co-occurrence graph H_Π cliques from R_i. I_Π bipartite incidence left source blocks, right target blocks, edge if B_j∈R_i. β1 = |E|-|V|+c.
+
+
+MATH-CORE THEOREMS — Proof Candidates Unless Marked EstablishedTheorem A — Defect-zero criterion [ESTABLISHED]
+
+D_Π=0 ⇔ K(V_Π)⊆V_Π ⇔ E_Π forward T-stable.
+
+Theorem B — BRT rank identity [PROOF / V n≤5]
+
+Let c(Γ) = number components of incidence. Then
+rank(D_Π|_{V_Π}) = m - c(I_Π) = m - c(H_Π)
+Proof engine: ker(D|V) = component-constant functions.
+
+Theorem C — Sharp defect bound [DERIVED]
+
+rank D_Π ≤ min(m-1,n-m) ⇒ max_{T,Π} rank D = floor((n-1)/2)
+
+Theorem D — Finite kernel equality [ANALYTICALLY CLEAN + V n≤4]
+
+X finite, T:X→X, E equivalence, reflection T^{-1}(E)⊆E ⇒ T^{-1}(E)=E
+Proof: |X/E| ≤ |X/ker| = |im S_E| ≤ |X/E| squeeze ⇒ equality.
+Immediate: T induces injective ⇒ bijective map on X/E.
+
+Theorem E — Finite quotient permutation [COROLLARY OF D]
+
+Under same hypothesis, \bar T_E([x]_E)=[T(x)]_E is permutation of X/E.
+
+Proof via block graph: reflection gives indeg≤1, every source has outdeg≥1, finite counting |R_T|≥k and ≤k ⇒ =k ⇒ indeg=outdeg=1 ⇒ permutation.
+
+Theorem F — Finite pullback-join stability [PROOF CANDIDATE — DEPENDS ON D+E]
+
+X finite, T, E,F reflection-stable ⇒ E∨F reflection-stable.
+Proof: E,F induce permutations ⇒ combined action on Γ(E,F) is automorphism ⇒ preserves components ⇒ E∨F forward-stable ⇒ by D again equality T^{-1}(E∨F)=E∨F.
+Hence Fix(T^{-1}) is sublattice of Eq(X).
+
+Infinite generalization: OPEN / expected false — shift on N is boundary.
+
+Negative control: T^{-1}(E∨F) ≤ T^{-1}(E)∨T^{-1}(F) remains REFUTED globally.
+
+
+JS-04 Finite Kernel Equality Lemma
+
+Statement: X finite, T:X→X, E equivalence, if T(x) E T(y) ⇒ x E y then ker(q_E∘T)=E and T induces permutation on X/E.
+
+Proof — corrected cardinality:
+
+ker(S_E)=T^{-1}(E) equivalence.Reflection ⇒ ker ⊆ E ⇒ partition ker finer ⇒ |X/ker| ≥ |X/E||X/ker| = |im S_E| ≤ |X/E| because S_E lands in X/ECombine ⇒ equalities throughout ⇒ ker=E ⇒ forward preservation xEy ⇒ T(x)ET(y) holds too ⇒ equality both directions.Assignment [x]→[T(x)] well-defined, injective, finite ⇒ bijective.
+
+Computational audit: n=1..4 exhaustive 1+6+51+592 reflection cases, 0 failures — independent reproduction of user's §1 table. File: /mnt/data/join_census_dual.py
+
+Lean target: LEAN/JS-04-KernelEquality.lean — OPEN, v4.14.0
+
+Governance: C4 BLOCKED, Promotion FALSE.
+
+
+JS-11 Finite Pullback-Join Stability
+
+Hypotheses: X finite, T:X→X, E,F equivalences, T^{-1}(E)⊆E and T^{-1}(F)⊆F
+
+Claim: T^{-1}(E∨F)⊆E∨F and indeed equality.
+
+Proof architecture:
+
+By JS-04, each gives permutation \bar T_E, \bar T_FBuild incidence graph Γ(E,F): (X/E)⊔(X/F) edges [x]_E—[x]_FStandard: components of Γ ↔ blocks of E∨FMap \bar T = \bar T_E⊔\bar T_F is bijection on vertices, sends edge [x]_E—[x]_F to [T(x)]_E—[T(x)]_F ⇒ graph automorphismAutomorphisms preserve connected components ⇒ E∨F forward invariant: x (E∨F) y ⇒ T(x) (E∨F) T(y)Apply JS-04 to J=E∨F itself: forward invariance + finiteness ⇒ T^{-1}(J)=J
+
+Corollary: Fix(T^{-1}) sublattice of Eq(X). Meets preserved anyway: T^{-1}(E∧F)=T^{-1}(E)∧T^{-1}(F).
+
+Computational: n=1..4 stable unordered pairs 1,8,84,1276 zero join failures. n=5,6 expected 24475,582696 per live verifier — cumulative 608540 matches historical report.
+
+Open: Lean formalization chain JS-00→JS-04→JS-06→JS-G01→JS-G03→JS-11, infinite-X counterexample machine-checked.
+
+Governance: Proof candidate, not [P], C4 BLOCKED.
+
+
+Proof — Finite block graph indeg≤1 outdeg≥1 ⇒ permutation
+
+Let k=|X/E|. Assume reflection T^{-1}(E)⊆E.
+
+Lemma: For each target block B meeting im T, T^{-1}(B) contained in single source block. Proof: if x,y∈T^{-1}(B) then E(Tx,Ty) ⇒ E(x,y).
+
+Thus each target block has at most one predecessor: indeg(B)≤1. Formal: if B receives from A,C via T(x)=y∈B, T(z)=y'∈B, then E(Tx,Tz) holds (if same y) or via E(Tx,Ty) argument, in general: choose representatives with same image class? Better: if Tx and Tz lie in same target block B, then E(Tx,Tz) ⇒ E(x,z) ⇒ same source block. So indeg≤1.
+
+Every source block A has at least one outgoing: pick x∈A, then edge to [T(x)].
+
+Let R_T = set of block transitions. Then |R_T| ≥ k (outdeg≥1) and ≤k (indeg≤1). Hence |R_T|=k and indeg=outdeg=1 everywhere ⇒ R_T is permutation.
+
+Therefore E forward invariant: xEy ⇒ same source block ⇒ same target block ⇒ T(x) E T(y). So E ⊆ T^{-1}(E). Combined with hypothesis gives equality.
+
+This repairs original proof which assumed forward preservation without proof.
+
+
+Verification — Kernel equality census n≤4
+
+Script: /mnt/data/join_census_dual.py (independent of repo verifier)
+
+Executed 2026-09-25 in container:
+
+n=1 maps=1 parts=1 pairs=1 reflection=1 hinge ok 1 fail 0
+n=2 maps=4 parts=2 pairs=8 reflection=6 ok 6 fail 0
+n=3 maps=27 parts=5 pairs=135 reflection=51 ok 51 fail 0
+n=4 maps=256 parts=15 pairs=3840 reflection=592 ok 592 fail 0
+
+Join under dual reflection:
+
+n=1 stable unordered 1 join_fail 0
+n=2 8 0
+n=3 84 0
+n=4 1276 0
+
+Matches live verifier table: 1,8,84,1276,24475,582696. Cumulative 608540 = sum matches historical 608540 report — discrepancy reconciled as per-n vs cumulative.
+
+Receipt reference: brt_fixed_package/verification/cycle_delta/receipt.json — C4 BLOCKED / promotion false / schema AQ-CYCLE-DELTA-001
+
+Status: [V] computational only, not [P].
+
+
+{ "name": "MATH-CORE", "date": "2026-09-25", "governance": {"C4":"BLOCKED","Lean":"OPEN","Publication":"BLOCKED","promotion":false}, "receipt_ref": "brt_fixed_package/verification/cycle_delta/receipt.json", "schema": "AQ-CYCLE-DELTA-001", "source_sha256": "43b56842ebf5c9042c100a8a1327e1cf4c2cd191bbef34596259408878e7fde9", "files": [ "README.md", "DEFINITIONS.md", "THEOREMS.md", "LEMMAS/JS-04-KernelEquality.md", "THEOREMS/JS-11-JoinStability.md", "PROOFS/finite-block-permutation.md", "VERIFICATION/kernel-census-n4.md", "LEAN/JS-04-KernelEquality.lean" ], "counts": {"k3_16":119,"k6_80":3150,"d_nonzero_nonzero":434}, "n_census": {"1":1,"2":8,"3":84,"4":1276,"5":24475,"6":582696,"cumulative_1-6":608540}, "lean_toolchain": "leanprover/lean4:v4.14.0", "status": {"Theorem A":"ESTABLISHED","B":"PROOF+V n≤5","C":"DERIVED","D":"ANALYTIC CLEAN+V n≤4 OPEN Lean","E":"COROLLARY","F":"PROOF CANDIDATE"} } 
+
+
+MATH-CORE created — frozen nucleus, no promotion
+
+Receipt: AQ-CYCLE-DELTA-001 k3_16=119 k6_80=3150 ok d_nonzero 434 C4 BLOCKED promotion false
+
+Directory /mnt/data/MATH-CORE/ — 8 files, machine-readable manifest:
+
+Core package
+-
+📎 MATH-CORE/README.md
+— 3-level hierarchy: D=(I-P)KP → $D=0$ forward E\subseteq T^{-1}(E) → finite reflection T^{-1}(E)=E permutation → join-closed sublattice
+-
+📎 MATH-CORE/DEFINITIONS.md
+— frozen D-001..D-009: $X$ finite, V_\Pi, P_\Pi, K_T, canonical D_\Pi=(I-P)KP D^2=0, T^{-1}(E)=ker(q_E\circ T), incidence graph \Gamma(E,F), block transition R_T indeg≤1/outdeg≥1
+-
+📎 MATH-CORE/THEOREMS.md
+— Theorems A-F:
+A defect-zero criterion [ESTABLISHED]
+B BRT rank D = m-c(\Gamma) [PROOF + V n≤5]
+C sharp \le\min(m-1,n-m) → max=\lfloor(n-1)/2\rfloor [DERIVED]
+D finite kernel equality T^{-1}(E)=E [ANALYTIC CLEAN + V n≤4]
+E quotient permutation [COROLLARY]
+F join stability Fix(T^{-1}) sublattice [PROOF CANDIDATE]
+
+Lemmas / Proofs
+-
+📎 MATH-CORE/LEMMAS/JS-04-KernelEquality.md
+— corrected cardinality squeeze |X/E|\le|X/ker|=|im S_E|\le|X/E|
+-
+📎 MATH-CORE/THEOREMS/JS-11-JoinStability.md
+— incidence automorphism argument
+-
+📎 MATH-CORE/PROOFS/finite-block-permutation.md
+— indeg≤1 + outdeg≥1 + finite |R_T|\ge k and \le k ⇒ permutation, repairs original forward-preservation gap
+
+Verification / Lean
+-
+📎 MATH-CORE/VERIFICATION/kernel-census-n4.md
+— independent reproduction:
+  n=1:1/0, n=2:6/0, n=3:51/0, n=4:592/0 and join 1,8,84,1276 fail 0 — matches live verifier 582696 per-n, 608540 cumulative reconciled
+-
+📎 MATH-CORE/LEAN/JS-04-KernelEquality.lean
+— isolated target, sorry OPEN, no claim[P]
+-
+📎 MATH-CORE/MANIFEST.json
+— case-sensitive file list, hashes, toolchain, census counts
+
+Governance preserved:
+evidence ≠ proof
+census PASS ≠ Lean ≠ promotion
+available ≠ runnable ≠ reproducible ≠ correct ≠ proved
+C4 BLOCKED / Publication BLOCKED / Promotion FALSE
+Next concrete actions from MATH-CORE:
+cd Aqarion-Lean && lake build LEAN/JS-04-KernelEquality.lean && lake build + #print axioms audit
+Run join_census_dual.py full n=5 (8.4M joins) → receipt + sha256
+Machine-check one fixed infinite counterexample X=\mathbb N, $T(n)=n+1$ to lock necessity of finiteness
+One registry entry AQ-DYN-PULL-JOIN-001 OPEN proof candidate depending on JS-04
+
+This is the minimal frozen spine — everything else (Kaprekar 54-state, KSG, DMD, Quantum, WU1, HF Spaces) remains experimental branches consuming it, not evidence for it.
+
+https://huggingface.co/spaces/Quantarion9/AQARION-ACADEMY/resolve/main/AQARION-CORE/MATH-CORE/AQ_2026-09-25.txt
