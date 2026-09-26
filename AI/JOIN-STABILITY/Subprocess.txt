@@ -10232,3 +10232,60 @@ And the retracted six-line proof stays dead.JOIN-STABILITY/
 │
 └── SESSION_2026-09-23.md
     └── NEW — SESSION/PROGRESS RECORD
+
+AQARION JOIN-STABILITY
+HISTORICAL SUBPROCESS ARTIFACT
+NON-AUTHORITATIVE
+
+
+This file is retained as a provenance marker only.
+
+
+The previous contents contained large generated subprocess logs,
+embedded file dumps, duplicated artifacts, proposed deliverables,
+and historical execution material.
+
+
+Those contents must not be interpreted as the current package
+specification or current mathematical status.
+
+
+Canonical specification:
+
+
+README.md
+Readme-Light.md
+contract.json
+JOIN_STABILITY_PROOF.md
+Parent_Wondering.md
+Filetree.md
+
+
+
+Canonical executable artifacts:
+
+
+join_stability_exact_verifier.py
+oracle.py
+parent_wondering_search.py
+
+
+
+Governance:
+
+
+finite theorem       PROVED mathematically
+arbitrary theorem    REFUTED
+surjective theorem   PROVED CONDITIONALLY
+Lean                 OPEN
+C4                   BLOCKED
+publication          BLOCKED
+promotion            FALSE
+
+https://github.com/JASKSG9/Aqarion-Quantarion-AI/tree/main/AQARION-CORE
+
+
+https://github.com/JASKSG9/Aqarion-Quantarion-AI/tree/main/AQARION-CORE/JOIN-STABILITY
+
+
+https://huggingface.co/spaces/Quantarion9/AQARION-ACADEMY/tree/main/AI/JOIN-STABILITY
