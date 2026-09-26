@@ -24,6 +24,105 @@
 
 This directory investigates whether pullback-stable equivalence
 relations are closed under equivalence closure, or equivalently,
+
+
+Status: FROZEN RESEARCH STATE
+
+
+Mathematical status
+
+
+Finite theorem — PROVED
+
+
+For finite X,
+
+
+[
+T^{-1}(E)\subseteq E,\qquad
+T^{-1}(F)\subseteq F
+]
+
+
+imply
+
+
+[
+T^{-1}(E\vee F)\subseteq E\vee F.
+]
+
+
+Proof: finite incidence graph of E-classes and F-classes.
+
+
+Arbitrary-set theorem — FALSE
+
+
+The unrestricted statement fails for
+
+
+[
+T(n)=n+1
+]
+
+
+with E-class {0,2} and F-class {0,3}.
+
+
+The failure occurs because 0\notin\operatorname{im}(T) acts as a
+hidden join bridge.
+
+
+Surjective theorem — PROVED CONDITIONALLY
+
+
+If T is surjective, then join stability follows without requiring
+X to be finite.
+
+
+Compactness
+
+
+Compactness and continuity alone do not repair the theorem.
+
+
+Evidence boundary
+
+
+Finite mathematical proof       PROVED
+Infinite counterexample         EXPLICIT
+Surjective generalization       PROVED CONDITIONALLY
+Lean                             OPEN
+C4                              BLOCKED
+Publication                     BLOCKED
+Promotion                       FALSE
+
+
+
+Computational searches are corroborative unless their domain is
+explicitly exhaustive.
+
+
+Historical ZIP/subprocess material is not authoritative.
+
+
+Canonical files:
+
+
+README.md
+Readme-Light.md
+contract.json
+Filetree.md
+JOIN_STABILITY_PROOF.md
+Parent_Wondering.md
+Session_2026-09-23.md
+parent_wondering_search.py
+parent_wondering_receipt.json
+join_stability_exact_verifier.py
+oracle.py
+
+
+
 under joins.
 
 Let
