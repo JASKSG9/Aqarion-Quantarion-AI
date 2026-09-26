@@ -1,3 +1,55 @@
+HISTORICAL ARTIFACT — NON-AUTHORITATIVE
+
+
+Path: AI/JOIN-STABILITY/AQ_S22_AJS_ZIP.md
+
+
+This file is retained for provenance only.
+
+
+It previously contained an embedded ZIP-style bundle consisting of
+multiple proposed files, duplicated documentation, implementation
+snippets, generated receipts, and deployment-oriented material.
+
+
+That embedded bundle is not the canonical JOIN-STABILITY package.
+
+
+Do not use file listings, status claims, implementation claims,
+"production ready" language, or receipts contained in the historical
+bundle as the current research specification.
+
+
+The canonical current specification is:
+
+
+README.md
+Readme-Light.md
+contract.json
+JOIN_STABILITY_PROOF.md
+Parent_Wondering.md
+Filetree.md
+
+
+
+Current governance:
+
+
+Finite theorem:        PROVED mathematically
+Infinite theorem:      REFUTED
+Surjective theorem:    PROVED CONDITIONALLY
+Lean:                  OPEN
+C4:                    BLOCKED
+Publication:           BLOCKED
+Promotion:             FALSE
+
+
+
+Historical material is preserved; it is not promoted.
+
+
+
+
 # 📦 COMPLETE ZIP DELIVERABLES
 ## AQARION-JOIN-STABILITY-CORRECTED-2026-09-23
 
