@@ -222,3 +222,366 @@ Promotion: FALSE
 Clean census: corroboration only
 
 Retracted proof: preserved negative evidence/history
+
+JOIN-STABILITY — RANGE-GAP / PARENT-WANDERING ANALYSIS
+
+
+Status
+
+
+Finite join theorem:        PROVED
+Arbitrary-set theorem:      REFUTED
+Surjective theorem:         PROVED CONDITIONALLY
+Range-Gap Lemma:             PROVED
+Lean:                        OPEN
+C4:                          BLOCKED
+Publication:                 BLOCKED
+Promotion:                   FALSE
+
+
+
+
+1. Original target
+
+
+Let
+
+
+[
+T:X\to X
+]
+
+
+and let E,F be equivalence relations.
+
+
+The target was
+
+
+[
+T^{-1}(E)\subseteq E
+\quad\land\quad
+T^{-1}(F)\subseteq F
+]
+
+
+implies
+
+
+[
+T^{-1}(E\vee F)\subseteq E\vee F.
+]
+
+
+The unrestricted statement is false.
+
+
+The finite statement is proved by the incidence-graph argument.
+
+
+
+2. Range-Gap Lemma
+
+
+Put
+
+
+[
+G=E\vee F.
+]
+
+
+If E,F are pullback-stable but G is not, then a witness
+
+
+[
+x\not Gy,\qquad Tx,G,Ty
+]
+
+
+must have a G-path from Tx to Ty that leaves
+\operatorname{im}(T).
+
+
+If the entire path remained in the image, every edge could be
+lifted using pullback stability and would produce a G-path from
+x to y.
+
+
+Thus:
+
+
+[
+\boxed{
+\text{join failure}\Longrightarrow\text{range gap}.
+}
+]
+
+
+This is a necessary condition only.
+
+
+
+3. Explicit range-gap counterexample
+
+
+The unrestricted theorem is actually refuted.
+
+
+Take
+
+
+[
+X=\mathbb N,\qquad T(n)=n+1.
+]
+
+
+Let
+
+
+[
+E:{0,2}\text{ is one class},
+]
+
+
+and let
+
+
+[
+F:{0,3}\text{ is one class}.
+]
+
+
+All remaining points are singleton classes.
+
+
+Then
+
+
+[
+2E0F3,
+]
+
+
+so
+
+
+[
+2(E\vee F)3.
+]
+
+
+But
+
+
+[
+1\not(E\vee F)2.
+]
+
+
+Since
+
+
+[
+T(1)=2,\qquad T(2)=3,
+]
+
+
+join stability fails.
+
+
+The missing point is 0\notin\operatorname{im}(T).
+
+
+This is the canonical infinite witness.
+
+
+
+4. Surjective boundary
+
+
+If T is surjective, then
+
+
+[
+\operatorname{im}(T)=X.
+]
+
+
+The range-gap obstruction cannot occur.
+
+
+Therefore the Range-Gap Lemma immediately gives:
+
+
+[
+T^{-1}(E)\subseteq E,\quad
+T^{-1}(F)\subseteq F
+\Longrightarrow
+T^{-1}(E\vee F)\subseteq E\vee F.
+]
+
+
+Thus the research problem is specifically a non-surjective
+problem once the surjective case is separated.
+
+
+
+5. Finite maps and eventual image
+
+
+For finite X, define
+
+
+[
+X_k=\operatorname{im}(T^k).
+]
+
+
+Then
+
+
+[
+X_{k+1}\subseteq X_k.
+]
+
+
+Because X is finite, this sequence eventually stabilizes:
+
+
+[
+X_m=X_{m+1}=X_{m+2}=\cdots.
+]
+
+
+The stable image X_\infty is invariant under T, and
+
+
+[
+T|{X\infty}:X_\infty\to X_\infty
+]
+
+
+is surjective.
+
+
+This gives a useful structural decomposition:
+
+
+finite dynamical system
+        |
+        +-- eventual surjective core
+        |
+        +-- transient vertices
+
+
+
+The surjective core has no range-gap problem.
+
+
+The remaining research question is whether transient vertices can
+create a join failure compatible with individual pullback stability.
+
+
+The explicit infinite example demonstrates that non-surjectivity can
+do exactly that.
+
+
+
+6. Computational search boundary
+
+
+The existing targeted searches at n=7,8,9,10 found no sampled
+range-gap candidates.
+
+
+Those searches are useful corroboration only.
+
+
+They do not prove:
+
+
+
+
+range gaps cannot occur;
+
+
+arbitrary finite maps satisfy join stability;
+
+
+the finite theorem beyond its mathematical proof;
+
+
+any infinite theorem.
+
+
+
+
+A future search should classify:
+
+
+range-gap candidate
+actual join-stability failure
+
+
+
+as separate outcomes.
+
+
+
+7. Best next mathematical attack
+
+
+The next exact target is:
+
+
+
+
+Characterize the transient non-surjective structure that can permit
+a join path between two image points to leave the image.
+
+
+
+
+Useful variables are:
+
+
+
+
+|\operatorname{im}(T)|;
+
+
+eventual-image size;
+
+
+transient depth;
+
+
+number of G-components;
+
+
+image intersection with each G-component;
+
+
+connectedness of G restricted to the image.
+
+
+
+
+Do not collapse these into one “counterexample” statistic.
+
+
+
+8. Governance
+
+
+Range-Gap Lemma          PROVED
+Infinite counterexample  EXPLICIT
+Surjective theorem       PROVED CONDITIONALLY
+Finite theorem           PROVED
+Lean                     OPEN
+C4                      BLOCKED
+Publication              BLOCKED
+Promotion                FALSE
+
+
