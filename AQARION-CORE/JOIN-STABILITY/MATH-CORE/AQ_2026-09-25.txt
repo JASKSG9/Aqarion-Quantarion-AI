@@ -181,3 +181,261 @@ Status: APPROVED FOR PRODUCTION USE
 ================================================================================
 END OF MATHEMATICAL CORE
 ================================================================================
+AQARION JOIN-STABILITY MATHEMATICAL CORE
+Date: 2026-09-25
+Status: FROZEN RESEARCH CORE
+C4: BLOCKED
+Publication: BLOCKED
+Lean: OPEN
+Promotion: FALSE
+
+======================================================================
+1. FINITE JOIN-STABILITY THEOREM
+======================================================================
+
+Let X be finite.
+
+Let T : X -> X.
+
+Let E,F be equivalence relations on X.
+
+Assume:
+
+    T(x) E T(y) -> x E y
+
+and:
+
+    T(x) F T(y) -> x F y.
+
+Then:
+
+    T(x) (E join F) T(y) -> x (E join F) y.
+
+Equivalently:
+
+    T^(-1)(E join F) subset E join F.
+
+Proof method:
+
+    E-classes
+    F-classes
+    incidence graph
+    induced permutations
+    component preservation.
+
+Evidence status:
+
+    [P]
+
+A fresh executable verification is separate evidence.
+
+======================================================================
+2. ARBITRARY-SET COUNTEREXAMPLE
+======================================================================
+
+Let:
+
+    X = N
+    T(n) = n + 1.
+
+Let E have non-singleton class:
+
+    {0,2}
+
+and otherwise singleton classes.
+
+Let F have non-singleton class:
+
+    {0,3}
+
+and otherwise singleton classes.
+
+Then E and F are pullback-stable.
+
+But:
+
+    2 E 0 F 3
+
+so:
+
+    2 (E join F) 3.
+
+Meanwhile:
+
+    1 not (E join F) 2.
+
+Since:
+
+    T(1)=2
+    T(2)=3,
+
+we have:
+
+    T(1) (E join F) T(2)
+
+but:
+
+    1 not (E join F) 2.
+
+Therefore:
+
+    T^(-1)(E join F) is not a subset of E join F.
+
+The unrestricted theorem is FALSE.
+
+Evidence status:
+
+    [F]
+
+======================================================================
+3. SURJECTIVE CASE
+======================================================================
+
+If T is surjective, then:
+
+    im(T) = X.
+
+Therefore the range-gap obstruction cannot occur.
+
+Under the same individual pullback-stability assumptions:
+
+    T^(-1)(E join F) subset E join F.
+
+Evidence status:
+
+    [P] conditional on the Range-Gap Lemma.
+
+======================================================================
+4. RANGE-GAP LEMMA
+======================================================================
+
+Let:
+
+    G = E join F.
+
+If E and F are pullback-stable but G is not, then a G-path witnessing
+the failure between image points must contain an internal vertex outside
+im(T).
+
+If every G-path between image points can be replaced by a path entirely
+inside im(T), the obstruction disappears.
+
+Evidence status:
+
+    [P]
+
+======================================================================
+5. COMPACTNESS / CONTINUITY
+======================================================================
+
+Compactness and continuity alone do not eliminate the range-gap
+obstruction.
+
+A compactified shift construction can retain an inaccessible bridge.
+
+Therefore:
+
+    compact + continuous
+
+is not accepted as a sufficient hypothesis for arbitrary join
+stability.
+
+======================================================================
+6. INFINITE DPJ LIMITS
+======================================================================
+
+The expression:
+
+    DPJ_infty(A,B) = lim DPJ(A_n,B_n)
+
+does not define a theorem without a specified approximation scheme and
+convergence structure.
+
+Monotone convergence cannot be invoked unless monotonicity is actually
+established.
+
+Likewise:
+
+    O(x^(-alpha)), alpha > 0
+
+does not by itself imply:
+
+    integral_N^infinity |f(x)| dx < infinity.
+
+For an ordinary power bound, alpha > 1 is required.
+
+======================================================================
+7. KERNEL COMPOSITION
+======================================================================
+
+For:
+
+    chi : A -> C
+    psi : C -> Bool,
+
+the correct identity is:
+
+    ker(psi o chi)
+      =
+    chi^(-1)(ker(psi)).
+
+The previous cross-carrier subset statement is invalid.
+
+======================================================================
+8. FINITE PERTURBATION BOUND
+======================================================================
+
+For finite DPJ outputs:
+
+    |DPJ(A,B) triangle DPJ(A',B')|
+    <=
+    |A triangle A'| |B|
+    +
+    |A'| |B triangle B'|.
+
+This is a finite combinatorial bound.
+
+It is not, by itself, an unrestricted epsilon-delta theorem.
+
+======================================================================
+9. EVIDENCE VOCABULARY
+======================================================================
+
+[D] Definition
+[P] Mathematical proof
+[V] Executed computational verification
+[PV] Proof plus executed verification
+[R] Research / computational corroboration
+[C] Conjecture
+[F] Refuted
+
+======================================================================
+10. GOVERNANCE
+======================================================================
+
+Finite theorem:
+    [P]
+
+Arbitrary-set theorem:
+    [F]
+
+Surjective theorem:
+    [P] conditional
+
+Range-Gap Lemma:
+    [P]
+
+Infinite theorem:
+    OPEN / QUARANTINED
+
+Lean:
+    OPEN
+
+C4:
+    BLOCKED
+
+Publication:
+    BLOCKED
+
+Promotion:
+    FALSE
