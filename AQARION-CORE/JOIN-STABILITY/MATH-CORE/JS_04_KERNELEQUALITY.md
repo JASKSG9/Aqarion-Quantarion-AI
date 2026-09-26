@@ -60,3 +60,147 @@ The relation "kernel-equal" partitions the set of all join predicates into equiv
 2. **Query Equivalence**: Determine if two queries produce identical results
 3. **Stability Analysis**: Prove stability under predicate transformations
 4. **Correctness Verification**: Verify implementation correctness
+# KERNEL EQUALITY ANALYSIS
+
+## Status: [P] elementary set-theoretic identities
+
+Date: 2026-09-25
+
+---
+
+## 1. Kernel definition
+
+Let:
+
+    phi : D -> Bool.
+
+Define:
+
+    ker(phi) = {x in D : phi(x) = TRUE}.
+
+For two predicates with the same domain:
+
+    phi_1, phi_2 : D -> Bool,
+
+we have:
+
+    ker(phi_1) = ker(phi_2)
+
+if and only if:
+
+    forall x in D,
+        phi_1(x) = phi_2(x).
+
+---
+
+## 2. Proof
+
+If the kernels are equal, then for every x:
+
+    phi_1(x) = TRUE
+    iff
+    x in ker(phi_1)
+    iff
+    x in ker(phi_2)
+    iff
+    phi_2(x) = TRUE.
+
+Since Bool has exactly TRUE and FALSE, the predicates agree.
+
+The reverse implication is immediate from extensional equality of
+their TRUE-sets.
+
+---
+
+## 3. Kernel composition
+
+Let:
+
+    chi : A -> C
+    psi : C -> Bool.
+
+Then:
+
+    ker(psi o chi)
+      =
+    {a in A : psi(chi(a)) = TRUE}.
+
+Therefore:
+
+    ker(psi o chi)
+      =
+    chi^(-1)(ker(psi)).
+
+This is the correct composition identity.
+
+It is generally invalid to write:
+
+    ker(psi o chi) subset ker(psi)
+
+because:
+
+    ker(psi o chi) subset A
+    ker(psi) subset C.
+
+They are subsets of different carriers.
+
+---
+
+## 4. Surjectivity condition
+
+If chi is surjective, then:
+
+    ker(psi o chi) = chi^(-1)(ker(psi))
+
+remains true.
+
+However, equality between ker(psi o chi) and ker(psi) is still
+ill-typed unless A=C or an explicit identification is supplied.
+
+Surjectivity permits recovery of information about psi from its
+composition, but does not identify the underlying carriers.
+
+---
+
+## 5. Restriction
+
+For S subset D:
+
+    ker(phi restricted to S)
+      =
+    ker(phi) intersection S.
+
+This is an immediate consequence of the kernel definition.
+
+---
+
+## 6. Infinite-boundary claims
+
+A statement such as:
+
+    lim ker(phi restricted to A_n) = ker(phi)
+
+requires an explicitly defined notion of convergence for sets.
+
+It is not accepted merely because A_n grows without a specified
+set-convergence topology or stabilization property.
+
+---
+
+## 7. Status
+
+Kernel equality on a common domain:
+
+    [P]
+
+Kernel composition:
+
+    [P]
+
+Previous cross-carrier subset statement:
+
+    [F] type-invalid
+
+Infinite kernel-limit statement without a specified convergence notion:
+
+    OPEN
