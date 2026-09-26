@@ -1,69 +1,233 @@
-"""Exact oracle for JOIN-STABILITY - no floating tolerance for decision."""
-import numpy as np
-from collections import defaultdict
+#!/usr/bin/env python3
+"""
+AQARION JOIN-STABILITY semantic oracle.
 
-def c_bip(blocks, T, n):
-    """FIXED version - original returned 1 always."""
-    m=len(blocks)
-    lab={x:i for i,b in enumerate(blocks) for x in b}
-    p=list(range(2*m))
-    def find(x):
-        while p[x]!=x:
-            p[x]=p[p[x]]; x=p[x]
-        return x
-    def unite(a,b):
-        pa,pb=find(a),find(b)
-        if pa!=pb: p[pa]=pb
-    for i,blk in enumerate(blocks):
-        targets=set(lab[T[x]] for x in blk)
-        for j in targets:
-            unite(i, m+j)
-    return len(set(find(v) for v in range(2*m)))
 
-def P_matrix(blocks, n):
-    P=np.zeros((n,n))
-    for b in blocks:
-        k=len(b)
-        if k==0: continue
-        for i in b:
-            for j in b:
-                P[i,j]=1.0/k
-    return P
+Purpose:
+Small standard-library-only checks for the mathematical boundary
+of the JOIN-STABILITY claim.
 
-def rank_D(blocks, T, n):
-    K=np.zeros((n,n))
-    for i,ti in enumerate(T): K[i,ti]=1.0 # Koopman pullback
-    P=P_matrix(blocks,n)
-    D=(np.eye(n)-P)@K@P
-    return int(np.linalg.matrix_rank(D, tol=1e-9)), D
 
-def is_pullback_stable(T, E):
-    n=len(T)
-    for a in range(n):
-        for b in range(n):
-            if (a,b) in E:
-                continue
-            if (T[a],T[b]) in E:
-                # need (a,b) in E to be stable, but it isn't
-                # so actually check contrapositive: if (T(a),T(b)) in E then (a,b) must be in E
-                # Here (T(a),T(b)) in E and (a,b) not in E => NOT stable
-                pass
-    # correct check:
-    for a in range(n):
-        for b in range(n):
-            if (T[a],T[b]) in E and (a,b) not in E:
-                return False
-    return True
+This file is NOT a theorem prover.
+This file is NOT a Lean certificate.
+This file is NOT a numerical-rank oracle.
 
-def join_equiv(E,F,n):
-    parent=list(range(n))
-    def find(x):
-        while parent[x]!=x:
-            parent[x]=parent[parent[x]]; x=parent[x]
-        return x
-    def union(a,b):
-        ra,rb=find(a),find(b)
-        if ra!=rb: parent[rb]=ra
-    for a,b in E|F:
-        union(a,b)
-    return {(a,b) for a in range(n) for b in range(n) if find(a)==find(b)}
+
+It checks:
+
+
+
+
+the explicit infinite counterexample;
+
+
+the finite theorem on small exhaustive instances;
+
+
+the basic surjective finite boundary.
+
+
+
+
+No NumPy or external dependency is used.
+"""
+
+
+from future import annotations
+
+
+from itertools import product
+
+
+def canonical(labels):
+"""Canonicalize a partition represented by integer labels."""
+names = {}
+result = []
+
+
+for value in labels:
+    if value not in names:
+        names[value] = len(names)
+    result.append(names[value])
+
+return tuple(result)
+
+
+
+def partitions(n):
+"""Enumerate all set partitions as restricted-growth strings."""
+if n == 0:
+return [()]
+
+
+result = []
+
+def extend(prefix, maximum):
+    if len(prefix) == n:
+        result.append(tuple(prefix))
+        return
+
+    for value in range(maximum + 2):
+        extend(prefix + [value], max(maximum, value))
+
+extend([0], 0)
+return result
+
+
+
+def related(P, a, b):
+return P[a] == P[b]
+
+
+def pullback_stable(T, P):
+"""Check T(a) P T(b) => a P b."""
+n = len(T)
+
+
+for a in range(n):
+    for b in range(n):
+        if related(P, T[a], T[b]) and not related(P, a, b):
+            return False
+
+return True
+
+
+
+def join(P, Q):
+"""Equivalence closure of P union Q."""
+n = len(P)
+parent = list(range(n))
+
+
+def find(x):
+    while parent[x] != x:
+        parent[x] = parent[parent[x]]
+        x = parent[x]
+    return x
+
+def union(a, b):
+    a = find(a)
+    b = find(b)
+
+    if a != b:
+        parent[b] = a
+
+for a in range(n):
+    for b in range(a):
+        if related(P, a, b) or related(Q, a, b):
+            union(a, b)
+
+return canonical([find(i) for i in range(n)])
+
+
+
+def join_stable(T, E, F):
+return pullback_stable(T, join(E, F))
+
+
+def explicit_infinite_counterexample():
+"""
+Check the canonical infinite witness on a finite prefix.
+
+
+Points:
+    x = 0,1,2,3,...
+
+T(n) = n+1
+
+E has class {0,2}.
+F has class {0,3}.
+
+The actual mathematical construction is infinite.
+This finite-prefix check verifies the concrete witness equations
+needed for the construction.
+"""
+
+def E(a, b):
+    return (a == b) or ({a, b} == {0, 2})
+
+def F(a, b):
+    return (a == b) or ({a, b} == {0, 3})
+
+def G(a, b):
+    # The only nontrivial G component is {0,2,3}.
+    return a == b or a in {0, 2, 3} and b in {0, 2, 3}
+
+# E and F stability under T(n)=n+1.
+for a in range(20):
+    for b in range(20):
+        if E(a + 1, b + 1) and not E(a, b):
+            return False
+
+        if F(a + 1, b + 1) and not F(a, b):
+            return False
+
+# Join failure:
+# T(1)=2 and T(2)=3 are G-related,
+# but 1 and 2 are not G-related.
+if not G(2, 3):
+    return False
+
+if G(1, 2):
+    return False
+
+return True
+
+
+
+def finite_exhaustive(max_n=4):
+"""
+Exhaustively test the finite theorem for n <= max_n.
+
+
+This is a small semantic oracle, not the primary exhaustive
+verifier.
+"""
+
+for n in range(1, max_n + 1):
+    Ps = partitions(n)
+
+    for T in product(range(n), repeat=n):
+        stable = [P for P in Ps if pullback_stable(T, P)]
+
+        for i, E in enumerate(stable):
+            for F in stable[i:]:
+                if not join_stable(T, E, F):
+                    return False, {
+                        "n": n,
+                        "T": T,
+                        "E": E,
+                        "F": F,
+                        "join": join(E, F),
+                    }
+
+return True, None
+
+
+
+def main():
+if not explicit_infinite_counterexample():
+print("INFINITE_COUNTEREXAMPLE=FAIL")
+return 1
+
+
+print("INFINITE_COUNTEREXAMPLE=PASS")
+
+ok, witness = finite_exhaustive(max_n=4)
+
+if not ok:
+    print("FINITE_THEOREM_SMOKE=FAIL")
+    print(witness)
+    return 1
+
+print("FINITE_THEOREM_SMOKE=PASS")
+print("DOMAIN=n=1..4")
+print("STATUS=PASS")
+return 0
+
+
+
+if name == "main":
+raise SystemExit(main())
+
+
