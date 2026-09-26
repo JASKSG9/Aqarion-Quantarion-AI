@@ -68,3 +68,128 @@ Modifying $$\phi$$ by $$\delta\phi$$ changes result by at most $$|\{(a,b) : |\de
 2. **Numerical Safety**: Floating-point errors don't propagate
 3. **Scalability**: Performance scales predictably
 4. **Reliability**: Results are reproducible under perturbations
+# JOIN STABILITY ANALYSIS
+
+## Status: REPAIRED / RESEARCH BOUNDARY
+
+Date: 2026-09-25
+
+This document does not assert the previous unrestricted metric
+"stability theorem."
+
+---
+
+## 1. Set perturbation bound
+
+For finite sets A,A',B,B':
+
+    DPJ(A,B) = {(a,b) in A x B : phi(a,b)=TRUE}.
+
+Then:
+
+    DPJ(A,B) triangle DPJ(A',B')
+
+is contained in the union of the changes caused by the first and
+second coordinates.
+
+Consequently:
+
+    |DPJ(A,B) triangle DPJ(A',B')|
+    <=
+    |A triangle A'| |B|
+    +
+    |A'| |B triangle B'|.
+
+A symmetric alternative is:
+
+    <=
+    |A triangle A'| max(|B|,|B'|)
+    +
+    |B triangle B'| max(|A|,|A'|).
+
+These are finite combinatorial bounds.
+
+They do not imply a uniform epsilon-delta theorem independent of set
+cardinalities.
+
+---
+
+## 2. Why the previous epsilon proof was insufficient
+
+The previous argument effectively obtained a bound of the form:
+
+    epsilon (|A|+|B|).
+
+That is not arbitrarily small merely because epsilon is small unless the
+cardinalities are controlled.
+
+Therefore the previous claim of unrestricted stability under the
+symmetric-difference metric is not accepted.
+
+---
+
+## 3. Correct normalized finite statement
+
+If the output metric is normalized by a known finite scale, then the
+above cardinality bound can yield continuity.
+
+For example, if a normalization N(A,B,A',B') is explicitly defined
+and bounded away from zero in the required domain, then:
+
+    normalized_distance
+        <=
+    explicit_bound / N.
+
+Any such theorem must state its normalization and domain.
+
+---
+
+## 4. Infinite stability
+
+No general infinite stability theorem is asserted here.
+
+A valid infinite theorem would require:
+
+1. a defined infinite input space;
+2. a defined metric or topology;
+3. a well-defined infinite DPJ operation;
+4. convergence of finite approximations;
+5. continuity of the operation under that convergence;
+6. explicit tail hypotheses if asymptotic truncation is used.
+
+The previous Lipschitz-plus-tail statement omitted too many of these
+requirements.
+
+Disposition:
+
+    QUARANTINED / OPEN.
+
+---
+
+## 5. Composition
+
+A statement that a composition of stable maps is stable requires a
+precise notion of stability and compatible domains/codomains.
+
+It is not sufficient to invoke "transitivity of stability" without
+stating the relevant continuity theorem.
+
+---
+
+## 6. Status
+
+Finite combinatorial perturbation bounds:
+
+    [P]
+
+Previous unrestricted epsilon-delta theorem:
+
+    [F] proof insufficient
+
+Infinite stability theorem:
+
+    OPEN
+
+Numerical convergence rates:
+
+    [R] unless mathematically derived
