@@ -1,0 +1,85 @@
+{
+  "package": "AQARION-JOIN-STABILITY-CORRECTED",
+  "version": "2026-09-25",
+  "release_date": "2026-09-25",
+  "status": "CORRECTED_AND_VERIFIED",
+  "files": [
+    {
+      "name": "README.md",
+      "type": "documentation",
+      "description": "Project overview and quick start guide",
+      "version": "1.0"
+    },
+    {
+      "name": "AUDIT-2026-09-25.md",
+      "type": "audit_report",
+      "description": "Complete audit trail and verification documentation",
+      "version": "1.0"
+    },
+    {
+      "name": "AQ-DYN-PULL-JOIN-001.md",
+      "type": "technical_specification",
+      "description": "Dynamic pull join mechanics and specifications",
+      "version": "2.1"
+    },
+    {
+      "name": "AQ-DYN-PULL-JOIN-INFINITE-001.md",
+      "type": "technical_specification",
+      "description": "Infinite join dynamics and boundary conditions",
+      "version": "1.5"
+    },
+    {
+      "name": "JS-04-KernelEquality.md",
+      "type": "mathematical_proof",
+      "description": "Kernel equality mathematical foundations",
+      "version": "3.2"
+    },
+    {
+      "name": "JS-11-JoinStability.md",
+      "type": "mathematical_proof",
+      "description": "Join stability proofs and analysis",
+      "version": "2.8"
+    },
+    {
+      "name": "finite-block-permutation.md",
+      "type": "theoretical_framework",
+      "description": "Finite block permutation group theory",
+      "version": "1.3"
+    },
+    {
+      "name": "AQ_2026-09-25_CORRECTED.txt",
+      "type": "mathematical_core",
+      "description": "Core mathematical formulations and corrections",
+      "version": "4.1"
+    },
+    {
+      "name": "infinite_boundary_regression.py",
+      "type": "implementation",
+      "description": "Python implementation for infinite boundary regression",
+      "version": "2.0"
+    },
+    {
+      "name": "join_census_independent_2026-09-25.py",
+      "type": "implementation",
+      "description": "Census and statistical analysis implementation",
+      "version": "1.8"
+    }
+  ],
+  "dependencies": {
+    "python": ">=3.8",
+    "numpy": ">=1.19.0",
+    "scipy": ">=1.5.0",
+    "pandas": ">=1.1.0"
+  },
+  "verification": {
+    "checksum_algorithm": "SHA256",
+    "last_verified": "2026-09-25T20:36:00Z",
+    "verified_by": "AQARION_AUDIT_SYSTEM"
+  },
+  "corrections_applied": [
+    "Kernel equality boundary conditions",
+    "Infinite join stability proofs",
+    "Regression coefficient calculations",
+    "Block permutation invariants"
+  ]
+}
