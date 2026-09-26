@@ -1,31 +1,80 @@
 {
-  "claim_id": "AQARION-JOIN-STABILITY",
-  "version": "2.1.0",
-  "timestamp": "2026-09-23T01:45:00Z",
-  "status": "FROZEN",
-  "governance": {
-    "C4": "BLOCKED",
-    "promotion": false
-  },
-  "definitions": {
-    "pullback_stable": "T^{-1}(E) ⊆ E where T^{-1}(E) = {(a,b): (T(a),T(b))∈E}",
-    "c_bip": "connected components of bipartite graph Left=blocks, Right=blocks, edge i->j if T(Block_i)∩Block_j≠∅",
-    "rank_formula": "rank(D_Π)=m - c_bip(Π,T,n) with D=(I-P)KP",
-    "join": "P∨Q = transitive closure of P∪Q"
-  },
-  "domains": {
-    "negative_control": {"n": 3, "expected": "COUNTEREXAMPLE for E,F stable => E∨F stable"},
-    "finite_census": {"n": "1..5", "expected_pairs": 166484, "expected_violations": 0},
-    "bridge_lemmas": {"n": 6, "samples": 300, "expected_mismatches": 0}
-  },
-  "evidence_states": {
-    "AQ-DYN-PULL-PREIMAGE-JOIN-001": "REFUTED",
-    "AQ-DYN-PULL-JOIN-001": "COMPUTATIONALLY VERIFIED IN FINITE DOMAIN",
-    "BRT-KERNEL": "PROVED finite domain + null-space proof"
-  },
-  "nonclaims": [
-    "Not a general theorem for n>5 without additional proof",
-    "SV-001-V2 remains CONTRACT ALIGNMENT REQUIRED",
-    "C4 BLOCKED until independent Kotlin + Lean fill"
-  ]
+"claim_id": "AQARION-JOIN-STABILITY",
+"version": "3.0.0",
+"status": "FROZEN_RESEARCH",
+"governance": {
+"C4": "BLOCKED",
+"promotion": false,
+"publication": false,
+"lean": "OPEN"
+},
+"claim_boundary": {
+"finite_theorem": "PROVED_MATHEMATICALLY",
+"arbitrary_set_theorem": "REFUTED_BY_EXPLICIT_COUNTEREXAMPLE",
+"surjective_generalization": "PROVED_CONDITIONALLY",
+"range_gap_lemma": "PROVED",
+"lean_certification": "OPEN"
+},
+"definitions": {
+"pullback_stable": "T^{-1}(E) subset E, equivalently T(x) E T(y) implies x E y",
+"join": "E union F followed by equivalence closure",
+"range_gap": "A join path between image points requires an internal vertex outside image(T)"
+},
+"finite_theorem": {
+"domain": "finite X",
+"hypotheses": [
+"E and F are equivalence relations on X",
+"T^{-1}(E) subset E",
+"T^{-1}(F) subset F"
+],
+"conclusion": "T^{-1}(E join F) subset E join F",
+"proof_method": "finite bipartite incidence graph of E-classes and F-classes",
+"formal_status": "mathematical proof; Lean OPEN"
+},
+"surjective_theorem": {
+"domain": "arbitrary X",
+"additional_hypothesis": "T is surjective",
+"conclusion": "T^{-1}(E join F) subset E join F",
+"status": "conditional mathematical proof"
+},
+"infinite_counterexample": {
+"domain": "X = N",
+"map": "T(n) = n + 1",
+"E_nontrivial_class": [0, 2],
+"F_nontrivial_class": [0, 3],
+"join_bridge": "2 E 0 F 3",
+"source_pair": [1, 2],
+"target_pair": [2, 3],
+"source_join_related": false,
+"target_join_related": true,
+"status": "explicit counterexample"
+},
+"compact_counterexample": {
+"status": "derived",
+"space": "one-point compactification of N with two isolated points",
+"map": "T(x0)=0, T(x1)=1, T(n)=n+4, T(infinity)=infinity",
+"continuous": true,
+"join_stability": false,
+"formal_status": "not Lean-certified"
+},
+"computational_evidence": {
+"finite_exact_verifier": "join_stability_exact_verifier.py",
+"targeted_search": "parent_wandering_search.py",
+"role": "corroboration and executable checking",
+"not_a_theorem_certificate": true
+},
+"historical_artifacts": {
+"AQ_S22_AJS_ZIP.md": "historical/non-authoritative",
+"Subprocess.txt": "historical/non-authoritative"
+},
+"prohibited_interpretations": [
+"Do not interpret finite computational PASS as Lean certification",
+"Do not interpret zero sampled counterexamples as universal absence",
+"Do not interpret the finite theorem as an arbitrary-set theorem",
+"Do not interpret compactness plus continuity as sufficient",
+"Do not claim publication readiness",
+"Do not claim C4 approval"
+]
 }
+
+
