@@ -1,13 +1,18 @@
-AQARION-JOIN-STABILITY-CORRECTED-2026-09-25/
-├── README.md
+# AQARION JOIN-STABILITY MATH-CORE — FILETREE
+
+Verified directory inventory at the time of this correction:
+
+```text
+AQARION-CORE/JOIN-STABILITY/MATH-CORE/
+├── AQ_2026-09-25.txt
+├── AQ_DYN_PULL_JOIN_INFINITE.md
+├── AQ_S25_ZIP.md
+├── AUDIT_2026-09-25.md
+├── CHECKPOINT.md
+├── FILETREE.md
+├── JS_04_KERNELEQUALITY.md
+├── JS_11_JoinStability.md
 ├── MANIFEST.json
-├── AUDIT-2026-09-25.md
-├── AQ-DYN-PULL-JOIN-001.md
-├── AQ-DYN-PULL-JOIN-INFINITE-001.md
-├── JS-04-KernelEquality.md
-├── JS-11-JoinStability.md
+├── README.md
 ├── finite-block-permutation.md
-├── infinite_boundary_regression.py
-├── join_census_independent_2026-09-25.py
-└── MATH-CORE/
-    └── AQ_2026-09-25_CORRECTED.txt
+└── infinite_boundary_regression.py
