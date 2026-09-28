@@ -1,4 +1,4 @@
-![Aqarions-Quantarion-AI](https://img.shields.io/badge/license-Apache--2.0-blue) ![C3](https://img.shields.io/badge/C3-OPEN-yellow) ![C4](https://img.shields.io/badge/C4-BLOCKED-red) ![Lean](https://img.shields.io/badge/Lean-OPEN-lightgrey) ![SDS-002](https://img.shields.io/badge/SDS--002-QUARANTINED-orange) ![Publication](https://img.shields.io/badge/publication-BLOCKED-red) ![Promotable](https://img.shields.io/badge/promotable-false-lightgrey)
+![Aqarion-Quantarion-AI](https://img.shields.io/badge/license-Apache--2.0-blue) ![C3](https://img.shields.io/badge/C3-OPEN-yellow) ![C4](https://img.shields.io/badge/C4-BLOCKED-red) ![Lean](https://img.shields.io/badge/Lean-OPEN-lightgrey) ![SDS-002](https://img.shields.io/badge/SDS--002-QUARANTINED-orange) ![Publication](https://img.shields.io/badge/publication-BLOCKED-red) ![Promotable](https://img.shields.io/badge/promotable-false-lightgrey)
 
 # Aqarions-Quantarion-AI
 
